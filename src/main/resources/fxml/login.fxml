@@ -1,0 +1,5 @@
+<VBox spacing="10" alignment="CENTER">
+    <TextField promptText="Username"/>
+    <PasswordField promptText="Password"/>
+    <Button text="Login"/>
+</VBox>
