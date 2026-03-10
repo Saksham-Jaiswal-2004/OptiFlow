@@ -10,7 +10,11 @@ public class Main extends Application
     @Override
     public void start(Stage stage) throws Exception
     {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("src/main/resources/fxml/login.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
+        if (loader.getLocation() == null)
+        {
+            throw new RuntimeException("FXML file not found!");
+        }
 
         Scene scene = new Scene(loader.load());
 

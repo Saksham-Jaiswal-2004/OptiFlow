@@ -1,5 +1,45 @@
-<VBox spacing="10" alignment="CENTER">
-    <TextField promptText="Username"/>
-    <PasswordField promptText="Password"/>
-    <Button text="Login"/>
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+
+<VBox spacing="15" alignment="CENTER" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+    <!-- Padding around the VBox -->
+    <padding>
+        <Insets top="40" right="40" bottom="40" left="40"/>
+    </padding>
+
+    <!-- Title -->
+    <Label text="Welcome Back!" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+
+    <!-- Username Field -->
+    <VBox spacing="5" alignment="CENTER_LEFT">
+        <Label text="Username" style="-fx-font-weight: bold;"/>
+        <TextField promptText="Enter your username" prefWidth="250"/>
+    </VBox>
+
+    <!-- Password Field -->
+    <VBox spacing="5" alignment="CENTER_LEFT">
+        <Label text="Password" style="-fx-font-weight: bold;"/>
+        <PasswordField promptText="Enter your password" prefWidth="250"/>
+    </VBox>
+
+    <!-- Login Button -->
+    <Button text="Login" prefWidth="250" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;"/>
+
+    <!-- Forgot Password -->
+    <Hyperlink text="Forgot Password?" style="-fx-font-size: 12px;"/>
+
+    <!-- Optional: Sign up link -->
+    <HBox spacing="5" alignment="CENTER">
+        <Label text="Don't have an account?"/>
+        <Hyperlink text="Sign Up"/>
+    </HBox>
 </VBox>
