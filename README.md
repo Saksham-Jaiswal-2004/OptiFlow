@@ -56,7 +56,7 @@ Optional IDE support:
 Make sure `JAVA_HOME` points to your JDK installation.
 
 ## ER Diagram
-![OptiFlow ER Diagram](/src/main/resources/images/ER Diagram.png)
+![OptiFlow ER Diagram](/src/main/resources/images/ER%20Diagram.png)
 
 ## Getting Started
 
