@@ -15,8 +15,18 @@ public class Employee
     private int weeklyCapacity;
 
     public Employee()
-    {}
+    {
+        System.out.println("Mai Employee Hu!");
+    }
 
-    public Employee(String name)
-    {}
+    public Employee(String name, String skill, String designation, String department, int manager_id, String status, int weeklyCapacity)
+    {
+        this.name = name;
+        this.skill = skill;
+        this.designation = designation;
+        this.department = department;
+        this.manager_id = manager_id;
+        this.status = status;
+        this.weeklyCapacity = weeklyCapacity;
+    }
 }
