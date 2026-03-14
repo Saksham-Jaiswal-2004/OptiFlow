@@ -6,4 +6,7 @@ public class Employee
     private String name;
     private String skill;
     private int weeklyCapacity;
+
+    public Employee()
+    {}
 }

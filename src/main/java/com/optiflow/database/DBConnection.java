@@ -14,7 +14,7 @@ public class DBConnection
             return DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/optiflow",
                     "root",
-                    "password"
+                    "iwillnottell"
             );
         } catch (Exception e) {
             e.printStackTrace();

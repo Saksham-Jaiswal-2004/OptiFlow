@@ -4,6 +4,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import com.optiflow.database.DBConnection;
+import java.sql.*;
 
 public class Main extends Application
 {
@@ -25,6 +27,11 @@ public class Main extends Application
 
     public static void main(String[] args)
     {
+        Connection conn = DBConnection.getConnection();
+        if(conn != null)
+            System.out.println("DATABASE CONNECTED!");
+        else
+            System.out.println("FAILED TO CONNECT DATABASE!");
         launch();
     }
 }
