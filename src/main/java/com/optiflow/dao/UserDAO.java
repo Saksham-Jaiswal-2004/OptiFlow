@@ -34,11 +34,11 @@ public class UserDAO
             if(rs.next())
             {
                 User user = new User();
-//                user.setUserId(rs.getInt("user_id"));
-//                user.setName(rs.getString("name"));
-//                user.setEmail(rs.getString("email"));
-//                user.setPasswordHash(rs.getString("password_hash"));
-//                user.setRole(rs.getString("role"));
+                user.setUserId(rs.getInt("user_id"));
+                user.setName(rs.getString("name"));
+                user.setEmail(rs.getString("email"));
+                user.setPasswordHash(rs.getString("password_hash"));
+                user.setRole(rs.getString("role"));
                 return user;
             }
         }
