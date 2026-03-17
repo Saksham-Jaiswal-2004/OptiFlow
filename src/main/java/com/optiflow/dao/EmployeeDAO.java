@@ -1,6 +1,7 @@
 package com.optiflow.dao;
 
 import java.sql.*;
+import java.util.List;
 import com.optiflow.database.DBConnection;
 import com.optiflow.models.Employee;
 
@@ -25,4 +26,37 @@ public class EmployeeDAO
             stmt.executeUpdate();
         }
     }
+
+    public Employee getEmployeeById(int empId)
+    {}
+
+    public Employee getEmployeeByUserId(int userId)
+    {}
+
+    public List<Employee> getAllEmployees()
+    {}
+
+    public List<Employee> getEmployeesByManager(int managerId)
+    {}
+
+    public List<Employee> getEmployeesByDepartment(String department)
+    {}
+
+    public List<Employee> getEmployeesByStatus(String status)
+    {}
+
+    public boolean updateEmployee(Employee emp)
+    {}
+
+    public boolean updateManager(int empId, int managerId)
+    {}
+
+    public boolean updateStatus(int empId, String status)
+    {}
+
+    public boolean deleteEmployee(int empId)
+    {}
+
+    public int getWeeklyCapacity(int empId)
+    {}
 }

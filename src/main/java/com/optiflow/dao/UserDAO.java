@@ -1,6 +1,8 @@
 package com.optiflow.dao;
 
 import java.sql.*;
+import java.util.List;
+
 import com.optiflow.database.DBConnection;
 import com.optiflow.models.User;
 
@@ -18,6 +20,9 @@ public class UserDAO
             stmt.executeUpdate();
         }
     }
+
+    public User getUserById(int user_id)
+    {}
 
     public User getUserByEmail(String email) throws SQLException
     {
@@ -45,4 +50,22 @@ public class UserDAO
 
         return null;
     }
+
+    public List<User> getAllUsers()
+    {}
+
+    public boolean updateUser(User user)
+    {}
+
+    public boolean updatePassword(int userId, String password_hash)
+    {}
+
+    public boolean updateRole(int user_id, String role)
+    {}
+
+    public boolean deleteUser(int user_id)
+    {}
+
+    public boolean existsByEmail(String email)
+    {}
 }
