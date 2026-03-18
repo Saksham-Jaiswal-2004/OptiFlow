@@ -59,4 +59,10 @@ public class EmployeeDAO
 //
 //    public int getWeeklyCapacity(int empId)
 //    {}
+//
+//    public List<Employee> getAvailableEmployees(int requiredHours)
+//    {}
+//
+//    public List<Employee> getEmployeesWithSkill(int skillId)
+//    {}
 }
