@@ -9,9 +9,7 @@ public class User
     private String role;
 
     public User()
-    {
-        System.out.println("Mai User Hu!");
-    }
+    {}
 
     public User(String name, String email, String passwordHash, String role)
     {

@@ -27,36 +27,36 @@ public class EmployeeDAO
         }
     }
 
-    public Employee getEmployeeById(int empId)
-    {}
-
-    public Employee getEmployeeByUserId(int userId)
-    {}
-
-    public List<Employee> getAllEmployees()
-    {}
-
-    public List<Employee> getEmployeesByManager(int managerId)
-    {}
-
-    public List<Employee> getEmployeesByDepartment(String department)
-    {}
-
-    public List<Employee> getEmployeesByStatus(String status)
-    {}
-
-    public boolean updateEmployee(Employee emp)
-    {}
-
-    public boolean updateManager(int empId, int managerId)
-    {}
-
-    public boolean updateStatus(int empId, String status)
-    {}
-
-    public boolean deleteEmployee(int empId)
-    {}
-
-    public int getWeeklyCapacity(int empId)
-    {}
+//    public Employee getEmployeeById(int empId)
+//    {}
+//
+//    public Employee getEmployeeByUserId(int userId)
+//    {}
+//
+//    public List<Employee> getAllEmployees()
+//    {}
+//
+//    public List<Employee> getEmployeesByManager(int managerId)
+//    {}
+//
+//    public List<Employee> getEmployeesByDepartment(String department)
+//    {}
+//
+//    public List<Employee> getEmployeesByStatus(String status)
+//    {}
+//
+//    public boolean updateEmployee(Employee emp)
+//    {}
+//
+//    public boolean updateManager(int empId, int managerId)
+//    {}
+//
+//    public boolean updateStatus(int empId, String status)
+//    {}
+//
+//    public boolean deleteEmployee(int empId)
+//    {}
+//
+//    public int getWeeklyCapacity(int empId)
+//    {}
 }
