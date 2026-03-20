@@ -16,12 +16,12 @@ public class Tasks
     private Date start_date;
     private Date end_date;
 
-    Tasks()
+    public Tasks()
     {
         System.out.println("Mai Tasks Hu!");
     }
 
-    Tasks(int project_id, int assigned_to, String title, String description, String status, String priority, int estimated_hours, Date start_date)
+    public Tasks(int project_id, int assigned_to, String title, String description, String status, String priority, int estimated_hours, Date start_date)
     {
         this.project_id = project_id;
         this.assigned_to = assigned_to;
@@ -86,6 +86,11 @@ public class Tasks
     public Date getEnd_date()
     {
         return end_date;
+    }
+
+    public void setTask_id(int task_id)
+    {
+        this.task_id = task_id;
     }
 
     public void setProject_id(int project_id)
