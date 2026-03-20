@@ -23,10 +23,30 @@ public class UserDAO
         }
     }
 
-    public User getUserById(int user_id)
+    public User getUserById(int user_id) throws SQLException
     {
-        User user = new User();
-        return user;
+        String sql = "SELECT * FROM Users WHERE user_id=?";
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+
+            stmt.setInt(1, user_id);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if(rs.next())
+            {
+                User user = new User();
+                user.setUserId(rs.getInt("user_id"));
+                user.setName(rs.getString("name"));
+                user.setEmail(rs.getString("email"));
+                user.setPasswordHash(rs.getString("password_hash"));
+                user.setRole(rs.getString("role"));
+                return user;
+            }
+        }
+
+        return null;
     }
 
     public User getUserByEmail(String email) throws SQLException
