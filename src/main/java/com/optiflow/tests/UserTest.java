@@ -36,11 +36,27 @@ public class UserTest
 //        User resUser = testUser.getUserByEmail(emailCheck);
 //        System.out.println("User: "+resUser.getName());
 
-        System.out.println("Getting All Users: ");
-        List<User> userList = testUser.getAllUsers();
-        for(User test: userList)
-        {
-            System.out.println(test.getName());
-        }
+//        System.out.println("Getting All Users: ");
+//        List<User> userList = testUser.getAllUsers();
+//        for(User test: userList)
+//        {
+//            System.out.println(test.getName());
+//        }
+
+//        System.out.print("Enter User Id to update: ");
+//        int uid = sc.nextInt();
+//        System.out.print("Enter new name: ");
+//        String name = sc.next();
+//        testUser.updateName(uid, name);
+
+//        System.out.print("Enter User Id to update: ");
+//        int uid = sc.nextInt();
+//        System.out.print("Enter new email: ");
+//        String email = sc.next();
+//        testUser.updateEmail(uid, email);
+
+        System.out.print("Enter User Id to delete: ");
+        int user_id = sc.nextInt();
+        testUser.deleteUser(user_id);
     }
 }

@@ -82,28 +82,91 @@ public class UserDAO
         return userList;
     }
 
-    public boolean updateUser(User user)
+    public int updateName(int user_id, String name) throws SQLException
     {
-        return true;
+        String sql = "UPDATE users SET name=? WHERE user_id=?";
+        int rs;
+
+        try(Connection conn = DBConnection.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            stmt.setString(1, name);
+            stmt.setInt(2, user_id);
+
+            rs = stmt.executeUpdate();
+            System.out.println("Result: "+rs);
+        }
+
+        return rs;
     }
 
-    public boolean updatePassword(int userId, String password_hash)
+    public int updateEmail(int user_id, String email) throws SQLException
     {
-        return true;
+        String sql = "UPDATE users SET email=? WHERE user_id=?";
+        int rs;
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            stmt.setString(1, email);
+            stmt.setInt(2, user_id);
+
+            rs = stmt.executeUpdate();
+            System.out.println("Result: "+rs);
+        }
+
+        return rs;
     }
 
-    public boolean updateRole(int user_id, String role)
+    public int updatePassword(int user_id, String password_hash) throws SQLException
     {
-        return true;
+        String sql = "UPDATE users SET password_hash=? WHERE user_id=?";
+        int rs;
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            stmt.setString(1, password_hash);
+            stmt.setInt(2, user_id);
+
+            rs = stmt.executeUpdate();
+            System.out.println("Result: "+rs);
+        }
+
+        return rs;
     }
 
-    public boolean deleteUser(int user_id)
+    public int updateRole(int user_id, String role) throws SQLException
     {
-        return true;
+        String sql = "UPDATE users SET role=? WHERE user_id=?";
+        int rs;
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            stmt.setString(1, role);
+            stmt.setInt(2, user_id);
+
+            rs = stmt.executeUpdate();
+            System.out.println("Result: "+rs);
+        }
+
+        return rs;
     }
 
-    public boolean existsByEmail(String email)
+    public int deleteUser(int user_id) throws SQLException
     {
-        return true;
+        String sql = "DELETE FROM Users WHERE user_id=?";
+        int rs;
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+
+            stmt.setInt(1, user_id);
+
+            rs = stmt.executeUpdate();
+        }
+
+        return rs;
     }
 }
