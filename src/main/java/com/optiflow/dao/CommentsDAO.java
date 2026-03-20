@@ -82,7 +82,6 @@ public class CommentsDAO
 
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)){
-
             stmt.setInt(1, comment_id);
 
             rs = stmt.executeUpdate();
