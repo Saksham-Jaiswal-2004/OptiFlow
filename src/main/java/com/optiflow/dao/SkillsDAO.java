@@ -42,9 +42,8 @@ public class SkillsDAO
         return null;
     }
 
-    public List<Skills> getSkillById(int skill_id) throws SQLException
+    public Skills getSkillById(int skill_id) throws SQLException
     {
-        LinkedList<Skills> skillList = new LinkedList<>();
         String sql = "SELECT * FROM skills WHERE skill_id=?";
 
         try(Connection conn = DBConnection.getConnection();
@@ -57,8 +56,7 @@ public class SkillsDAO
                 skill.setName(rs.getString("name"));
                 skill.setDescription(rs.getString("description"));
 
-                skillList.add(skill);
-                return skillList;
+                return skill;
             }
         }
 
@@ -80,24 +78,4 @@ public class SkillsDAO
 
         return rs;
     }
-
-//    Employee Skill DAO
-//    public boolean addSkillToEmployee(int empId, int skill_id, int proficiency) throws SQLException
-//    {}
-//
-//    Employee Skill DAO
-//    public List<Skills> getSkillsByEmployee(int empId) throws SQLException
-//    {}
-//
-//    Employee Skill DAO
-//    public List<Employee> getEmployeesBySkill(int skillId) throws SQLException
-//    {}
-//
-//    Employee Skill DAO
-//    public boolean updateProficiency(int empId, int skillId, int proficiency) throws SQLException
-//    {}
-//
-//    Employee Skill DAO
-//    public boolean removeSkillFromEmployee(int empId, int skillId) throws SQLException
-//    {}
 }

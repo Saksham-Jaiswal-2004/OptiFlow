@@ -6,12 +6,12 @@ public class EmployeeSkill
     private int skill_id;
     private int proficiency;
 
-    EmployeeSkill()
+    public EmployeeSkill()
     {
         System.out.println("Mai Employee Skills Connector Hu!");
     }
 
-    EmployeeSkill(int emp_id, int skill_id, int proficiency)
+    public EmployeeSkill(int emp_id, int skill_id, int proficiency)
     {
         this.emp_id = emp_id;
         this.skill_id = skill_id;
