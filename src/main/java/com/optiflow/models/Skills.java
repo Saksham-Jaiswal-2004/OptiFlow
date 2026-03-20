@@ -6,12 +6,12 @@ public class Skills
     private String name;
     private String description;
 
-    Skills()
+    public Skills()
     {
         System.out.println("Mai Skills Hu!");;
     }
 
-    Skills(String name, String description)
+    public Skills(String name, String description)
     {
         this.name = name;
         this.description = description;
