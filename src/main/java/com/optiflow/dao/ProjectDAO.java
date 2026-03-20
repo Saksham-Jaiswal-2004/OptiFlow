@@ -1,31 +1,257 @@
 package com.optiflow.dao;
 
+import com.optiflow.database.DBConnection;
+import com.optiflow.models.Projects;
+
+import java.sql.*;
+import java.util.LinkedList;
+import java.util.List;
+
 public class ProjectDAO
 {
-//    public boolean createProject(Project project)
-//    {}
-//
-//    public Project getProjectById(int projectId)
-//    {}
-//
-//    public List<Project> getAllProjects()
-//    {}
-//
-//    public List<Project> getProjectsByStatus(String status)
-//    {}
-//
-//    public boolean updateProject(Project project)
-//    {}
-//
-//    public boolean updateProjectStatus(int projectId, String status)
-//    {}
-//
-//    public boolean deleteProject(int projectId)
-//    {}
-//
-//    int getTotalTasks(int projectId)
-//    {}
-//
-//    int getCompletedTasks(int projectId)
-//    {}
+    public void createProject(String name, String description, Date start_date, Date end_date, int client_id, String status) throws SQLException
+    {
+        String sql = "INSERT INTO projects (name, description, start_date, end_date, client_id, status) VALUES (?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, name);
+            stmt.setString(2, description);
+            stmt.setDate(3, Date.valueOf(start_date.toLocalDate()));
+            stmt.setDate(4, Date.valueOf(end_date.toLocalDate()));
+            if(client_id == 0)
+                stmt.setNull(5, java.sql.Types.INTEGER);
+            else
+                stmt.setInt(5, client_id);
+            stmt.setString(6, status);
+            stmt.executeUpdate();
+        }
+    }
+
+    public Projects getProjectById(int projectId) throws SQLException
+    {
+        String sql = "SELECT * FROM projects WHERE project_id=?";
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, projectId);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                Projects pro = new Projects();
+                pro.setProject_id(rs.getInt("project_id"));
+                pro.setName(rs.getString("name"));
+                pro.setDescription(rs.getString("description"));
+                pro.setStart_date(rs.getDate("start_date"));
+                pro.setEnd_date(rs.getDate("end_date"));
+                pro.setClient_id(rs.getInt("client_id"));
+                pro.setStatus(rs.getString("status"));
+                return pro;
+            }
+        }
+
+        return null;
+    }
+
+    public List<Projects> getAllProjects() throws SQLException
+    {
+        LinkedList<Projects> proList = new LinkedList<>();
+        String sql = "SELECT * FROM projects";
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next())
+            {
+                Projects pro = new Projects();
+                pro.setProject_id(rs.getInt("project_id"));
+                pro.setName(rs.getString("name"));
+                pro.setDescription(rs.getString("description"));
+                pro.setStart_date(rs.getDate("start_date"));
+                pro.setEnd_date(rs.getDate("end_date"));
+                pro.setClient_id(rs.getInt("client_id"));
+                pro.setStatus(rs.getString("status"));
+
+                proList.add(pro);
+            }
+        }
+        return proList;
+    }
+
+    public List<Projects> getProjectsByStatus(String status) throws SQLException
+    {
+        LinkedList<Projects> proList = new LinkedList<>();
+        String sql = "SELECT * FROM projects WHERE status=?";
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            stmt.setString(1, status);
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next())
+            {
+                Projects pro = new Projects();
+                pro.setProject_id(rs.getInt("project_id"));
+                pro.setName(rs.getString("name"));
+                pro.setDescription(rs.getString("description"));
+                pro.setStart_date(rs.getDate("start_date"));
+                pro.setEnd_date(rs.getDate("end_date"));
+                pro.setClient_id(rs.getInt("client_id"));
+                pro.setStatus(rs.getString("status"));
+
+                proList.add(pro);
+            }
+        }
+        return proList;
+    }
+
+    public List<Projects> getProjectsByClient(int client_id) throws SQLException
+    {
+        LinkedList<Projects> proList = new LinkedList<>();
+        String sql = "SELECT * FROM projects WHERE client_id=?";
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            stmt.setInt(1, client_id);
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next())
+            {
+                Projects pro = new Projects();
+                pro.setProject_id(rs.getInt("project_id"));
+                pro.setName(rs.getString("name"));
+                pro.setDescription(rs.getString("description"));
+                pro.setStart_date(rs.getDate("start_date"));
+                pro.setEnd_date(rs.getDate("end_date"));
+                pro.setClient_id(rs.getInt("client_id"));
+                pro.setStatus(rs.getString("status"));
+
+                proList.add(pro);
+            }
+        }
+        return proList;
+    }
+
+    public int updateName(int project_id, String name) throws SQLException
+    {
+        String sql = "UPDATE projects SET name=? WHERE project_id=?";
+        int rs;
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            stmt.setString(1, name);
+            stmt.setInt(2, project_id);
+
+            rs = stmt.executeUpdate();
+            System.out.println("Result: "+rs);
+        }
+
+        return rs;
+    }
+
+    public int updateDescription(int project_id, String description) throws SQLException
+    {
+        String sql = "UPDATE projects SET description=? WHERE project_id=?";
+        int rs;
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            stmt.setString(1, description);
+            stmt.setInt(2, project_id);
+
+            rs = stmt.executeUpdate();
+            System.out.println("Result: "+rs);
+        }
+
+        return rs;
+    }
+
+    public int updateStartDate(int project_id, Date start_date) throws SQLException
+    {
+        String sql = "UPDATE projects SET start_date=? WHERE project_id=?";
+        int rs;
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            stmt.setDate(1, Date.valueOf(start_date.toLocalDate()));
+            stmt.setInt(2, project_id);
+
+            rs = stmt.executeUpdate();
+            System.out.println("Result: "+rs);
+        }
+
+        return rs;
+    }
+
+    public int updateEndDate(int project_id, Date end_date) throws SQLException
+    {
+        String sql = "UPDATE projects SET end_date=? WHERE project_id=?";
+        int rs;
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            stmt.setDate(1, Date.valueOf(end_date.toLocalDate()));
+            stmt.setInt(2, project_id);
+
+            rs = stmt.executeUpdate();
+            System.out.println("Result: "+rs);
+        }
+
+        return rs;
+    }
+
+    public int updateStatus(int project_id, String status) throws SQLException
+    {
+        String sql = "UPDATE projects SET status=? WHERE project_id=?";
+        int rs;
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            stmt.setString(1, status);
+            stmt.setInt(2, project_id);
+
+            rs = stmt.executeUpdate();
+            System.out.println("Result: "+rs);
+        }
+
+        return rs;
+    }
+
+    public int deleteProject(int project_id) throws SQLException
+    {
+        String sql = "DELETE FROM projects WHERE project_id=?";
+        int rs;
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+
+            stmt.setInt(1, project_id);
+
+            rs = stmt.executeUpdate();
+        }
+
+        return rs;
+    }
+
+//  Tasks Needed
+    public int getTotalTasks(int projectId) throws SQLException
+    {
+        return -1;
+    }
+
+//  Tasks Needed
+    public int getCompletedTasks(int projectId) throws SQLException
+    {
+        return -1;
+    }
 }

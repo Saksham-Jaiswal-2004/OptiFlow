@@ -12,12 +12,12 @@ public class Projects
     private int client_id;
     private String status;
 
-    Projects()
+    public Projects()
     {
         System.out.println("Mai Projects Hu!");
     }
 
-    Projects(String name, String description, Date start_date, int client_id)
+    public Projects(String name, String description, Date start_date, int client_id)
     {
         this.name = name;
         this.description = description;
