@@ -2,6 +2,7 @@ package com.optiflow.dao;
 
 import com.optiflow.database.DBConnection;
 import com.optiflow.models.Projects;
+import com.optiflow.models.Tasks;
 
 import java.sql.*;
 import java.util.LinkedList;
@@ -242,16 +243,36 @@ public class ProjectDAO
 
         return rs;
     }
-
-//  Tasks Needed
-    public int getTotalTasks(int projectId) throws SQLException
+    public List<Tasks> getCompletedTasks(int project_id) throws SQLException
     {
-        return -1;
-    }
+        LinkedList<Tasks> taskList = new LinkedList<>();
+        String sql = "SELECT * FROM tasks WHERE (project_id, status) VALUES (?, ?)";
 
-//  Tasks Needed
-    public int getCompletedTasks(int projectId) throws SQLException
-    {
-        return -1;
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            stmt.setInt(1, project_id);
+            stmt.setString(2, "Completed");
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next())
+            {
+                Tasks task = new Tasks();
+                task.setTask_id(rs.getInt("task_id"));
+                task.setProject_id(rs.getInt("project_id"));
+                task.setAssigned_to(rs.getInt("assigned_to"));
+                task.setTitle(rs.getString("title"));
+                task.setDescription(rs.getString("description"));
+                task.setStatus(rs.getString("status"));
+                task.setPriority(rs.getString("priority"));
+                task.setEstimated_hours(rs.getInt("estimated_hours"));
+                task.setActual_hours(rs.getInt("actual_hours"));
+                task.setStart_date(rs.getDate("start_date"));
+                task.setEnd_date(rs.getDate("end_date"));
+
+                taskList.add(task);
+            }
+        }
+        return taskList;
     }
 }

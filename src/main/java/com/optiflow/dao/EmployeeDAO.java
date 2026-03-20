@@ -342,20 +342,4 @@ public class EmployeeDAO
 
         return rs;
     }
-
-//  Workload Needed
-    public List<Employee> getAvailableEmployees(int requiredHours) throws SQLException
-    {
-        LinkedList<Employee> emp = new LinkedList<>();
-
-        return emp;
-    }
-
-//  Skills Needed
-    public List<Employee> getEmployeesWithSkill(int skillId) throws SQLException
-    {
-        LinkedList<Employee> emp = new LinkedList<>();
-
-        return emp;
-    }
 }

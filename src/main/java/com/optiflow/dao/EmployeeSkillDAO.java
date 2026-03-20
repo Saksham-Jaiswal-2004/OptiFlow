@@ -4,7 +4,6 @@ import com.optiflow.database.DBConnection;
 import com.optiflow.models.Employee;
 import com.optiflow.models.EmployeeSkill;
 import com.optiflow.models.Skills;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

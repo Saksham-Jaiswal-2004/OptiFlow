@@ -2,7 +2,6 @@ package com.optiflow.dao;
 
 import java.sql.*;
 import java.util.*;
-
 import com.optiflow.database.DBConnection;
 import com.optiflow.models.User;
 

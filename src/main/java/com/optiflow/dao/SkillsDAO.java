@@ -2,7 +2,6 @@ package com.optiflow.dao;
 
 import com.optiflow.database.DBConnection;
 import com.optiflow.models.Skills;
-
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
