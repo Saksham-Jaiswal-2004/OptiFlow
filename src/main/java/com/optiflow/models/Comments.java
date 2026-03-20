@@ -7,12 +7,12 @@ public class Comments
     private int user_id;
     private String content;
 
-    Comments()
+    public Comments()
     {
         System.out.println("Mai Comments Hu!");
     }
 
-    Comments(int task_id, int user_id, String content)
+    public Comments(int task_id, int user_id, String content)
     {
         this.task_id = task_id;
         this.user_id = user_id;
