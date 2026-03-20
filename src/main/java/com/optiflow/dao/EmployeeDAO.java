@@ -1,9 +1,11 @@
 package com.optiflow.dao;
 
 import java.sql.*;
+import java.util.LinkedList;
 import java.util.List;
 import com.optiflow.database.DBConnection;
 import com.optiflow.models.Employee;
+import com.optiflow.models.User;
 
 public class EmployeeDAO
 {
@@ -27,42 +29,333 @@ public class EmployeeDAO
         }
     }
 
-    public Employee getEmployeeById(int empId)
-    {}
+    public Employee getEmployeeById(int empId) throws SQLException
+    {
+        String sql = "SELECT * FROM Employees WHERE employee_id=?";
 
-    public Employee getEmployeeByUserId(int userId)
-    {}
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
 
-    public List<Employee> getAllEmployees()
-    {}
+            stmt.setInt(1, empId);
 
-    public List<Employee> getEmployeesByManager(int managerId)
-    {}
+            ResultSet rs = stmt.executeQuery();
 
-    public List<Employee> getEmployeesByDepartment(String department)
-    {}
+            if(rs.next())
+            {
+                User user = new User();
+                Employee emp = new Employee();
+                emp.setEmp_id(rs.getInt("employee_id"));
+                emp.setUser_id(rs.getInt("user_id"));
+                emp.setName(rs.getString("name"));
+                emp.setSkill(rs.getString("skills"));
+                emp.setDesignation(rs.getString("designation"));
+                emp.setDepartment(rs.getString("department"));
+                emp.setManager_id(rs.getInt("manager_id"));
+                emp.setStatus(rs.getString("status"));
+                emp.setWeeklyCapacity(rs.getInt("weekly_capacity"));
+                return emp;
+            }
+        }
 
-    public List<Employee> getEmployeesByStatus(String status)
-    {}
+        return null;
+    }
 
-    public boolean updateEmployee(Employee emp)
-    {}
+    public Employee getEmployeeByUserId(int userId) throws SQLException
+    {
+        String sql = "SELECT * FROM Employees WHERE user_id=?";
 
-    public boolean updateManager(int empId, int managerId)
-    {}
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
 
-    public boolean updateStatus(int empId, String status)
-    {}
+            stmt.setInt(1, userId);
 
-    public boolean deleteEmployee(int empId)
-    {}
+            ResultSet rs = stmt.executeQuery();
 
-    public int getWeeklyCapacity(int empId)
-    {}
+            if(rs.next())
+            {
+                Employee emp = new Employee();
+                emp.setEmp_id(rs.getInt("employee_id"));
+                emp.setUser_id(rs.getInt("user_id"));
+                emp.setName(rs.getString("name"));
+                emp.setSkill(rs.getString("skills"));
+                emp.setDesignation(rs.getString("designation"));
+                emp.setDepartment(rs.getString("department"));
+                emp.setManager_id(rs.getInt("manager_id"));
+                emp.setStatus(rs.getString("status"));
+                emp.setWeeklyCapacity(rs.getInt("weekly_capacity"));
+                return emp;
+            }
+        }
 
-    public List<Employee> getAvailableEmployees(int requiredHours)
-    {}
+        return null;
+    }
 
-    public List<Employee> getEmployeesWithSkill(int skillId)
-    {}
+    public List<Employee> getAllEmployees() throws SQLException
+    {
+        LinkedList<Employee> empList = new LinkedList<>();
+        String sql = "SELECT * FROM employees";
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next())
+            {
+                Employee emp = new Employee();
+                emp.setEmp_id(rs.getInt("employee_id"));
+                emp.setUser_id(rs.getInt("user_id"));
+                emp.setName(rs.getString("name"));
+                emp.setSkill(rs.getString("skills"));
+                emp.setDesignation(rs.getString("designation"));
+                emp.setDepartment(rs.getString("department"));
+                emp.setManager_id(rs.getInt("manager_id"));
+                emp.setStatus(rs.getString("status"));
+                emp.setWeeklyCapacity(rs.getInt("weekly_capacity"));
+//                user.setCreatedAt(rs.getTimestamp("created_at"));
+
+                empList.add(emp);
+            }
+        }
+        return empList;
+    }
+
+    public List<Employee> getEmployeesByManager(int managerId) throws SQLException
+    {
+        LinkedList<Employee> empList = new LinkedList<>();
+        String sql = "SELECT * FROM employees WHERE manager_id=?";
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            stmt.setInt(1, managerId);
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next())
+            {
+                Employee emp = new Employee();
+                emp.setEmp_id(rs.getInt("employee_id"));
+                emp.setUser_id(rs.getInt("user_id"));
+                emp.setName(rs.getString("name"));
+                emp.setSkill(rs.getString("skills"));
+                emp.setDesignation(rs.getString("designation"));
+                emp.setDepartment(rs.getString("department"));
+                emp.setManager_id(rs.getInt("manager_id"));
+                emp.setStatus(rs.getString("status"));
+                emp.setWeeklyCapacity(rs.getInt("weekly_capacity"));
+//                user.setCreatedAt(rs.getTimestamp("created_at"));
+
+                empList.add(emp);
+            }
+        }
+        return empList;
+    }
+
+    public List<Employee> getEmployeesByDepartment(String department) throws SQLException
+    {
+        LinkedList<Employee> empList = new LinkedList<>();
+        String sql = "SELECT * FROM employees WHERE department=?";
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            stmt.setString(1, department);
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next())
+            {
+                Employee emp = new Employee();
+                emp.setEmp_id(rs.getInt("employee_id"));
+                emp.setUser_id(rs.getInt("user_id"));
+                emp.setName(rs.getString("name"));
+                emp.setSkill(rs.getString("skills"));
+                emp.setDesignation(rs.getString("designation"));
+                emp.setDepartment(rs.getString("department"));
+                emp.setManager_id(rs.getInt("manager_id"));
+                emp.setStatus(rs.getString("status"));
+                emp.setWeeklyCapacity(rs.getInt("weekly_capacity"));
+//                user.setCreatedAt(rs.getTimestamp("created_at"));
+
+                empList.add(emp);
+            }
+        }
+        return empList;
+    }
+
+    public List<Employee> getEmployeesByStatus(String status) throws SQLException
+    {
+        LinkedList<Employee> empList = new LinkedList<>();
+        String sql = "SELECT * FROM employees WHERE status=?";
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            stmt.setString(1, status);
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next())
+            {
+                Employee emp = new Employee();
+                emp.setEmp_id(rs.getInt("employee_id"));
+                emp.setUser_id(rs.getInt("user_id"));
+                emp.setName(rs.getString("name"));
+                emp.setSkill(rs.getString("skills"));
+                emp.setDesignation(rs.getString("designation"));
+                emp.setDepartment(rs.getString("department"));
+                emp.setManager_id(rs.getInt("manager_id"));
+                emp.setStatus(rs.getString("status"));
+                emp.setWeeklyCapacity(rs.getInt("weekly_capacity"));
+//                user.setCreatedAt(rs.getTimestamp("created_at"));
+
+                empList.add(emp);
+            }
+        }
+        return empList;
+    }
+
+    public int updateName(int empId, String name) throws SQLException
+    {
+        String sql = "UPDATE employees SET name=? WHERE employee_id=?";
+        int rs;
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            stmt.setString(1, name);
+            stmt.setInt(2, empId);
+
+            rs = stmt.executeUpdate();
+            System.out.println("Result: "+rs);
+        }
+
+        return rs;
+    }
+
+//  Skills Needed
+    public int updateSkill(int empId, String name) throws SQLException
+    {
+        return -1;
+    }
+
+    public int updateDesignation(int empId, String designation) throws SQLException
+    {
+        String sql = "UPDATE employees SET designation=? WHERE employee_id=?";
+        int rs;
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            stmt.setString(1, designation);
+            stmt.setInt(2, empId);
+
+            rs = stmt.executeUpdate();
+            System.out.println("Result: "+rs);
+        }
+
+        return rs;
+    }
+
+    public int updateDepartment(int empId, String department) throws SQLException
+    {
+        String sql = "UPDATE employees SET department=? WHERE employee_id=?";
+        int rs;
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            stmt.setString(1, department);
+            stmt.setInt(2, empId);
+
+            rs = stmt.executeUpdate();
+            System.out.println("Result: "+rs);
+        }
+
+        return rs;
+    }
+
+    public int updateManager(int empId, int managerId) throws SQLException
+    {
+        String sql = "UPDATE employees SET manager_id=? WHERE employee_id=?";
+        int rs;
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            stmt.setInt(1, managerId);
+            stmt.setInt(2, empId);
+
+            rs = stmt.executeUpdate();
+            System.out.println("Result: "+rs);
+        }
+
+        return rs;
+    }
+
+    public int updateStatus(int empId, String status) throws SQLException
+    {
+        String sql = "UPDATE employees SET status=? WHERE employee_id=?";
+        int rs;
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            stmt.setString(1, status);
+            stmt.setInt(2, empId);
+
+            rs = stmt.executeUpdate();
+            System.out.println("Result: "+rs);
+        }
+
+        return rs;
+    }
+
+    public int updateWeeklyCapacity(int empId, int weekly_capacity) throws SQLException
+    {
+        String sql = "UPDATE employees SET weekly_capacity=? WHERE employee_id=?";
+        int rs;
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            stmt.setInt(1, weekly_capacity);
+            stmt.setInt(2, empId);
+
+            rs = stmt.executeUpdate();
+            System.out.println("Result: "+rs);
+        }
+
+        return rs;
+    }
+
+    public int deleteEmployee(int empId) throws SQLException
+    {
+        String sql = "DELETE FROM employees WHERE employee_id=?";
+        int rs;
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+
+            stmt.setInt(1, empId);
+
+            rs = stmt.executeUpdate();
+        }
+
+        return rs;
+    }
+
+//  Workload Needed
+    public List<Employee> getAvailableEmployees(int requiredHours) throws SQLException
+    {
+        LinkedList<Employee> emp = new LinkedList<>();
+
+        return emp;
+    }
+
+//  Skills Needed
+    public List<Employee> getEmployeesWithSkill(int skillId) throws SQLException
+    {
+        LinkedList<Employee> emp = new LinkedList<>();
+
+        return emp;
+    }
 }
