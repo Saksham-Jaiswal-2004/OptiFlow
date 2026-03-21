@@ -7,7 +7,7 @@ import com.optiflow.models.User;
 
 public class UserDAO
 {
-    public void addUser(String name, String email, String passwordHash, String role) throws SQLException
+    public boolean addUser(String name, String email, String passwordHash, String role) throws SQLException
     {
         String sql = "INSERT INTO Users (name, email, password_hash, role) VALUES (?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
@@ -17,9 +17,12 @@ public class UserDAO
             stmt.setString(3, passwordHash);
             stmt.setString(4, role);
             stmt.executeUpdate();
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return false;
     }
 
     public User getUserById(int user_id) throws SQLException
