@@ -2,7 +2,6 @@ package com.optiflow.services;
 
 import com.optiflow.dao.UserDAO;
 import com.optiflow.models.User;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;

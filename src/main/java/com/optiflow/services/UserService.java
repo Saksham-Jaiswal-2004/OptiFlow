@@ -2,9 +2,7 @@ package com.optiflow.services;
 
 import com.optiflow.dao.UserDAO;
 import com.optiflow.models.User;
-
 import java.sql.SQLException;
-import java.util.LinkedList;
 import java.util.List;
 
 public class UserService
@@ -68,8 +66,49 @@ public class UserService
         return userDAO.getAllUsers();
     }
 
-    public boolean updateUser(User user)
+    public boolean updateName(int user_id, String name) throws SQLException
     {
+        if(user_id<=0 || name.isEmpty())
+            return false;
+
+        if(userDAO.updateName(user_id, name)!=1)
+            return false;
+
+        return true;
+    }
+
+    public boolean updateEmail(int user_id, String email) throws SQLException
+    {
+        if(user_id<=0 || email.isEmpty() || !auth.isValidEmail(email))
+            return false;
+
+        if(userDAO.updateEmail(user_id, email)!=1)
+            return false;
+
+        return true;
+    }
+
+    public boolean updatePassword(int user_id, String password) throws SQLException
+    {
+        if(user_id<=0 || password.isEmpty() || !auth.validatePassword(password))
+            return false;
+
+        String hashed_password = auth.hashPassword(password);
+
+        if(userDAO.updatePassword(user_id, hashed_password)!=1)
+            return false;
+
+        return true;
+    }
+
+    public boolean updateRole(int user_id, String role) throws SQLException
+    {
+        if(user_id<=0 || role.isEmpty())
+            return false;
+
+        if(userDAO.updateRole(user_id, role)!=1)
+            return false;
+
         return true;
     }
 
