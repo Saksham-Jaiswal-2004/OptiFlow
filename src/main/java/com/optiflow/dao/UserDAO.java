@@ -104,6 +104,33 @@ public class UserDAO
         return userList;
     }
 
+    public List<User> getUsersByRole(String role) throws SQLException
+    {
+        LinkedList<User> userList = new LinkedList<>();
+        String sql = "SELECT * FROM users WHERE role=?";
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            stmt.setString(1, role);
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next())
+            {
+                User user = new User();
+                user.setUserId(rs.getInt("user_id"));
+                user.setName(rs.getString("name"));
+                user.setEmail(rs.getString("email"));
+                user.setPasswordHash(rs.getString("password_hash"));
+                user.setRole(rs.getString("role"));
+//                user.setCreatedAt(rs.getTimestamp("created_at"));
+
+                userList.add(user);
+            }
+        }
+        return userList;
+    }
+
     public int updateName(int user_id, String name) throws SQLException
     {
         String sql = "UPDATE users SET name=? WHERE user_id=?";
@@ -176,7 +203,7 @@ public class UserDAO
         return rs;
     }
 
-    public int deleteUser(int user_id) throws SQLException
+    public boolean deleteUser(int user_id) throws SQLException
     {
         String sql = "DELETE FROM Users WHERE user_id=?";
         int rs;
@@ -189,6 +216,9 @@ public class UserDAO
             rs = stmt.executeUpdate();
         }
 
-        return rs;
+        if(rs!=0)
+            return true;
+
+        return false;
     }
 }

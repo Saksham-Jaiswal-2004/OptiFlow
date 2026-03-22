@@ -1,35 +1,71 @@
 package com.optiflow.services;
 
+import com.optiflow.dao.UserDAO;
 import com.optiflow.models.User;
+
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
 public class UserService
 {
-    public boolean createUser(User user)
+    private UserDAO userDAO;
+    private AuthService auth;
+
+    UserService()
     {
-        return true;
+        this.userDAO = new UserDAO();
+        this.auth = new AuthService();
     }
 
-    public User getUserById(int userId)
+    public boolean createUser(User user) throws SQLException
     {
-        User u1 = new User();
+        if (user == null)
+            return false;
 
-        return u1;
+        if (!auth.isValidEmail(user.getEmail()))
+        {
+            System.out.println("Invalid email format");
+            return false;
+        }
+
+        if (userDAO.getUserByEmail(user.getEmail()) != null)
+        {
+            System.out.println("Email already exists");
+            return false;
+        }
+
+        if (!auth.validatePassword(user.getPasswordHash()))
+        {
+            System.out.println("Weak password");
+            return false;
+        }
+
+        String hashedPassword = auth.hashPassword(user.getPasswordHash());
+        user.setPasswordHash(hashedPassword);
+
+        return userDAO.addUser(user.getName(), user.getEmail(), user.getPasswordHash(), user.getRole());
     }
 
-    public User getUserByEmail(String email)
+    public User getUserById(int user_id) throws SQLException
     {
-        User u1 = new User();
+        if(user_id <= 0)
+            return null;
 
-        return u1;
+        return userDAO.getUserById(user_id);
     }
 
-    public List<User> getAllUsers()
+    public User getUserByEmail(String email) throws SQLException
     {
-        LinkedList<User> userList = new LinkedList<>();
+        if(!auth.isValidEmail(email))
+            return null;
 
-        return userList;
+        return userDAO.getUserByEmail(email);
+    }
+
+    public List<User> getAllUsers() throws SQLException
+    {
+        return userDAO.getAllUsers();
     }
 
     public boolean updateUser(User user)
@@ -37,15 +73,19 @@ public class UserService
         return true;
     }
 
-    public boolean deleteUser(int userId)
+    public boolean deleteUser(int user_id) throws SQLException
     {
-        return true;
+        if(user_id <= 0)
+            return false;
+
+        return userDAO.deleteUser(user_id);
     }
 
-    public List<User> getUsersByRole(String role)
+    public List<User> getUsersByRole(String role) throws SQLException
     {
-        LinkedList<User> userList = new LinkedList<>();
+        if(role==null || role.isEmpty())
+            return null;
 
-        return userList;
+        return userDAO.getUsersByRole(role);
     }
 }
