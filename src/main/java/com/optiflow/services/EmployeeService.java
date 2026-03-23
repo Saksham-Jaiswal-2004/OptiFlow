@@ -1,50 +1,103 @@
 package com.optiflow.services;
 
+import com.optiflow.dao.EmployeeDAO;
+import com.optiflow.dao.TaskDAO;
 import com.optiflow.models.Employee;
+
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
 public class EmployeeService
 {
-    public boolean createEmployee(Employee emp)
+    private EmployeeDAO employeeDAO;
+    private TaskDAO taskDAO;
+
+    EmployeeService()
     {
-        return true;
+        this.employeeDAO = new EmployeeDAO();
+        this .taskDAO = new TaskDAO();
     }
 
-    public Employee getEmployeeById(int empId)
+    public boolean createEmployee(Employee emp) throws SQLException
     {
-        Employee e1 = new Employee();
+        if(emp==null)
+            return false;
 
-        return e1;
+        return employeeDAO.addEmployee(emp.getUser_id(), emp.getName(), emp.getSkill(), emp.getDesignation(), emp.getDepartment(), emp.getManager_id(), emp.getStatus(), emp.getWeeklyCapacity());
     }
 
-    public List<Employee> getAllEmployees()
+    public Employee getEmployeeById(int emp_id) throws SQLException
     {
-        LinkedList<Employee> empList = new LinkedList<>();
+        if(emp_id<=0)
+            return null;
 
-        return empList;
+        return employeeDAO.getEmployeeById(emp_id);
     }
 
-    public boolean updateEmployee(Employee emp)
+    public Employee getEmployeeByUserId(int user_id) throws SQLException
     {
-        return true;
+        if(user_id<=0)
+            return null;
+
+        return employeeDAO.getEmployeeByUserId(user_id);
     }
 
-    public boolean deleteEmployee(int empId)
+    public List<Employee> getEmployeeByDepartment(String department) throws SQLException
     {
-        return true;
+        if(department.isEmpty())
+            return null;
+
+        return employeeDAO.getEmployeesByDepartment(department);
     }
 
-    public List<Employee> getEmployeesByManager(int managerId)
+    public List<Employee> getAllEmployees() throws SQLException
     {
-        LinkedList<Employee> empList = new LinkedList<>();
-
-        return empList;
+        return employeeDAO.getAllEmployees();
     }
 
-    public boolean assignManager(int empId, int managerId)
+    public boolean updateEmployee(Employee emp) throws SQLException
     {
-        return true;
+        if(emp == null)
+            return false;
+
+        try {
+            employeeDAO.updateName(emp.getEmp_id(), emp.getName());
+            employeeDAO.updateSkill(emp.getEmp_id(), emp.getSkill());
+            employeeDAO.updateDesignation(emp.getEmp_id(), emp.getDesignation());
+            employeeDAO.updateDepartment(emp.getEmp_id(), emp.getDepartment());
+            employeeDAO.updateManager(emp.getEmp_id(), emp.getManager_id());
+            employeeDAO.updateStatus(emp.getEmp_id(), emp.getStatus());
+            employeeDAO.updateWeeklyCapacity(emp.getEmp_id(), emp.getWeeklyCapacity());
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean deleteEmployee(int emp_id) throws SQLException
+    {
+        if(emp_id<=0)
+            return false;
+
+        return employeeDAO.deleteEmployee(emp_id) == 1;
+    }
+
+    public List<Employee> getEmployeesByManager(int manager_id) throws SQLException
+    {
+        if(manager_id<=0)
+            return null;
+
+        return employeeDAO.getEmployeesByManager(manager_id);
+    }
+
+    public boolean assignManager(int emp_id, int manager_id) throws SQLException
+    {
+        if(emp_id<=0 || manager_id<=0)
+            return false;
+
+        return employeeDAO.updateManager(emp_id, manager_id) == 1;
     }
 
     public int calculateCurrentWorkload(int empId)
@@ -81,10 +134,5 @@ public class EmployeeService
         LinkedList<Employee> empList = new LinkedList<>();
 
         return empList;
-    }
-
-    public boolean updateSkills(int empId, String skills)
-    {
-        return true;
     }
 }

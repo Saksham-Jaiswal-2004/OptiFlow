@@ -2,7 +2,7 @@ package com.optiflow.dao;
 
 public class WorkloadDAO
 {
-//    boolean createOrUpdateWorkload(Workload workload)
+//    boolean createWorkload(Workload workload)
 //    {}
 //
 //    Workload getWorkloadByEmployee(int empId)

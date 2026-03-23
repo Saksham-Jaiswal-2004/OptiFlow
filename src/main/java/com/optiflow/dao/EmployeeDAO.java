@@ -9,7 +9,7 @@ import com.optiflow.models.User;
 
 public class EmployeeDAO
 {
-    public void addEmployee(int user_id, String name, String skill, String designation, String department, int manager_id, String status, int weeklyCapacity) throws SQLException
+    public boolean addEmployee(int user_id, String name, String skill, String designation, String department, int manager_id, String status, int weeklyCapacity) throws SQLException
     {
         String sql = "INSERT INTO Employees (user_id, name, skills, designation, department, manager_id, status, weekly_capacity) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
@@ -26,17 +26,20 @@ public class EmployeeDAO
             stmt.setString(7, status);
             stmt.setInt(8, weeklyCapacity);
             stmt.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 
-    public Employee getEmployeeById(int empId) throws SQLException
+    public Employee getEmployeeById(int emp_id) throws SQLException
     {
         String sql = "SELECT * FROM Employees WHERE employee_id=?";
 
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)){
 
-            stmt.setInt(1, empId);
+            stmt.setInt(1, emp_id);
 
             ResultSet rs = stmt.executeQuery();
 
@@ -213,7 +216,7 @@ public class EmployeeDAO
         return empList;
     }
 
-    public int updateName(int empId, String name) throws SQLException
+    public int updateName(int emp_id, String name) throws SQLException
     {
         String sql = "UPDATE employees SET name=? WHERE employee_id=?";
         int rs;
@@ -222,7 +225,7 @@ public class EmployeeDAO
             PreparedStatement stmt = conn.prepareStatement(sql);)
         {
             stmt.setString(1, name);
-            stmt.setInt(2, empId);
+            stmt.setInt(2, emp_id);
 
             rs = stmt.executeUpdate();
             System.out.println("Result: "+rs);
@@ -232,12 +235,12 @@ public class EmployeeDAO
     }
 
 //  Skills Needed
-    public int updateSkill(int empId, String name) throws SQLException
+    public int updateSkill(int emp_id, String name) throws SQLException
     {
         return -1;
     }
 
-    public int updateDesignation(int empId, String designation) throws SQLException
+    public int updateDesignation(int emp_id, String designation) throws SQLException
     {
         String sql = "UPDATE employees SET designation=? WHERE employee_id=?";
         int rs;
@@ -246,7 +249,7 @@ public class EmployeeDAO
             PreparedStatement stmt = conn.prepareStatement(sql);)
         {
             stmt.setString(1, designation);
-            stmt.setInt(2, empId);
+            stmt.setInt(2, emp_id);
 
             rs = stmt.executeUpdate();
             System.out.println("Result: "+rs);
@@ -255,7 +258,7 @@ public class EmployeeDAO
         return rs;
     }
 
-    public int updateDepartment(int empId, String department) throws SQLException
+    public int updateDepartment(int emp_id, String department) throws SQLException
     {
         String sql = "UPDATE employees SET department=? WHERE employee_id=?";
         int rs;
@@ -264,7 +267,7 @@ public class EmployeeDAO
             PreparedStatement stmt = conn.prepareStatement(sql);)
         {
             stmt.setString(1, department);
-            stmt.setInt(2, empId);
+            stmt.setInt(2, emp_id);
 
             rs = stmt.executeUpdate();
             System.out.println("Result: "+rs);
@@ -273,7 +276,7 @@ public class EmployeeDAO
         return rs;
     }
 
-    public int updateManager(int empId, int managerId) throws SQLException
+    public int updateManager(int emp_id, int managerId) throws SQLException
     {
         String sql = "UPDATE employees SET manager_id=? WHERE employee_id=?";
         int rs;
@@ -282,7 +285,7 @@ public class EmployeeDAO
             PreparedStatement stmt = conn.prepareStatement(sql);)
         {
             stmt.setInt(1, managerId);
-            stmt.setInt(2, empId);
+            stmt.setInt(2, emp_id);
 
             rs = stmt.executeUpdate();
             System.out.println("Result: "+rs);
@@ -291,7 +294,7 @@ public class EmployeeDAO
         return rs;
     }
 
-    public int updateStatus(int empId, String status) throws SQLException
+    public int updateStatus(int emp_id, String status) throws SQLException
     {
         String sql = "UPDATE employees SET status=? WHERE employee_id=?";
         int rs;
@@ -300,7 +303,7 @@ public class EmployeeDAO
             PreparedStatement stmt = conn.prepareStatement(sql);)
         {
             stmt.setString(1, status);
-            stmt.setInt(2, empId);
+            stmt.setInt(2, emp_id);
 
             rs = stmt.executeUpdate();
             System.out.println("Result: "+rs);
@@ -309,7 +312,7 @@ public class EmployeeDAO
         return rs;
     }
 
-    public int updateWeeklyCapacity(int empId, int weekly_capacity) throws SQLException
+    public int updateWeeklyCapacity(int emp_id, int weekly_capacity) throws SQLException
     {
         String sql = "UPDATE employees SET weekly_capacity=? WHERE employee_id=?";
         int rs;
@@ -318,7 +321,7 @@ public class EmployeeDAO
             PreparedStatement stmt = conn.prepareStatement(sql);)
         {
             stmt.setInt(1, weekly_capacity);
-            stmt.setInt(2, empId);
+            stmt.setInt(2, emp_id);
 
             rs = stmt.executeUpdate();
             System.out.println("Result: "+rs);
@@ -327,7 +330,7 @@ public class EmployeeDAO
         return rs;
     }
 
-    public int deleteEmployee(int empId) throws SQLException
+    public int deleteEmployee(int emp_id) throws SQLException
     {
         String sql = "DELETE FROM employees WHERE employee_id=?";
         int rs;
@@ -335,7 +338,7 @@ public class EmployeeDAO
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)){
 
-            stmt.setInt(1, empId);
+            stmt.setInt(1, emp_id);
 
             rs = stmt.executeUpdate();
         }
