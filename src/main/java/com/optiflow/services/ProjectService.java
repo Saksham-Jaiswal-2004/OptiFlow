@@ -12,7 +12,7 @@ public class ProjectService
         return true;
     }
 
-    public Projects getProjectById(int projectId)
+    public Projects getProjectById(int project_id)
     {
         Projects p1 = new Projects();
 
@@ -31,34 +31,34 @@ public class ProjectService
         return true;
     }
 
-    public boolean deleteProject(int projectId)
+    public boolean deleteProject(int project_id)
     {
         return true;
     }
 
-    public double calculateProjectProgress(int projectId)
+    public double calculateProjectProgress(int project_id)
     {
         return 0.0;
     }
 
-    public String getProjectStatus(int projectId)
+    public String getProjectStatus(int project_id)
     {
         return "";
     }
 
-    public List<Tasks> getTasksByProject(int projectId)
+    public List<Tasks> getTasksByProject(int project_id)
     {
         LinkedList<Tasks> taskList = new LinkedList<>();
 
         return taskList;
     }
 
-    public int getTotalProjectHours(int projectId)
+    public int getTotalProjectHours(int project_id)
     {
         return -1;
     }
 
-    public int getCompletedProjectHours(int projectId)
+    public int getCompletedProjectHours(int project_id)
     {
         return -1;
     }
