@@ -1,22 +1,39 @@
 package com.optiflow.services;
 
+import com.optiflow.dao.ProjectDAO;
+import com.optiflow.dao.TaskDAO;
 import com.optiflow.models.Projects;
 import com.optiflow.models.Tasks;
+
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
 public class ProjectService
 {
-    public boolean createProject(Projects project)
+    ProjectDAO projectDAO;
+    TaskDAO taskDAO;
+
+    ProjectService()
     {
-        return true;
+        this.projectDAO = new ProjectDAO();
+        this.taskDAO = new TaskDAO();
     }
 
-    public Projects getProjectById(int project_id)
+    public boolean createProject(Projects project) throws SQLException
     {
-        Projects p1 = new Projects();
+        if(project == null)
+            return false;
 
-        return p1;
+        return projectDAO.createProject(project.getName(), project.getDescription(), project.getStart_date(), project.getEnd_date(), project.getClient_id(), project.getStatus());
+    }
+
+    public Projects getProjectById(int project_id) throws SQLException
+    {
+        if(project_id<=0)
+            return null;
+
+        return projectDAO.getProjectById(project_id);
     }
 
     public List<Projects> getAllProjects()

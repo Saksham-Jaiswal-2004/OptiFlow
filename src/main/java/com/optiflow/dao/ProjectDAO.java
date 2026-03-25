@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ProjectDAO
 {
-    public void createProject(String name, String description, Date start_date, Date end_date, int client_id, String status) throws SQLException
+    public boolean createProject(String name, String description, Date start_date, Date end_date, int client_id, String status) throws SQLException
     {
         String sql = "INSERT INTO projects (name, description, start_date, end_date, client_id, status) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
@@ -25,6 +25,10 @@ public class ProjectDAO
                 stmt.setInt(5, client_id);
             stmt.setString(6, status);
             stmt.executeUpdate();
+
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 
