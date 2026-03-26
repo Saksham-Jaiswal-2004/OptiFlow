@@ -36,47 +36,91 @@ public class ProjectService
         return projectDAO.getProjectById(project_id);
     }
 
-    public List<Projects> getAllProjects()
+    public List<Projects> getAllProjects() throws SQLException
     {
-        LinkedList<Projects> proList = new LinkedList<>();
-
-        return proList;
+        return projectDAO.getAllProjects();
     }
 
     public boolean updateProject(Projects project)
     {
-        return true;
+        if(project == null)
+            return false;
+
+        try
+        {
+            projectDAO.updateName(project.getProject_id(), project.getName());
+            projectDAO.updateDescription(project.getProject_id(), project.getDescription());
+            projectDAO.updateStartDate(project.getProject_id(), project.getStart_date());
+            projectDAO.updateEndDate(project.getProject_id(), project.getEnd_date());
+            projectDAO.updateStatus(project.getProject_id(), project.getStatus());
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
-    public boolean deleteProject(int project_id)
+    public boolean deleteProject(int project_id) throws SQLException
     {
-        return true;
+        if(project_id <= 0)
+            return false;
+
+        return projectDAO.deleteProject(project_id) == 1;
     }
 
-    public double calculateProjectProgress(int project_id)
+    public double calculateProjectProgress(int project_id) throws SQLException
     {
-        return 0.0;
+        if(project_id <= 0)
+            return -1.0;
+
+        return (getCompletedProjectHours(project_id)/getTotalProjectHours(project_id))*100;
     }
 
-    public String getProjectStatus(int project_id)
+    public String getProjectStatus(int project_id) throws SQLException
     {
-        return "";
+        if(project_id <= 0)
+            return "";
+
+        return projectDAO.getProjectStatus(project_id);
     }
 
-    public List<Tasks> getTasksByProject(int project_id)
+    public List<Tasks> getTasksByProject(int project_id) throws SQLException
     {
-        LinkedList<Tasks> taskList = new LinkedList<>();
+        if(project_id <= 0)
+            return null;
 
-        return taskList;
+        return taskDAO.getTasksByProject(project_id);
     }
 
-    public int getTotalProjectHours(int project_id)
+    public int getTotalProjectHours(int project_id) throws SQLException
     {
-        return -1;
+        if(project_id <= 0)
+            return -1;
+
+        List<Tasks> taskList = getTasksByProject(project_id);
+        int total = 0;
+
+        for(Tasks task: taskList)
+        {
+            total += task.getEstimated_hours();
+        }
+
+        return total;
     }
 
-    public int getCompletedProjectHours(int project_id)
+    public int getCompletedProjectHours(int project_id) throws SQLException
     {
-        return -1;
+        if(project_id <= 0)
+            return -1;
+
+        List<Tasks> taskList = getTasksByProject(project_id);
+        int total = 0;
+
+        for(Tasks task: taskList)
+        {
+            total += task.getActual_hours();
+        }
+
+        return total;
     }
 }

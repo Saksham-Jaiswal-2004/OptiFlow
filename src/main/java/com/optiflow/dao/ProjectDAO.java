@@ -142,6 +142,20 @@ public class ProjectDAO
         return proList;
     }
 
+    public String getProjectStatus(int project_id) throws SQLException
+    {
+        String sql = "SELECT * FROM projects WHERE project_id=?";
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            stmt.setInt(1, project_id);
+            ResultSet rs = stmt.executeQuery();
+
+            return rs.getString("status");
+        }
+    }
+
     public int updateName(int project_id, String name) throws SQLException
     {
         String sql = "UPDATE projects SET name=? WHERE project_id=?";
