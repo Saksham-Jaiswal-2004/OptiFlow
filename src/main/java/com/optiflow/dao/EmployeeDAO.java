@@ -216,6 +216,22 @@ public class EmployeeDAO
         return empList;
     }
 
+    public int getWeeklyCapacity(int emp_id)
+    {
+        if(emp_id <= 0)
+            return -1;
+
+        return getWeeklyCapacity(emp_id);
+    }
+
+    public int getAllocatedHours(int emp_id)
+    {
+        if(emp_id <= 0)
+            return -1;
+
+        return getAllocatedHours(emp_id);
+    }
+
     public int updateName(int emp_id, String name) throws SQLException
     {
         String sql = "UPDATE employees SET name=? WHERE employee_id=?";

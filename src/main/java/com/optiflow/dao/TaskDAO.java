@@ -2,13 +2,17 @@ package com.optiflow.dao;
 
 import com.optiflow.database.DBConnection;
 import com.optiflow.models.Tasks;
+import org.jetbrains.annotations.NotNull;
+
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.LinkedList;
 import java.util.List;
 
 public class TaskDAO
 {
-    public void createTask(int project_id, int assigned_to, String title, String description, String status, String priority, int estimated_hours, Date start_date, Date end_date) throws SQLException
+    public boolean createTask(int project_id, int assigned_to, String title, String description, String status, String priority, int estimated_hours, Date start_date, Date end_date) throws SQLException
     {
         String sql = "INSERT INTO tasks (project_id, assigned_to, title, description, status, priority, estimated_hours, actual_hours, start_date, end_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
@@ -27,6 +31,10 @@ public class TaskDAO
             stmt.setDate(9, Date.valueOf(start_date.toLocalDate()));
             stmt.setDate(10, Date.valueOf(end_date.toLocalDate()));
             stmt.executeUpdate();
+
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 
@@ -315,7 +323,7 @@ public class TaskDAO
         return rs;
     }
 
-    public int updateStartDate(int task_id, Date start_date) throws SQLException
+    public int updateStartDate(int task_id, @NotNull Date start_date) throws SQLException
     {
         String sql = "UPDATE tasks SET start_date=? WHERE task_id=?";
         int rs;
@@ -333,7 +341,7 @@ public class TaskDAO
         return rs;
     }
 
-    public int updateEndDate(int task_id, Date end_date) throws SQLException
+    public int updateEndDate(int task_id, @NotNull Date end_date) throws SQLException
     {
         String sql = "UPDATE tasks SET end_date=? WHERE task_id=?";
         int rs;
@@ -458,7 +466,39 @@ public class TaskDAO
                 task.setStart_date(rs.getDate("start_date"));
                 task.setEnd_date(rs.getDate("end_date"));
 
-                if(task.getActual_hours()>task.getEstimated_hours())
+                if(LocalDate.now().isAfter(task.getEnd_date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))
+                    taskList.add(task);
+            }
+        }
+        return taskList;
+    }
+
+    public List<Tasks> getTasksDueSoon() throws SQLException
+    {
+        LinkedList<Tasks> taskList = new LinkedList<>();
+        String sql = "SELECT * FROM tasks";
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next())
+            {
+                Tasks task = new Tasks();
+                task.setTask_id(rs.getInt("task_id"));
+                task.setProject_id(rs.getInt("project_id"));
+                task.setAssigned_to(rs.getInt("assigned_to"));
+                task.setTitle(rs.getString("title"));
+                task.setDescription(rs.getString("description"));
+                task.setStatus(rs.getString("status"));
+                task.setPriority(rs.getString("priority"));
+                task.setEstimated_hours(rs.getInt("estimated_hours"));
+                task.setActual_hours(rs.getInt("actual_hours"));
+                task.setStart_date(rs.getDate("start_date"));
+                task.setEnd_date(rs.getDate("end_date"));
+
+                if(LocalDate.now().isEqual(task.getEnd_date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))
                     taskList.add(task);
             }
         }

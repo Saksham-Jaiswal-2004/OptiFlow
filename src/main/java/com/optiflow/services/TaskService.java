@@ -1,28 +1,37 @@
 package com.optiflow.services;
 
+import com.optiflow.dao.EmployeeDAO;
+import com.optiflow.dao.TaskDAO;
 import com.optiflow.models.Tasks;
-import java.util.LinkedList;
+
+import java.sql.SQLException;
 import java.util.List;
 
 public class TaskService
 {
-    public boolean createTask(Tasks task)
+    private TaskDAO taskDAO;
+    private EmployeeDAO employeeDAO;
+
+    TaskService()
     {
-        return true;
+        this.taskDAO = new TaskDAO();
+        this.employeeDAO = new EmployeeDAO();
     }
 
-    public Tasks getTaskById(int taskId)
+    public boolean createTask(Tasks task) throws SQLException
     {
-        Tasks t1 = new Tasks();
+        if(task == null)
+            return false;
 
-        return t1;
+        return taskDAO.createTask(task.getProject_id(), task.getAssigned_to(), task.getTitle(), task.getDescription(), task.getStatus(), task.getPriority(), task.getEstimated_hours(), task.getStart_date(), task.getEnd_date());
     }
 
-    public List<Tasks> getAllTasks()
+    public Tasks getTaskById(int task_id) throws SQLException
     {
-        LinkedList<Tasks> taskList = new LinkedList<>();
+        if(task_id <= 0)
+            return null;
 
-        return taskList;
+        return taskDAO.getTaskById(task_id);
     }
 
     public boolean updateTask(Tasks task)
@@ -30,14 +39,20 @@ public class TaskService
         return true;
     }
 
-    public boolean deleteTask(int taskId)
+    public boolean deleteTask(int task_id) throws SQLException
     {
-        return true;
+        if(task_id <= 0)
+            return false;
+
+        return taskDAO.deleteTask(task_id) == 1;
     }
 
-    public boolean assignTask(int taskId, int empId)
+    public boolean assignTask(int task_id, int emp_id) throws SQLException
     {
-        return true;
+        if(task_id <=0 || emp_id <= 0)
+            return false;
+
+        return taskDAO.assignTask(task_id, emp_id) == 1;
     }
 
     public boolean autoAssignTask(Tasks task)
@@ -45,46 +60,50 @@ public class TaskService
         return true;
     }
 
-    public boolean updateTaskStatus(int taskId, String status)
+    public boolean updateTaskStatus(int task_id, String status) throws SQLException
     {
-        return true;
+        if(task_id <= 0)
+            return false;
+
+        return taskDAO.updateStatus(task_id,status) == 1;
     }
 
-    public List<Tasks> getTasksByStatus(String status)
+    public List<Tasks> getTasksByStatus(String status) throws SQLException
     {
-        LinkedList<Tasks> taskList = new LinkedList<>();
-
-        return taskList;
+        return taskDAO.getTasksByStatus(status);
     }
 
-    public List<Tasks> getTasksByEmployee(int empId)
+    public List<Tasks> getTasksByEmployee(int emp_id) throws SQLException
     {
-        LinkedList<Tasks> taskList = new LinkedList<>();
+        if(emp_id <= 0)
+            return null;
 
-        return taskList;
+        return taskDAO.getTasksByEmployee(emp_id);
     }
 
-    public int calculateTaskHours(int taskId)
+    public int calculateTaskHours(int task_id)
     {
         return -1;
     }
 
-    public boolean canAssignTask(int empId, int taskHours)
+    public boolean canAssignTask(int emp_id, int taskHours)
     {
-        return true;
+        if(emp_id <= 0)
+            return false;
+
+        if(employeeDAO.getWeeklyCapacity(emp_id) - employeeDAO.getAllocatedHours(emp_id) > taskHours)
+            return true;
+
+        return false;
     }
 
-    public List<Tasks> getOverdueTasks()
+    public List<Tasks> getOverdueTasks() throws SQLException
     {
-        LinkedList<Tasks> taskList = new LinkedList<>();
-
-        return taskList;
+        return taskDAO.getDelayedTasks();
     }
 
-    public List<Tasks> getTasksDueSoon()
+    public List<Tasks> getTasksDueSoon() throws SQLException
     {
-        LinkedList<Tasks> taskList = new LinkedList<>();
-
-        return taskList;
+        return taskDAO.getTasksDueSoon();
     }
 }
