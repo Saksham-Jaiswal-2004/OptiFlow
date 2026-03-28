@@ -2,6 +2,7 @@ package com.optiflow.services;
 
 import com.optiflow.dao.EmployeeDAO;
 import com.optiflow.dao.TaskDAO;
+import com.optiflow.models.Employee;
 import com.optiflow.models.Tasks;
 
 import java.sql.SQLException;
@@ -11,11 +12,15 @@ public class TaskService
 {
     private TaskDAO taskDAO;
     private EmployeeDAO employeeDAO;
+    private EmployeeSkillService employeeSkillService;
+    private WorkloadService workloadService;
 
     TaskService()
     {
         this.taskDAO = new TaskDAO();
         this.employeeDAO = new EmployeeDAO();
+        this.employeeSkillService = new EmployeeSkillService();
+        this.workloadService = new WorkloadService();
     }
 
     public boolean createTask(Tasks task) throws SQLException
@@ -55,9 +60,23 @@ public class TaskService
         return taskDAO.assignTask(task_id, emp_id) == 1;
     }
 
-    public boolean autoAssignTask(Tasks task)
+    public boolean autoAssignTask(Tasks task) throws SQLException
     {
-        return true;
+//        List<Integer> skillIds = task.getRequiredSkillIds();
+        List<Integer> skillIds = {1};
+
+        List<Employee> candidates = employeeSkillService.getEmployeesByMultipleSkills(skillIds);
+
+        List<Integer> empIds = candidates.stream()
+                .map(Employee::getEmp_id)
+                .toList();
+
+        int bestEmpId = workloadService.getBestEmployee(empIds, task.getEstimated_hours());
+
+        if(bestEmpId == -1)
+            return false;
+
+        return assignTask(task.getTask_id(), bestEmpId);
     }
 
     public boolean updateTaskStatus(int task_id, String status) throws SQLException
