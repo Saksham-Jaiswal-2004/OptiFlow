@@ -2,10 +2,9 @@ package com.optiflow.services;
 
 import com.optiflow.dao.EmployeeDAO;
 import com.optiflow.dao.TaskDAO;
-import com.optiflow.models.Employee;
-import com.optiflow.models.ProjectSkill;
-import com.optiflow.models.Skills;
-import com.optiflow.models.Tasks;
+import com.optiflow.dao.TaskSkillDAO;
+import com.optiflow.models.*;
+import com.optiflow.utils.AutoAssignEngine;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -16,6 +15,7 @@ public class TaskService
     private EmployeeDAO employeeDAO;
     private EmployeeSkillService employeeSkillService;
     private WorkloadService workloadService;
+    private TaskSkillService taskSkillService;
 
     TaskService()
     {
@@ -23,6 +23,7 @@ public class TaskService
         this.employeeDAO = new EmployeeDAO();
         this.employeeSkillService = new EmployeeSkillService();
         this.workloadService = new WorkloadService();
+        this.taskSkillService = new TaskSkillService();
     }
 
     public boolean createTask(Tasks task) throws SQLException
@@ -62,20 +63,20 @@ public class TaskService
         return taskDAO.assignTask(task_id, emp_id) == 1;
     }
 
-//    public boolean autoAssignTask(Tasks task) throws SQLException
-//    {
-//        List<ProjectSkill> skillIds = task.getRequiredSkills();
-//
-//        List<Employee> candidates = employeeSkillService.getEmployeesByMultipleSkills(skillIds);
-//
-//        List<Integer> empIds = candidates.stream().map(Employee::getEmp_id).toList();
-//
-//        int bestEmpId = workloadService.getBestEmployee(empIds, task.getEstimated_hours());
-//        if(bestEmpId == -1)
-//            return false;
-//
-//        return assignTask(task.getTask_id(), bestEmpId);
-//    }
+    public boolean autoAssignTask(Tasks task) throws SQLException
+    {
+        if(task == null)
+            return false;
+
+        AutoAssignEngine engine = new AutoAssignEngine();
+
+        Employee bestEmp = engine.getBestEmployeeForTask(task.getTask_id());
+
+        if(bestEmp == null)
+            return false;
+
+        return taskDAO.assignTask(task.getTask_id(), bestEmp.getEmp_id()) == 1;
+    }
 
     public boolean updateTaskStatus(int task_id, String status) throws SQLException
     {
