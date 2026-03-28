@@ -1,23 +1,29 @@
 package com.optiflow.services;
 
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.optiflow.dao.ProjectDAO;
 import com.optiflow.dao.TaskDAO;
+import com.optiflow.dto.TaskDTO;
 import com.optiflow.models.Projects;
 import com.optiflow.models.Tasks;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Scanner;
 
 public class ProjectService
 {
     ProjectDAO projectDAO;
     TaskDAO taskDAO;
+    AIService aiService;
 
     ProjectService()
     {
         this.projectDAO = new ProjectDAO();
         this.taskDAO = new TaskDAO();
+        this.aiService = new AIService();
     }
 
     public boolean createProject(Projects project) throws SQLException
@@ -26,6 +32,50 @@ public class ProjectService
             return false;
 
         return projectDAO.createProject(project.getName(), project.getDescription(), project.getStart_date(), project.getEnd_date(), project.getClient_id(), project.getStatus());
+    }
+
+    public void generateTasksForProjects(String project_title, String project_details)
+    {
+        String response = aiService.generateTasks(project_title, project_details);
+        System.out.println("Response: "+response);
+
+        List<TaskDTO> tasks = null;
+        try
+        {
+            ObjectMapper mapper = new ObjectMapper();
+
+            JsonNode root = mapper.readTree(response);
+
+            String content = root
+                    .path("choices")
+                    .get(0)
+                    .path("message")
+                    .path("content")
+                    .asText();
+
+            content = content.replace("```json", "")
+                    .replace("```", "")
+                    .trim();
+
+            tasks = mapper.readValue(
+                    content,
+                    new TypeReference<List<TaskDTO>>() {}
+            );
+
+            System.out.println("Taske: "+tasks);
+
+            for(TaskDTO task: tasks)
+            {
+                System.out.println(task.getTitle());
+                System.out.println(task.getDescription());
+                System.out.println(task.getEstimatedHours());
+                System.out.println(task.getPriority());
+                System.out.println();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public Projects getProjectById(int project_id) throws SQLException
@@ -122,5 +172,18 @@ public class ProjectService
         }
 
         return total;
+    }
+
+    public static void main(String[] args)
+    {
+        Scanner sc = new Scanner(System.in);
+        ProjectService projectService = new ProjectService();
+
+        System.out.print("Enter project title: ");
+        String title = sc.nextLine();
+        System.out.print("Enter project details: ");
+        String description = sc.nextLine();
+
+        projectService.generateTasksForProjects(title, description);
     }
 }
