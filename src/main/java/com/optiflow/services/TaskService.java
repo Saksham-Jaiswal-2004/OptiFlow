@@ -3,6 +3,8 @@ package com.optiflow.services;
 import com.optiflow.dao.EmployeeDAO;
 import com.optiflow.dao.TaskDAO;
 import com.optiflow.models.Employee;
+import com.optiflow.models.ProjectSkill;
+import com.optiflow.models.Skills;
 import com.optiflow.models.Tasks;
 
 import java.sql.SQLException;
@@ -60,24 +62,20 @@ public class TaskService
         return taskDAO.assignTask(task_id, emp_id) == 1;
     }
 
-    public boolean autoAssignTask(Tasks task) throws SQLException
-    {
-//        List<Integer> skillIds = task.getRequiredSkillIds();
-        List<Integer> skillIds = {1};
-
-        List<Employee> candidates = employeeSkillService.getEmployeesByMultipleSkills(skillIds);
-
-        List<Integer> empIds = candidates.stream()
-                .map(Employee::getEmp_id)
-                .toList();
-
-        int bestEmpId = workloadService.getBestEmployee(empIds, task.getEstimated_hours());
-
-        if(bestEmpId == -1)
-            return false;
-
-        return assignTask(task.getTask_id(), bestEmpId);
-    }
+//    public boolean autoAssignTask(Tasks task) throws SQLException
+//    {
+//        List<ProjectSkill> skillIds = task.getRequiredSkills();
+//
+//        List<Employee> candidates = employeeSkillService.getEmployeesByMultipleSkills(skillIds);
+//
+//        List<Integer> empIds = candidates.stream().map(Employee::getEmp_id).toList();
+//
+//        int bestEmpId = workloadService.getBestEmployee(empIds, task.getEstimated_hours());
+//        if(bestEmpId == -1)
+//            return false;
+//
+//        return assignTask(task.getTask_id(), bestEmpId);
+//    }
 
     public boolean updateTaskStatus(int task_id, String status) throws SQLException
     {

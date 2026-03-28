@@ -1,6 +1,7 @@
 package com.optiflow.dao;
 
 import com.optiflow.database.DBConnection;
+import com.optiflow.models.ProjectSkill;
 import com.optiflow.models.Tasks;
 import org.jetbrains.annotations.NotNull;
 
