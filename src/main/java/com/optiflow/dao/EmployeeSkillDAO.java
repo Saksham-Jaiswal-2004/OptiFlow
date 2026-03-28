@@ -13,7 +13,7 @@ import java.util.List;
 
 public class EmployeeSkillDAO
 {
-    public void addSkillToEmployee(int emp_id, int skill_id, int proficiency) throws SQLException
+    public boolean addSkillToEmployee(int emp_id, int skill_id, int proficiency) throws SQLException
     {
         String sql = "INSERT INTO employee_skills (employee_id, skill_id, proficiency) VALUES (?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
@@ -22,6 +22,10 @@ public class EmployeeSkillDAO
             stmt.setInt(2, skill_id);
             stmt.setInt(3, proficiency);
             stmt.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            return false;
         }
     }
 
@@ -118,5 +122,18 @@ public class EmployeeSkillDAO
         }
 
         return rs;
+    }
+
+    public boolean deleteAllSkillsOfEmployee(int emp_id) throws SQLException
+    {
+        if(emp_id <= 0)
+            return false;
+
+        for(Skills empskill: getSkillsByEmployee(emp_id))
+        {
+            removeSkillFromEmployee(emp_id, empskill.getSkill_id());
+        }
+
+        return true;
     }
 }
