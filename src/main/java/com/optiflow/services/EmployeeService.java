@@ -99,40 +99,4 @@ public class EmployeeService
 
         return employeeDAO.updateManager(emp_id, manager_id) == 1;
     }
-
-    public int calculateCurrentWorkload(int empId)
-    {
-        return -1;
-    }
-
-    public int getAvailableCapacity(int empId)
-    {
-        return -1;
-    }
-
-    public boolean isEmployeeOverloaded(int empId)
-    {
-        return true;
-    }
-
-    public List<Employee> getAvailableEmployees()
-    {
-        LinkedList<Employee> empList = new LinkedList<>();
-
-        return empList;
-    }
-
-    public Employee getBestEmployeeForTask(int requiredHours)
-    {
-        Employee e1 = new Employee();
-
-        return e1;
-    }
-
-    public List<Employee> getEmployeesBySkill(String skill)
-    {
-        LinkedList<Employee> empList = new LinkedList<>();
-
-        return empList;
-    }
 }
