@@ -1,35 +1,41 @@
 package com.optiflow.services;
 
+import com.optiflow.dao.SkillsDAO;
 import com.optiflow.models.Employee;
 import com.optiflow.models.Skills;
 
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
 public class SkillService
 {
-    public boolean addSkill(Skills skill)
+    private SkillsDAO skillsDAO;
+
+    SkillService()
     {
-        return true;
+        this.skillsDAO = new SkillsDAO();
     }
 
-    public List<Skills> getAllSkills()
+    public boolean addSkill(Skills skill) throws SQLException
     {
-        LinkedList<Skills> skillList = new LinkedList<>();
+        if(skill == null)
+            return false;
 
-        return skillList;
+        return skillsDAO.createSkill(skill.getName(), skill.getDescription());
     }
 
-    public List<Employee> getEmployeesBySkill(String skill)
+    public List<Skills> getAllSkills() throws SQLException
     {
-        LinkedList<Employee> empList = new LinkedList<>();
-
-        return empList;
+        return skillsDAO.getAllSkills();
     }
 
-    public boolean deleteSkill(int skillId)
+    public boolean deleteSkill(int skill_id) throws SQLException
     {
-        return true;
+        if(skill_id <= 0)
+            return false;
+
+        return skillsDAO.deleteSkill(skill_id) == 1;
     }
 
 }

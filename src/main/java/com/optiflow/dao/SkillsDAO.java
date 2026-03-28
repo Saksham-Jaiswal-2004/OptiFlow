@@ -8,7 +8,7 @@ import java.util.List;
 
 public class SkillsDAO
 {
-    public void createSkill(String name, String description) throws SQLException
+    public boolean createSkill(String name, String description) throws SQLException
     {
         String sql = "INSERT INTO skills (name, description) VALUES (?, ?)";
         try (Connection conn = DBConnection.getConnection();
@@ -16,6 +16,10 @@ public class SkillsDAO
             stmt.setString(1, name);
             stmt.setString(2, description);
             stmt.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            return false;
         }
     }
 
