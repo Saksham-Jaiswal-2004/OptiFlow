@@ -30,7 +30,6 @@ public class TaskSkillService
 
     public boolean removeSkillFromTask(User user, int task_id, int skill_id) throws SQLException
     {
-
         if(!AuthorizationUtil.isManager(user) && !AuthorizationUtil.isAdmin(user))
             return false;
 
@@ -39,7 +38,6 @@ public class TaskSkillService
 
     public List<TaskSkill> getSkillsForTask(int task_id) throws SQLException
     {
-
         if(task_id <= 0)
             return null;
 
@@ -48,7 +46,6 @@ public class TaskSkillService
 
     public List<TaskSkill> getTasksBySkill(int skill_id) throws SQLException
     {
-
         if(skill_id <= 0)
             return null;
 

@@ -32,10 +32,10 @@ public class CommentService
         return commentsDAO.getCommentsByTask(task_id);
     }
 
-//    public boolean updateComment(Comments comment)
-//    {
-//        return true;
-//    }
+    public boolean updateComment(Comments comment) throws SQLException
+    {
+        return commentsDAO.updateComment(comment.getComment_id(), comment.getContent());
+    }
 
     public boolean deleteComment(int comment_id) throws SQLException
     {

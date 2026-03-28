@@ -79,6 +79,26 @@ public class CommentsDAO
         return null;
     }
 
+    public boolean updateComment(int comment_id, String content) throws SQLException
+    {
+        if(comment_id <=0 || content.isEmpty())
+            return false;
+
+        String sql = "UPDATE comments SET content=? WHERE comment_id=?";
+        int rs;
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            stmt.setString(1, content);
+            stmt.setInt(2, comment_id);
+
+            rs = stmt.executeUpdate();
+        }
+
+        return rs == 1;
+    }
+
     public int deleteComment(int comment_id) throws SQLException
     {
         String sql = "DELETE FROM comments WHERE comment_id=?";

@@ -44,7 +44,24 @@ public class TaskService
 
     public boolean updateTask(Tasks task)
     {
-        return true;
+        if(task == null)
+            return false;
+
+        try
+        {
+            taskDAO.updateTitle(task.getTask_id(), task.getTitle());
+            taskDAO.updateDescription(task.getTask_id(), task.getDescription());
+            taskDAO.updateStatus(task.getTask_id(), task.getStatus());
+            taskDAO.updatePriority(task.getTask_id(), task.getPriority());
+            taskDAO.updateEstimatedHours(task.getTask_id(), task.getEstimated_hours());
+            taskDAO.updateActualHours(task.getTask_id(), task.getActual_hours());
+            taskDAO.updateStartDate(task.getTask_id(), task.getStart_date());
+            taskDAO.updateEndDate(task.getTask_id(), task.getEnd_date());
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public boolean deleteTask(int task_id) throws SQLException
