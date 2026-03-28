@@ -61,7 +61,14 @@ public class AutoAssignEngine
 
             double workloadScore = 1.0 - ((double) allocated / capacity);
 
-            if(workloadScore < 0) workloadScore = 0;
+            if(workloadScore < 0)
+                workloadScore = 0;
+
+            if(skillScore < 0.5)
+                continue;
+
+            if(allocated >= capacity)
+                continue;
 
             double finalScore = (0.7 * skillScore) + (0.3 * workloadScore);
 
