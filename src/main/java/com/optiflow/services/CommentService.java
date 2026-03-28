@@ -1,32 +1,48 @@
 package com.optiflow.services;
 
+import com.optiflow.dao.CommentsDAO;
 import com.optiflow.models.Comments;
 
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
 public class CommentService
 {
-    public boolean addComment(Comments comment)
+    private CommentsDAO commentsDAO;
+
+    CommentService()
     {
-        return true;
+        this.commentsDAO = new CommentsDAO();
     }
 
-    public List<Comments> getCommentsByTask(int taskId)
+    public boolean addComment(Comments comment) throws SQLException
     {
-        LinkedList<Comments> commentList = new LinkedList<>();
+        if(comment == null)
+            return false;
 
-        return commentList;
+        return commentsDAO.addComment(comment.getTask_id(), comment.getUser_id(), comment.getContent());
     }
 
-    public boolean updateComment(Comments comment)
+    public List<Comments> getCommentsByTask(int task_id) throws SQLException
     {
-        return true;
+        if(task_id <= 0)
+            return null;
+
+        return commentsDAO.getCommentsByTask(task_id);
     }
 
-    public boolean deleteComment(int commentId)
+//    public boolean updateComment(Comments comment)
+//    {
+//        return true;
+//    }
+
+    public boolean deleteComment(int comment_id) throws SQLException
     {
-        return true;
+        if(comment_id <= 0)
+            return false;
+
+        return commentsDAO.deleteComment(comment_id) == 1;
     }
 
 }

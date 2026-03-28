@@ -13,7 +13,7 @@ import java.util.List;
 
 public class CommentsDAO
 {
-    public void addComment(int task_id, int user_id, String content) throws SQLException
+    public boolean addComment(int task_id, int user_id, String content) throws SQLException
     {
         String sql = "INSERT INTO comments (task_id, user_id, content) VALUES (?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
@@ -22,6 +22,10 @@ public class CommentsDAO
             stmt.setInt(2, user_id);
             stmt.setString(3, content);
             stmt.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            return false;
         }
     }
 
