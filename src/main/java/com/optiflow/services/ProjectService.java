@@ -8,7 +8,9 @@ import com.optiflow.dto.TaskDTO;
 import com.optiflow.models.Projects;
 import com.optiflow.models.Tasks;
 
+import java.io.FileWriter;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
@@ -186,5 +188,31 @@ public class ProjectService
         String description = sc.nextLine();
 
         projectService.generateTasksForProjects(title, description);
+    }
+
+    public String exportProjectsToCSV() throws Exception
+    {
+        List<Projects> projects = projectDAO.getAllProjects();
+
+        String fileName = "projects_" + LocalDate.now() + ".csv";
+
+        FileWriter writer = new FileWriter(fileName);
+
+        writer.append("ID,Name,Description,Start Date,End Date,Client-ID,Status\n");
+
+        for (Projects p : projects) {
+            writer.append(p.getProject_id() + ",")
+                    .append(p.getName() + ",")
+                    .append(p.getDescription() + ",")
+                    .append(p.getStart_date() + ",")
+                    .append(p.getEnd_date() + ",")
+                    .append(p.getClient_id() + ",")
+                    .append(p.getStatus() + "\n");
+        }
+
+        writer.flush();
+        writer.close();
+
+        return fileName;
     }
 }

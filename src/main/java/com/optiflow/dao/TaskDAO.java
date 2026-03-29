@@ -39,6 +39,40 @@ public class TaskDAO
         }
     }
 
+    public List<Tasks> getAllTasks() throws SQLException
+    {
+        List<Tasks> tasksList = new LinkedList<>();
+        String sql = "SELECT * FROM tasks";
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next())
+            {
+                Tasks task = new Tasks();
+                task.setTask_id(rs.getInt("task_id"));
+                task.setProject_id(rs.getInt("project_id"));
+                task.setAssigned_to(rs.getInt("assigned_to"));
+                task.setTitle(rs.getString("title"));
+                task.setDescription(rs.getString("description"));
+                task.setStatus(rs.getString("status"));
+                task.setPriority(rs.getString("priority"));
+                task.setEstimated_hours(rs.getInt("estimated_hours"));
+                task.setActual_hours(rs.getInt("actual_hours"));
+                task.setStart_date(rs.getDate("start_date"));
+                task.setEnd_date(rs.getDate("end_date"));
+
+                tasksList.add(task);
+            }
+
+                return tasksList;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public Tasks getTaskById(int taskId) throws SQLException
     {
         String sql = "SELECT * FROM tasks WHERE task_id=?";

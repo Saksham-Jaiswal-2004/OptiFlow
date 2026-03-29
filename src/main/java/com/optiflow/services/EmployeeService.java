@@ -4,9 +4,12 @@ import com.optiflow.dao.EmployeeDAO;
 import com.optiflow.dao.TaskDAO;
 import com.optiflow.models.Employee;
 
+import java.io.FileWriter;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Scanner;
 
 public class EmployeeService
 {
@@ -98,5 +101,34 @@ public class EmployeeService
             return false;
 
         return employeeDAO.updateManager(emp_id, manager_id) == 1;
+    }
+
+    public String exportEmployeesToCSV() throws Exception
+    {
+        List<Employee> employees = employeeDAO.getAllEmployees();
+
+        String fileName = "employees_" + LocalDate.now() + ".csv";
+
+        FileWriter writer = new FileWriter(fileName);
+
+        writer.append("User-ID,Emp-ID,Name,Department,Designation,Status,Manager-ID,Weekly Capacity,Allocated Hours\n");
+
+        for (Employee e : employees)
+        {
+            writer.append(e.getUser_id() + ",")
+                    .append(e.getEmp_id() + ",")
+                    .append(e.getName() + ",")
+                    .append(e.getDepartment() + ",")
+                    .append(e.getDesignation() + ",")
+                    .append(e.getStatus() + ",")
+                    .append(e.getManager_id() + ",")
+                    .append(e.getWeeklyCapacity() + ",")
+                    .append(e.getAllocated_hours() + ",");
+        }
+
+        writer.flush();
+        writer.close();
+
+        return fileName;
     }
 }

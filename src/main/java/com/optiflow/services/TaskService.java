@@ -6,7 +6,9 @@ import com.optiflow.dao.TaskSkillDAO;
 import com.optiflow.models.*;
 import com.optiflow.utils.AutoAssignEngine;
 
+import java.io.FileWriter;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 public class TaskService
@@ -140,5 +142,30 @@ public class TaskService
     public List<Tasks> getTasksDueSoon() throws SQLException
     {
         return taskDAO.getTasksDueSoon();
+    }
+
+    public String exportTasksToCSV() throws Exception
+    {
+        List<Tasks> tasks = taskDAO.getAllTasks();
+
+        String fileName = "tasks_" + LocalDate.now() + ".csv";
+
+        FileWriter writer = new FileWriter(fileName);
+
+        writer.append("ID,Title,Status,Priority,Assigned To,Hours\n");
+
+        for (Tasks t : tasks) {
+            writer.append(t.getTask_id() + ",")
+                    .append(t.getTitle() + ",")
+                    .append(t.getStatus() + ",")
+                    .append(t.getPriority() + ",")
+                    .append(t.getAssigned_to() + ",")
+                    .append(t.getEstimated_hours() + "\n");
+        }
+
+        writer.flush();
+        writer.close();
+
+        return fileName;
     }
 }
