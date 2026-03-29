@@ -3,7 +3,12 @@ package com.optiflow.services;
 import com.optiflow.dao.EmployeeDAO;
 import com.optiflow.dao.TaskDAO;
 import com.optiflow.models.Employee;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -130,5 +135,30 @@ public class EmployeeService
         writer.close();
 
         return fileName;
+    }
+
+    public String exportEmployeesToExcel() throws Exception
+    {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Employees");
+
+        Row header = sheet.createRow(0);
+        header.createCell(0).setCellValue("ID");
+        header.createCell(1).setCellValue("Name");
+
+        int rowNum = 1;
+
+        for(Employee e : employeeDAO.getAllEmployees()) {
+            Row row = sheet.createRow(rowNum++);
+            row.createCell(0).setCellValue(e.getEmp_id());
+            row.createCell(1).setCellValue(e.getName());
+        }
+
+        FileOutputStream fileOut = new FileOutputStream("employees.xlsx");
+        workbook.write(fileOut);
+        fileOut.close();
+        workbook.close();
+
+        return "";
     }
 }

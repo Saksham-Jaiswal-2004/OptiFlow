@@ -5,7 +5,12 @@ import com.optiflow.dao.TaskDAO;
 import com.optiflow.dao.TaskSkillDAO;
 import com.optiflow.models.*;
 import com.optiflow.utils.AutoAssignEngine;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -152,20 +157,68 @@ public class TaskService
 
         FileWriter writer = new FileWriter(fileName);
 
-        writer.append("ID,Title,Status,Priority,Assigned To,Hours\n");
+        writer.append("ID,Project ID,Title,Description,Status,Priority,Assigned To,Estimated Hours,Actual Hours,Start Date,End Date\n");
 
         for (Tasks t : tasks) {
             writer.append(t.getTask_id() + ",")
+                    .append(t.getProject_id() + ",")
                     .append(t.getTitle() + ",")
+                    .append(t.getDescription() + ",")
                     .append(t.getStatus() + ",")
                     .append(t.getPriority() + ",")
                     .append(t.getAssigned_to() + ",")
-                    .append(t.getEstimated_hours() + "\n");
+                    .append(t.getEstimated_hours() + ",")
+                    .append(t.getActual_hours() + ",")
+                    .append(t.getStart_date() + ",")
+                    .append(t.getEnd_date() + "\n");
         }
 
         writer.flush();
         writer.close();
 
         return fileName;
+    }
+
+    public String exportTasksToExcel() throws Exception
+    {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Tasks");
+
+        Row header = sheet.createRow(0);
+        header.createCell(0).setCellValue("ID");
+        header.createCell(1).setCellValue("Project ID");
+        header.createCell(2).setCellValue("Title");
+        header.createCell(3).setCellValue("Description");
+        header.createCell(4).setCellValue("Status");
+        header.createCell(5).setCellValue("Priority");
+        header.createCell(6).setCellValue("Assigned To");
+        header.createCell(7).setCellValue("Estimated Hours");
+        header.createCell(8).setCellValue("Actual Hours");
+        header.createCell(9).setCellValue("Start Date");
+        header.createCell(10).setCellValue("End Date");
+
+        int rowNum = 1;
+
+        for(Tasks t : taskDAO.getAllTasks()) {
+            Row row = sheet.createRow(rowNum++);
+            row.createCell(0).setCellValue(t.getTask_id());
+            row.createCell(1).setCellValue(t.getProject_id());
+            row.createCell(2).setCellValue(t.getTitle());
+            row.createCell(3).setCellValue(t.getDescription());
+            row.createCell(4).setCellValue(t.getStatus());
+            row.createCell(5).setCellValue(t.getPriority());
+            row.createCell(6).setCellValue(t.getAssigned_to());
+            row.createCell(7).setCellValue(t.getEstimated_hours());
+            row.createCell(8).setCellValue(t.getActual_hours());
+            row.createCell(9).setCellValue(t.getStart_date());
+            row.createCell(10).setCellValue(t.getEnd_date());
+        }
+
+        FileOutputStream fileOut = new FileOutputStream("tasks.xlsx");
+        workbook.write(fileOut);
+        fileOut.close();
+        workbook.close();
+
+        return "";
     }
 }

@@ -5,9 +5,15 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.optiflow.dao.ProjectDAO;
 import com.optiflow.dao.TaskDAO;
 import com.optiflow.dto.TaskDTO;
+import com.optiflow.models.Employee;
 import com.optiflow.models.Projects;
 import com.optiflow.models.Tasks;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -214,5 +220,40 @@ public class ProjectService
         writer.close();
 
         return fileName;
+    }
+
+    public String exportProjectsToExcel() throws Exception
+    {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Projects");
+
+        Row header = sheet.createRow(0);
+        header.createCell(0).setCellValue("ID");
+        header.createCell(1).setCellValue("Name");
+        header.createCell(2).setCellValue("Description");
+        header.createCell(3).setCellValue("Start Date");
+        header.createCell(4).setCellValue("End Date");
+        header.createCell(5).setCellValue("Client ID");
+        header.createCell(6).setCellValue("Status");
+
+        int rowNum = 1;
+
+        for(Projects p : projectDAO.getAllProjects()) {
+            Row row = sheet.createRow(rowNum++);
+            row.createCell(0).setCellValue(p.getProject_id());
+            row.createCell(1).setCellValue(p.getName());
+            row.createCell(2).setCellValue(p.getDescription());
+            row.createCell(3).setCellValue(p.getStart_date());
+            row.createCell(4).setCellValue(p.getEnd_date());
+            row.createCell(5).setCellValue(p.getClient_id());
+            row.createCell(6).setCellValue(p.getStatus());
+        }
+
+        FileOutputStream fileOut = new FileOutputStream("projects.xlsx");
+        workbook.write(fileOut);
+        fileOut.close();
+        workbook.close();
+
+        return "";
     }
 }

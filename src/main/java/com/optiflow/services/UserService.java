@@ -1,8 +1,17 @@
 package com.optiflow.services;
 
 import com.optiflow.dao.UserDAO;
+import com.optiflow.models.Employee;
 import com.optiflow.models.User;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 public class UserService
@@ -126,5 +135,61 @@ public class UserService
             return null;
 
         return userDAO.getUsersByRole(role);
+    }
+
+    public String exportUsersToCSV() throws Exception
+    {
+        List<User> users = userDAO.getAllUsers();
+
+        String fileName = "users_" + LocalDate.now() + ".csv";
+
+        FileWriter writer = new FileWriter(fileName);
+
+        writer.append("User-ID,Name,Email,Password Hash,Role\n");
+
+        for (User u : users)
+        {
+            writer.append(u.getUserId() + ",")
+                    .append(u.getName() + ",")
+                    .append(u.getEmail() + ",")
+                    .append(u.getPasswordHash() + ",")
+                    .append(u.getRole() + "\n");
+        }
+
+        writer.flush();
+        writer.close();
+
+        return fileName;
+    }
+
+    public String exportUsersToExcel() throws Exception
+    {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Users");
+
+        Row header = sheet.createRow(0);
+        header.createCell(0).setCellValue("ID");
+        header.createCell(1).setCellValue("Name");
+        header.createCell(2).setCellValue("Email");
+        header.createCell(3).setCellValue("Password Hash");
+        header.createCell(4).setCellValue("Role");
+
+        int rowNum = 1;
+
+        for(User u : userDAO.getAllUsers()) {
+            Row row = sheet.createRow(rowNum++);
+            row.createCell(0).setCellValue(u.getUserId());
+            row.createCell(1).setCellValue(u.getName());
+            row.createCell(2).setCellValue(u.getEmail());
+            row.createCell(3).setCellValue(u.getPasswordHash());
+            row.createCell(4).setCellValue(u.getRole());
+        }
+
+        FileOutputStream fileOut = new FileOutputStream("users.xlsx");
+        workbook.write(fileOut);
+        fileOut.close();
+        workbook.close();
+
+        return "";
     }
 }
