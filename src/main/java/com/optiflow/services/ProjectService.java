@@ -66,11 +66,12 @@ public class ProjectService
 
             for(TaskDTO task: tasks)
             {
+                System.out.println();
                 System.out.println(task.getTitle());
                 System.out.println(task.getDescription());
+                System.out.println(task.getSkills());
                 System.out.println(task.getEstimatedHours());
                 System.out.println(task.getPriority());
-                System.out.println();
             }
 
         } catch (Exception e) {

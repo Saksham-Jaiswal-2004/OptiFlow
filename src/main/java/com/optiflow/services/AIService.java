@@ -24,7 +24,6 @@ public class AIService
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Authorization", "Bearer " + API_KEY);
             conn.setRequestProperty("Content-Type", "application/json");
-
             conn.setRequestProperty("HTTP-Referer", "http://localhost");
             conn.setRequestProperty("X-Title", "OptiFlow");
 
@@ -71,7 +70,6 @@ public class AIService
 
             conn.disconnect();
 
-            // 🔍 DEBUG
             System.out.println("Status Code: " + statusCode);
             System.out.println("Response: " + response);
 
@@ -86,14 +84,15 @@ public class AIService
 
     private String buildPrompt(String title, String details)
     {
-        return "You are an expert software project manager.\n\n" +
-                "Your task is to analyze the given project and break it down into clear, actionable development tasks.\n\n" +
+        return "You are an expert project manager of your company.\n\n" +
+                "Your task is to analyze the given project and break it down into clear, actionable tasks for your employees.\n\n" +
 
                 "Instructions:\n" +
                 "- Return ONLY a valid JSON array.\n" +
                 "- Do NOT include explanations, headings, or extra text.\n" +
                 "- Each task must be practical and implementation-focused.\n" +
-                "- Cover backend, frontend, database, and testing where applicable.\n\n" +
+                "- Divide the project into each task such that a specific person can do it with the necessary background.\n" +
+                "- Cover each domain like frontend, creatives, construction etc. where applicable to fit project needs.\n\n" +
 
                 "Each task object must follow this exact format:\n" +
                 "{\n" +

@@ -20,6 +20,11 @@ public class TaskDTO
         return description;
     }
 
+    public List<String> getSkills()
+    {
+        return skills;
+    }
+
     public int getEstimatedHours()
     {
         return estimated_hours;
