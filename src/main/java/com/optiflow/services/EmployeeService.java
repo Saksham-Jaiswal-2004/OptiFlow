@@ -123,7 +123,7 @@ public class EmployeeService
                     .append(e.getStatus() + ",")
                     .append(e.getManager_id() + ",")
                     .append(e.getWeeklyCapacity() + ",")
-                    .append(e.getAllocated_hours() + ",");
+                    .append(e.getAllocated_hours() + "\n");
         }
 
         writer.flush();
