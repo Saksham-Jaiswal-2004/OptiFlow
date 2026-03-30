@@ -5,10 +5,15 @@ import java.io.*;
 
 public class SocketClient
 {
-
     private Socket socket;
     private ObjectOutputStream out;
     private ObjectInputStream in;
+    private MessageListener listener;
+
+    public void setListener(MessageListener listener)
+    {
+        this.listener = listener;
+    }
 
     public void connect() throws Exception
     {
@@ -33,6 +38,11 @@ public class SocketClient
             {
                 Message message = (Message) in.readObject();
                 System.out.println("New Message: " + message.getContent());
+
+                if(listener != null)
+                {
+                    listener.onMessageReceived(message);
+                }
             }
         } catch(Exception e) {
             e.printStackTrace();

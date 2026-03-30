@@ -1,6 +1,8 @@
 package com.optiflow;
 
+import com.optiflow.utils.AppContext;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -33,5 +35,11 @@ public class Main extends Application
         else
             System.out.println("FAILED TO CONNECT DATABASE!");
         launch();
+
+        AppContext.getSocketClient().setListener(message -> {
+            Platform.runLater(() -> {
+                System.out.println(message.getMessageType());
+            });
+        });
     }
 }

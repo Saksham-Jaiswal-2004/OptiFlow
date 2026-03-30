@@ -3,6 +3,10 @@ package com.optiflow.services;
 import com.optiflow.dao.UserDAO;
 import com.optiflow.models.Employee;
 import com.optiflow.models.User;
+import com.optiflow.networking.Message;
+import com.optiflow.networking.MessageType;
+import com.optiflow.utils.AppContext;
+import com.optiflow.utils.SessionManager;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -13,6 +17,7 @@ import java.io.FileWriter;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Scanner;
 
 public class UserService
 {
@@ -192,4 +197,28 @@ public class UserService
 
         return "";
     }
+
+//    public void sendMessage(String msg) throws Exception
+//    {
+//        User user = SessionManager.getUser();
+//        AppContext.socketClient.sendMessage(
+//                new Message(MessageType.COMMENT, msg, user.getUserId(), 1234, "Test Entity")
+//        );
+//    }
+//
+//    public static void main(String[] args) throws Exception
+//    {
+//        Scanner sc = new Scanner(System.in);
+//        AppContext.initSocket();
+//
+//        UserService userService = new UserService();
+//        UserDAO userDAO = new UserDAO();
+//
+//        SessionManager.setUser(userDAO.getUserById(1));
+//
+//        System.out.print("Enter Message User 1: ");
+//        String msg = sc.nextLine();
+//
+//        userService.sendMessage(msg);
+//    }
 }

@@ -3,8 +3,11 @@ package com.optiflow.services;
 import com.optiflow.dao.EmployeeDAO;
 import com.optiflow.dao.TaskDAO;
 import com.optiflow.dao.TaskSkillDAO;
+import com.optiflow.dao.UserDAO;
 import com.optiflow.models.*;
+import com.optiflow.utils.AppContext;
 import com.optiflow.utils.AutoAssignEngine;
+import com.optiflow.utils.SessionManager;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -15,6 +18,7 @@ import java.io.FileWriter;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Scanner;
 
 public class TaskService
 {
@@ -221,4 +225,20 @@ public class TaskService
 
         return "";
     }
+
+//    public static void main(String[] args) throws Exception
+//    {
+//        Scanner sc = new Scanner(System.in);
+//        AppContext.initSocket();
+//
+//        UserService userService = new UserService();
+//        UserDAO userDAO = new UserDAO();
+//
+//        SessionManager.setUser(userDAO.getUserById(2));
+//
+//        System.out.print("Enter Message User 2: ");
+//        String msg = sc.nextLine();
+//
+//        userService.sendMessage(msg);
+//    }
 }
