@@ -23,11 +23,13 @@ public class UserService
 {
     private UserDAO userDAO;
     private AuthService auth;
+    private AuditLogService auditLogService;
 
     UserService()
     {
         this.userDAO = new UserDAO();
         this.auth = new AuthService();
+        this.auditLogService = new AuditLogService();
     }
 
     public boolean createUser(User user) throws SQLException
@@ -55,6 +57,8 @@ public class UserService
 
         String hashedPassword = auth.hashPassword(user.getPasswordHash());
         user.setPasswordHash(hashedPassword);
+
+        auditLogService.logAction(SessionManager.getUser().getUserId(), "CREATE_USER", "USER", SessionManager.getUser().getUserId(), SessionManager.getUser().getName()+" added a new user");
 
         return userDAO.addUser(user.getName(), user.getEmail(), user.getPasswordHash(), user.getRole());
     }
@@ -88,6 +92,8 @@ public class UserService
         if(userDAO.updateName(user_id, name)!=1)
             return false;
 
+        auditLogService.logAction(SessionManager.getUser().getUserId(), "UPDATE_USER_NAME", "USER", user_id, SessionManager.getUser().getName()+" updated user name to "+name);
+
         return true;
     }
 
@@ -98,6 +104,8 @@ public class UserService
 
         if(userDAO.updateEmail(user_id, email)!=1)
             return false;
+
+        auditLogService.logAction(SessionManager.getUser().getUserId(), "UPDATE_USER_EMAIL", "USER", user_id, SessionManager.getUser().getName()+" updated user email to "+email);
 
         return true;
     }
@@ -112,6 +120,8 @@ public class UserService
         if(userDAO.updatePassword(user_id, hashed_password)!=1)
             return false;
 
+        auditLogService.logAction(SessionManager.getUser().getUserId(), "UPDATE_USER_PASSWORD", "USER", user_id, SessionManager.getUser().getName()+" updated user password");
+
         return true;
     }
 
@@ -123,6 +133,8 @@ public class UserService
         if(userDAO.updateRole(user_id, role)!=1)
             return false;
 
+        auditLogService.logAction(SessionManager.getUser().getUserId(), "UPDATE_USER_ROLE", "USER", user_id, SessionManager.getUser().getName()+" updated user role to "+role);
+
         return true;
     }
 
@@ -130,6 +142,8 @@ public class UserService
     {
         if(user_id <= 0)
             return false;
+
+        auditLogService.logAction(SessionManager.getUser().getUserId(), "DELETE_USER", "USER", user_id, SessionManager.getUser().getName()+" deleted user "+getUserById(user_id).getName());
 
         return userDAO.deleteUser(user_id);
     }
@@ -164,6 +178,8 @@ public class UserService
         writer.flush();
         writer.close();
 
+        auditLogService.logAction(SessionManager.getUser().getUserId(), "EXPORT_USER", "USER", SessionManager.getUser().getUserId(), SessionManager.getUser().getName()+" exported user details via CSV");
+
         return fileName;
     }
 
@@ -195,30 +211,8 @@ public class UserService
         fileOut.close();
         workbook.close();
 
+        auditLogService.logAction(SessionManager.getUser().getUserId(), "EXPORT_USER", "USER", SessionManager.getUser().getUserId(), SessionManager.getUser().getName()+" exported user details via Excel");
+
         return "";
     }
-
-//    public void sendMessage(String msg) throws Exception
-//    {
-//        User user = SessionManager.getUser();
-//        AppContext.socketClient.sendMessage(
-//                new Message(MessageType.COMMENT, msg, user.getUserId(), 1234, "Test Entity")
-//        );
-//    }
-//
-//    public static void main(String[] args) throws Exception
-//    {
-//        Scanner sc = new Scanner(System.in);
-//        AppContext.initSocket();
-//
-//        UserService userService = new UserService();
-//        UserDAO userDAO = new UserDAO();
-//
-//        SessionManager.setUser(userDAO.getUserById(1));
-//
-//        System.out.print("Enter Message User 1: ");
-//        String msg = sc.nextLine();
-//
-//        userService.sendMessage(msg);
-//    }
 }

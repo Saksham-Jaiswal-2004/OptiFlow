@@ -3,6 +3,7 @@ package com.optiflow.services;
 import com.optiflow.dao.EmployeeDAO;
 import com.optiflow.dao.TaskDAO;
 import com.optiflow.models.Employee;
+import com.optiflow.utils.SessionManager;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -20,17 +21,21 @@ public class EmployeeService
 {
     private EmployeeDAO employeeDAO;
     private TaskDAO taskDAO;
+    private AuditLogService auditLogService;
 
     EmployeeService()
     {
         this.employeeDAO = new EmployeeDAO();
         this .taskDAO = new TaskDAO();
+        this.auditLogService = new AuditLogService();
     }
 
     public boolean createEmployee(Employee emp) throws SQLException
     {
         if(emp==null)
             return false;
+
+        auditLogService.logAction(SessionManager.getUser().getUserId(), "CREATE_EMPLOYEE", "EMPLOYEE", emp.getUser_id(), SessionManager.getUser().getName()+" added a new employee");
 
         return employeeDAO.addEmployee(emp.getUser_id(), emp.getName(), emp.getSkill(), emp.getDesignation(), emp.getDepartment(), emp.getManager_id(), emp.getStatus(), emp.getWeeklyCapacity());
     }
@@ -78,6 +83,8 @@ public class EmployeeService
             employeeDAO.updateStatus(emp.getEmp_id(), emp.getStatus());
             employeeDAO.updateWeeklyCapacity(emp.getEmp_id(), emp.getWeeklyCapacity());
 
+            auditLogService.logAction(SessionManager.getUser().getUserId(), "UPDATE_EMPLOYEE", "EMPLOYEE", emp.getEmp_id(), SessionManager.getUser().getName()+" updated employee details for "+emp.getName());
+
             return true;
         } catch (Exception e) {
             return false;
@@ -88,6 +95,8 @@ public class EmployeeService
     {
         if(emp_id<=0)
             return false;
+
+        auditLogService.logAction(SessionManager.getUser().getUserId(), "DELETE_EMPLOYEE", "EMPLOYEE", emp_id, SessionManager.getUser().getName()+" deleted employee "+getEmployeeById(emp_id).getName());
 
         return employeeDAO.deleteEmployee(emp_id) == 1;
     }
@@ -104,6 +113,8 @@ public class EmployeeService
     {
         if(emp_id<=0 || manager_id<=0)
             return false;
+
+        auditLogService.logAction(SessionManager.getUser().getUserId(), "ASSIGN_MANAGER", "EMPLOYEE", emp_id, SessionManager.getUser().getName()+" assigned a manager to "+getEmployeeById(emp_id).getName());
 
         return employeeDAO.updateManager(emp_id, manager_id) == 1;
     }
@@ -134,6 +145,8 @@ public class EmployeeService
         writer.flush();
         writer.close();
 
+        auditLogService.logAction(SessionManager.getUser().getUserId(), "EXPORT_EMPLOYEE", "EMPLOYEE", -1, SessionManager.getUser().getName()+" exported employee details via CSV");
+
         return fileName;
     }
 
@@ -158,6 +171,8 @@ public class EmployeeService
         workbook.write(fileOut);
         fileOut.close();
         workbook.close();
+
+        auditLogService.logAction(SessionManager.getUser().getUserId(), "EXPORT_EMPLOYEE", "EMPLOYEE", -1, SessionManager.getUser().getName()+" exported employee details via Excel");
 
         return "";
     }

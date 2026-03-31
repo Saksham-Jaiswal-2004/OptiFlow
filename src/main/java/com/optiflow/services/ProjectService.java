@@ -5,9 +5,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.optiflow.dao.ProjectDAO;
 import com.optiflow.dao.TaskDAO;
 import com.optiflow.dto.TaskDTO;
-import com.optiflow.models.Employee;
 import com.optiflow.models.Projects;
 import com.optiflow.models.Tasks;
+import com.optiflow.utils.SessionManager;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -17,27 +17,30 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
 public class ProjectService
 {
-    ProjectDAO projectDAO;
-    TaskDAO taskDAO;
-    AIService aiService;
+    private ProjectDAO projectDAO;
+    private TaskDAO taskDAO;
+    private AIService aiService;
+    private AuditLogService auditLogService;
 
     ProjectService()
     {
         this.projectDAO = new ProjectDAO();
         this.taskDAO = new TaskDAO();
         this.aiService = new AIService();
+        this.auditLogService = new AuditLogService();
     }
 
     public boolean createProject(Projects project) throws SQLException
     {
         if(project == null)
             return false;
+
+        auditLogService.logAction(SessionManager.getUser().getUserId(), "ADD_PROJECT", "PROJECT", SessionManager.getUser().getUserId(), SessionManager.getUser().getName()+" added a new project");
 
         return projectDAO.createProject(project.getName(), project.getDescription(), project.getStart_date(), project.getEnd_date(), project.getClient_id(), project.getStatus());
     }
@@ -82,6 +85,8 @@ public class ProjectService
                 System.out.println(task.getPriority());
             }
 
+            auditLogService.logAction(SessionManager.getUser().getUserId(), "DIVIDE_PROJECT_TO_TASKS", "PROJECT", -1, SessionManager.getUser().getName()+" divided a project into its respective tasks");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -113,6 +118,8 @@ public class ProjectService
             projectDAO.updateEndDate(project.getProject_id(), project.getEnd_date());
             projectDAO.updateStatus(project.getProject_id(), project.getStatus());
 
+            auditLogService.logAction(SessionManager.getUser().getUserId(), "UPDATE_PROJECT", "PROJECT", project.getProject_id(), SessionManager.getUser().getName()+" updated the project "+project.getName());
+
             return true;
         } catch (Exception e) {
             return false;
@@ -123,6 +130,8 @@ public class ProjectService
     {
         if(project_id <= 0)
             return false;
+
+        auditLogService.logAction(SessionManager.getUser().getUserId(), "DELETE_PROJECT", "PROJECT", project_id, SessionManager.getUser().getName()+" deleted the project "+getProjectById(project_id).getName());
 
         return projectDAO.deleteProject(project_id) == 1;
     }
@@ -183,19 +192,6 @@ public class ProjectService
         return total;
     }
 
-    public static void main(String[] args)
-    {
-        Scanner sc = new Scanner(System.in);
-        ProjectService projectService = new ProjectService();
-
-        System.out.print("Enter project title: ");
-        String title = sc.nextLine();
-        System.out.print("Enter project details: ");
-        String description = sc.nextLine();
-
-        projectService.generateTasksForProjects(title, description);
-    }
-
     public String exportProjectsToCSV() throws Exception
     {
         List<Projects> projects = projectDAO.getAllProjects();
@@ -218,6 +214,8 @@ public class ProjectService
 
         writer.flush();
         writer.close();
+
+        auditLogService.logAction(SessionManager.getUser().getUserId(), "EXPORT_PROJECT", "PROJECT", SessionManager.getUser().getUserId(), SessionManager.getUser().getName()+" exported project details via CSV");
 
         return fileName;
     }
@@ -253,6 +251,8 @@ public class ProjectService
         workbook.write(fileOut);
         fileOut.close();
         workbook.close();
+
+        auditLogService.logAction(SessionManager.getUser().getUserId(), "EXPORT_PROJECT", "PROJECT", SessionManager.getUser().getUserId(), SessionManager.getUser().getName()+" exported project details via Excel");
 
         return "";
     }

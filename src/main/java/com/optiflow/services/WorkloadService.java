@@ -54,6 +54,11 @@ public class WorkloadService
         return getAvailableCapacity(emp_id) < 0;
     }
 
+    public boolean isEmployeeUnderUtilized(int emp_id) throws SQLException
+    {
+        return getAvailableCapacity(emp_id) > 10;
+    }
+
     public boolean canAssignTask(int emp_id, int taskHours) throws SQLException
     {
         if(emp_id <= 0)

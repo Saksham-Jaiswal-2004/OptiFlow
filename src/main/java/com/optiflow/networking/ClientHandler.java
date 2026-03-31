@@ -3,6 +3,8 @@ package com.optiflow.networking;
 import java.io.*;
 import java.net.Socket;
 
+import static com.optiflow.networking.SocketServer.clients;
+
 public class ClientHandler implements Runnable
 {
 
@@ -29,6 +31,13 @@ public class ClientHandler implements Runnable
             }
 
         } catch(Exception e) {
+            clients.remove(this);
+            try
+            {
+                socket.close();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
             e.printStackTrace();
         }
     }
