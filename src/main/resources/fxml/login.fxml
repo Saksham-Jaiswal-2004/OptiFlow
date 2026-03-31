@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" spacing="20" style="-fx-background-color: #111827;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.optiflow.controllers.LoginController">
+<VBox alignment="CENTER" spacing="20" style="-fx-background-color: #111827;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.optiflow.controllers.AuthController">
 
     <padding>
         <Insets bottom="50" left="40" right="40" top="50" />

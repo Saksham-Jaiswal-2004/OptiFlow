@@ -4,6 +4,7 @@ import java.sql.Date;
 
 public class WorkLog
 {
+
     private int logId;
     private int employeeId;
     private int taskId;

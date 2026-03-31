@@ -67,7 +67,7 @@ public class AuthController
 
             if(user != null)
             {
-                LoginerrorLabel.setText("Login successful");
+                System.out.println("Login successful");
 
                 SessionManager.setUser(user);
                 AppContext.initSocket();

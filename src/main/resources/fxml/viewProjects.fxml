@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.Button?>
 <BorderPane prefHeight="600.0" prefWidth="900.0"
             style="-fx-background-color: #F5F7FA;"
             xmlns="http://javafx.com/javafx/25"
@@ -19,22 +20,14 @@
     <top>
         <AnchorPane prefHeight="68.0" style="-fx-background-color: #111827;">
             <children>
-                <Label text="OptiFlow"
-                       style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"
-                       AnchorPane.leftAnchor="20.0"
-                       AnchorPane.topAnchor="20.0"/>
+                <Label style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" text="OptiFlow" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
 
-                <Label text="Manager"
-                       style="-fx-background-color: linear-gradient(to right, #8e2de2, #c471ed);
-                              -fx-background-radius: 50;
-                              -fx-text-fill: white;
-                              -fx-font-weight: bold;"
-                       AnchorPane.rightAnchor="20.0"
-                       AnchorPane.topAnchor="20.0">
+                <Label layoutX="714.0" layoutY="22.0" style="-fx-background-color: linear-gradient(to right, #8e2de2, #c471ed);                               -fx-background-radius: 50;                               -fx-text-fill: white;                               -fx-font-weight: bold;" text="Manager" AnchorPane.rightAnchor="114.79999999999995" AnchorPane.topAnchor="22.0">
                     <padding>
-                        <Insets top="2" bottom="2" left="8" right="8"/>
+                        <Insets bottom="2" left="10" right="10" top="2" />
                     </padding>
                 </Label>
+                <Button fx:id="closeButton" layoutX="855.0" layoutY="20.0" prefHeight="27.0" prefWidth="23.0" style="-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 8px; -fx-font-weight: bold;" text="✕" />
             </children>
         </AnchorPane>
     </top>

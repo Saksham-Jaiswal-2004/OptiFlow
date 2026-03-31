@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
@@ -16,20 +17,14 @@
     <top>
         <AnchorPane prefHeight="68.0" style="-fx-background-color: #111827;">
             <children>
-                <Label text="OptiFlow"
-                       style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"
-                       AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0"/>
+                <Label style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" text="OptiFlow" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
 
-                <Label text="Manager"
-                       style="-fx-background-color: linear-gradient(to right, #8e2de2, #c471ed);
-                              -fx-background-radius: 50;
-                              -fx-text-fill: white;
-                              -fx-font-weight: bold;"
-                       AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+                <Label layoutX="714.0" layoutY="22.0" style="-fx-background-color: linear-gradient(to right, #8e2de2, #c471ed);                               -fx-background-radius: 50;                               -fx-text-fill: white;                               -fx-font-weight: bold;" text="Manager" AnchorPane.rightAnchor="114.79999999999995" AnchorPane.topAnchor="22.0">
                     <padding>
-                        <Insets bottom="2" left="10" right="10" top="2"/>
+                        <Insets bottom="2" left="10" right="10" top="2" />
                     </padding>
                 </Label>
+    <Button fx:id="closeButton" layoutX="855.0" layoutY="20.0" prefHeight="27.0" prefWidth="23.0" style="-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 8px; -fx-font-weight: bold;" text="✕" />
             </children>
         </AnchorPane>
     </top>
@@ -39,49 +34,40 @@
         <ScrollPane fitToWidth="true" style="-fx-background: #1F2937;">
             <content>
 
-                <VBox spacing="20"
-                      style="-fx-background-color: #1F2937;
-                             -fx-padding: 25;
-                             -fx-background-radius: 12;">
+                <VBox spacing="20" style="-fx-background-color: #1F2937;                              -fx-padding: 25;                              -fx-background-radius: 12;">
 
                     <!-- HEADER -->
                     <VBox spacing="10">
 
                         <HBox alignment="CENTER_LEFT" spacing="15">
                             <children>
-                                <Label text="Manager ABC"
-                                       style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+                                <Label fx:id="managerNameField" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" text="Manager ABC" />
 
-                                <Separator orientation="VERTICAL" prefHeight="25"/>
+                                <Separator orientation="VERTICAL" prefHeight="25" />
 
-                                <Label text="Project Alpha"
-                                       style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+                                <Label fx:id="projectNameField" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" text="Project Alpha" />
                             </children>
                         </HBox>
 
                         <!-- STATUS -->
-                        <Label text="In Progress"
-                               style="-fx-background-color: linear-gradient(to right, #8e2de2, #c471ed);
-                                      -fx-background-radius: 50;
-                                      -fx-text-fill: white;
-                                      -fx-font-weight: bold;">
+                        <Label fx:id="statusField" style="-fx-background-color: linear-gradient(to right, #8e2de2, #c471ed);                                       -fx-background-radius: 50;                                       -fx-text-fill: white;                                       -fx-font-weight: bold;" text="In Progress">
                             <padding>
-                                <Insets bottom="2" left="12" right="12" top="2"/>
+                                <Insets bottom="2" left="12" right="12" top="2" />
                             </padding>
                         </Label>
 
                     </VBox>
 
                     <!-- MANAGER INFO -->
-                    <HBox spacing="10" alignment="CENTER_LEFT">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
                         <children>
-                            <Label text="Manager ID:" style="-fx-text-fill: #D1D5DB;"/>
-                            <Label text="John Doe" style="-fx-text-fill: white;"/>
+                            <Label style="-fx-text-fill: #D1D5DB;" text="Manager ID:" />
+                            <Label fx:id="managerIDField" style="-fx-text-fill: white;" text="John Doe" />
 
-                            <Separator orientation="VERTICAL" prefHeight="20"/>
+                            <Separator orientation="VERTICAL" prefHeight="20" />
 
-                            <Label text="Employee ID:" style="-fx-text-fill: #D1D5DB;"/>
-                            <Label text="EMP12345" style="-fx-text-fill: white;"/>
+                            <Label style="-fx-text-fill: #D1D5DB;" text="Employee ID:" />
+                            <Label fx:id="employeeIDField" style="-fx-text-fill: white;" text="EMP12345" />
                         </children>
                     </HBox>
 
@@ -89,68 +75,51 @@
                     <HBox spacing="40">
                         <children>
                             <HBox spacing="8">
-                                <Label text="Start Date:" style="-fx-text-fill: #D1D5DB;"/>
-                                <Label text="01 Jan 2026" style="-fx-text-fill: white;"/>
+                                <Label style="-fx-text-fill: #D1D5DB;" text="Start Date:" />
+                                <Label fx:id="startField" style="-fx-text-fill: white;" text="01 Jan 2026" />
                             </HBox>
 
                             <HBox spacing="8">
-                                <Label text="End Date:" style="-fx-text-fill: #D1D5DB;"/>
-                                <Label text="30 Jun 2026" style="-fx-text-fill: white;"/>
+                                <Label style="-fx-text-fill: #D1D5DB;" text="End Date:" />
+                                <Label fx:id="deadField" style="-fx-text-fill: white;" text="30 Jun 2026" />
                             </HBox>
                         </children>
                     </HBox>
 
                     <!-- DESCRIPTION -->
                     <VBox spacing="5">
-                        <Label text="Project Description" style="-fx-text-fill: #D1D5DB;"/>
-                        <TextArea prefHeight="70"
-                                  wrapText="true"
-                                  style="-fx-control-inner-background: #374151;
-                                         -fx-text-fill: white;
-                                         -fx-background-radius: 6;"/>
+                        <Label style="-fx-text-fill: #D1D5DB;" text="Project Description" />
+                        <TextArea fx:id="descField" prefHeight="70" style="-fx-control-inner-background: #374151;                                          -fx-text-fill: white;                                          -fx-background-radius: 6;" wrapText="true" />
                     </VBox>
 
                     <!-- ================= EMPLOYEES SECTION ================= -->
                     <VBox spacing="15">
 
                         <!-- HEADING -->
-                        <Label text="Employees"
-                               style="-fx-text-fill: white;
-                                      -fx-font-size: 18px;
-                                      -fx-font-weight: bold;"/>
+                        <Label style="-fx-text-fill: white;                                       -fx-font-size: 18px;                                       -fx-font-weight: bold;" text="Employees" />
 
                         <!-- EMPLOYEE CARD 1 -->
-                        <VBox spacing="10"
-                              style="-fx-background-color: #374151;
-                                     -fx-padding: 15;
-                                     -fx-background-radius: 10;
-                                     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0.2, 0, 3);">
+                        <VBox spacing="10" style="-fx-background-color: #374151;                                      -fx-padding: 15;                                      -fx-background-radius: 10;                                      -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0.2, 0, 3);">
 
                             <HBox alignment="CENTER_LEFT" spacing="20">
                                 <children>
 
                                     <!-- NAME + ID -->
                                     <VBox spacing="5">
-                                        <Label text="Ram Sharma"
-                                               style="-fx-text-fill: white; -fx-font-weight: bold;"/>
-                                        <Label text="ID: 787878"
-                                               style="-fx-text-fill: #D1D5DB; -fx-font-size: 11px;"/>
+                                        <Label style="-fx-text-fill: white; -fx-font-weight: bold;" text="Ram Sharma" />
+                                        <Label style="-fx-text-fill: #D1D5DB; -fx-font-size: 11px;" text="ID: 787878" />
                                     </VBox>
 
                                     <!-- SKILL -->
                                     <VBox spacing="5">
-                                        <Label text="Skill"
-                                               style="-fx-text-fill: #D1D5DB; -fx-font-size: 11px;"/>
-                                        <Label text="AI"
-                                               style="-fx-text-fill: white;"/>
+                                        <Label style="-fx-text-fill: #D1D5DB; -fx-font-size: 11px;" text="Skill" />
+                                        <Label style="-fx-text-fill: white;" text="AI" />
                                     </VBox>
 
                                     <!-- TASK -->
                                     <VBox spacing="5">
-                                        <Label text="Task"
-                                               style="-fx-text-fill: #D1D5DB; -fx-font-size: 11px;"/>
-                                        <Label text="Task Astro"
-                                               style="-fx-text-fill: white;"/>
+                                        <Label style="-fx-text-fill: #D1D5DB; -fx-font-size: 11px;" text="Task" />
+                                        <Label style="-fx-text-fill: white;" text="Task Astro" />
                                     </VBox>
 
                                 </children>
@@ -159,33 +128,24 @@
                         </VBox>
 
                         <!-- EMPLOYEE CARD 2 -->
-                        <VBox spacing="10"
-                              style="-fx-background-color: #374151;
-                                     -fx-padding: 15;
-                                     -fx-background-radius: 10;">
+                        <VBox spacing="10" style="-fx-background-color: #374151;                                      -fx-padding: 15;                                      -fx-background-radius: 10;">
 
                             <HBox alignment="CENTER_LEFT" spacing="20">
                                 <children>
 
                                     <VBox spacing="5">
-                                        <Label text="Anita Verma"
-                                               style="-fx-text-fill: white; -fx-font-weight: bold;"/>
-                                        <Label text="ID: 989898"
-                                               style="-fx-text-fill: #D1D5DB; -fx-font-size: 11px;"/>
+                                        <Label style="-fx-text-fill: white; -fx-font-weight: bold;" text="Anita Verma" />
+                                        <Label style="-fx-text-fill: #D1D5DB; -fx-font-size: 11px;" text="ID: 989898" />
                                     </VBox>
 
                                     <VBox spacing="5">
-                                        <Label text="Skill"
-                                               style="-fx-text-fill: #D1D5DB; -fx-font-size: 11px;"/>
-                                        <Label text="Frontend"
-                                               style="-fx-text-fill: white;"/>
+                                        <Label style="-fx-text-fill: #D1D5DB; -fx-font-size: 11px;" text="Skill" />
+                                        <Label style="-fx-text-fill: white;" text="Frontend" />
                                     </VBox>
 
                                     <VBox spacing="5">
-                                        <Label text="Task"
-                                               style="-fx-text-fill: #D1D5DB; -fx-font-size: 11px;"/>
-                                        <Label text="UI Design"
-                                               style="-fx-text-fill: white;"/>
+                                        <Label style="-fx-text-fill: #D1D5DB; -fx-font-size: 11px;" text="Task" />
+                                        <Label style="-fx-text-fill: white;" text="UI Design" />
                                     </VBox>
 
                                 </children>
