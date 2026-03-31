@@ -5,6 +5,8 @@ import com.optiflow.dao.TaskDAO;
 import com.optiflow.dao.TaskSkillDAO;
 import com.optiflow.dao.UserDAO;
 import com.optiflow.models.*;
+import com.optiflow.networking.Message;
+import com.optiflow.networking.MessageType;
 import com.optiflow.utils.AppContext;
 import com.optiflow.utils.AutoAssignEngine;
 import com.optiflow.utils.SessionManager;
@@ -83,15 +85,26 @@ public class TaskService
         return taskDAO.deleteTask(task_id) == 1;
     }
 
-    public boolean assignTask(int task_id, int emp_id) throws SQLException
+    public boolean assignTask(int task_id, int emp_id) throws Exception
     {
         if(task_id <=0 || emp_id <= 0)
             return false;
 
-        return taskDAO.assignTask(task_id, emp_id) == 1;
+        if(taskDAO.assignTask(task_id, emp_id) == 1)
+        {
+            AppContext.socketClient.sendMessage(
+                new Message(MessageType.TASK_UPDATE, "New Task Assigned", SessionManager.getUser().getUserId(), emp_id, "EMPLOYEE")
+            );
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
-    public boolean autoAssignTask(Tasks task) throws SQLException
+    public boolean autoAssignTask(Tasks task) throws Exception
     {
         if(task == null)
             return false;
@@ -103,7 +116,18 @@ public class TaskService
         if(bestEmp == null)
             return false;
 
-        return taskDAO.assignTask(task.getTask_id(), bestEmp.getEmp_id()) == 1;
+        if(taskDAO.assignTask(task.getTask_id(), bestEmp.getEmp_id()) == 1)
+        {
+            AppContext.socketClient.sendMessage(
+                    new Message(MessageType.COMMENT, "New Task Assigned", SessionManager.getUser().getUserId(), bestEmp.getEmp_id(), "EMPLOYEE")
+            );
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public boolean updateTaskStatus(int task_id, String status) throws SQLException
@@ -203,7 +227,8 @@ public class TaskService
 
         int rowNum = 1;
 
-        for(Tasks t : taskDAO.getAllTasks()) {
+        for(Tasks t : taskDAO.getAllTasks())
+        {
             Row row = sheet.createRow(rowNum++);
             row.createCell(0).setCellValue(t.getTask_id());
             row.createCell(1).setCellValue(t.getProject_id());
@@ -225,20 +250,4 @@ public class TaskService
 
         return "";
     }
-
-//    public static void main(String[] args) throws Exception
-//    {
-//        Scanner sc = new Scanner(System.in);
-//        AppContext.initSocket();
-//
-//        UserService userService = new UserService();
-//        UserDAO userDAO = new UserDAO();
-//
-//        SessionManager.setUser(userDAO.getUserById(2));
-//
-//        System.out.print("Enter Message User 2: ");
-//        String msg = sc.nextLine();
-//
-//        userService.sendMessage(msg);
-//    }
 }

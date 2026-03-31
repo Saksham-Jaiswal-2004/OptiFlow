@@ -7,7 +7,7 @@ import java.util.*;
 public class SocketServer
 {
 
-    private static List<ClientHandler> clients = new ArrayList<>();
+    static List<ClientHandler> clients = new ArrayList<>();
 
     public static void main(String[] args) throws Exception
     {
