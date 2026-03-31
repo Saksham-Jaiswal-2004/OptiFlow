@@ -43,7 +43,7 @@ public class ProjectService
 
         auditLogService.logAction(SessionManager.getUser().getUserId(), "ADD_PROJECT", "PROJECT", SessionManager.getUser().getUserId(), SessionManager.getUser().getName()+" added a new project");
 
-        return projectDAO.createProject(project.getName(), project.getDescription(), project.getStart_date(), project.getEnd_date(), project.getClient_id(), project.getStatus());
+        return projectDAO.createProject(project.getName(), project.getDescription(), project.getStart_date(), project.getEnd_date(), project.getManager_id(), project.getStatus());
     }
 
     public List<Tasks> generateTasksForProjects(String project_title, String project_details)
@@ -105,6 +105,14 @@ public class ProjectService
             return null;
 
         return projectDAO.getProjectById(project_id);
+    }
+
+    public List<Projects> getProjectByManager(int manager_id) throws SQLException
+    {
+        if(manager_id<=0)
+            return null;
+
+        return projectDAO.getProjectsByManager(manager_id);
     }
 
     public List<Projects> getAllProjects() throws SQLException
@@ -215,7 +223,7 @@ public class ProjectService
                     .append(p.getDescription() + ",")
                     .append(p.getStart_date() + ",")
                     .append(p.getEnd_date() + ",")
-                    .append(p.getClient_id() + ",")
+                    .append(p.getManager_id() + ",")
                     .append(p.getStatus() + "\n");
         }
 
@@ -250,7 +258,7 @@ public class ProjectService
             row.createCell(2).setCellValue(p.getDescription());
             row.createCell(3).setCellValue(p.getStart_date());
             row.createCell(4).setCellValue(p.getEnd_date());
-            row.createCell(5).setCellValue(p.getClient_id());
+            row.createCell(5).setCellValue(p.getManager_id());
             row.createCell(6).setCellValue(p.getStatus());
         }
 
