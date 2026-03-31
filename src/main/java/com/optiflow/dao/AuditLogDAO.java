@@ -23,7 +23,7 @@ public class AuditLogDAO
 
     public boolean addLog(int user_id, String action, String entityType, int entity_id, String details)
     {
-        String sql = "INSERT INTO auditlog (user_id, action, entityType, entitty_id, details) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO auditlog (user_id, action, entityType, entity_id, details) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, user_id);

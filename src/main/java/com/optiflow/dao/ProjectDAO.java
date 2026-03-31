@@ -12,7 +12,7 @@ public class ProjectDAO
 {
     public boolean createProject(String name, String description, Date start_date, Date end_date, int client_id, String status) throws SQLException
     {
-        String sql = "INSERT INTO projects (name, description, start_date, end_date, client_id, status) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO projects (name, description, start_date, end_date, manager_id, status) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, name);
@@ -50,7 +50,7 @@ public class ProjectDAO
                 pro.setDescription(rs.getString("description"));
                 pro.setStart_date(rs.getDate("start_date"));
                 pro.setEnd_date(rs.getDate("end_date"));
-                pro.setClient_id(rs.getInt("client_id"));
+                pro.setManager_id(rs.getInt("manager_id"));
                 pro.setStatus(rs.getString("status"));
                 return pro;
             }
@@ -77,7 +77,7 @@ public class ProjectDAO
                 pro.setDescription(rs.getString("description"));
                 pro.setStart_date(rs.getDate("start_date"));
                 pro.setEnd_date(rs.getDate("end_date"));
-                pro.setClient_id(rs.getInt("client_id"));
+                pro.setManager_id(rs.getInt("manager_id"));
                 pro.setStatus(rs.getString("status"));
 
                 proList.add(pro);
@@ -105,7 +105,7 @@ public class ProjectDAO
                 pro.setDescription(rs.getString("description"));
                 pro.setStart_date(rs.getDate("start_date"));
                 pro.setEnd_date(rs.getDate("end_date"));
-                pro.setClient_id(rs.getInt("client_id"));
+                pro.setManager_id(rs.getInt("manager_id"));
                 pro.setStatus(rs.getString("status"));
 
                 proList.add(pro);
@@ -114,15 +114,15 @@ public class ProjectDAO
         return proList;
     }
 
-    public List<Projects> getProjectsByClient(int client_id) throws SQLException
+    public List<Projects> getProjectsByManager(int manager_id) throws SQLException
     {
         LinkedList<Projects> proList = new LinkedList<>();
-        String sql = "SELECT * FROM projects WHERE client_id=?";
+        String sql = "SELECT * FROM projects WHERE manager_id=?";
 
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql);)
         {
-            stmt.setInt(1, client_id);
+            stmt.setInt(1, manager_id);
             ResultSet rs = stmt.executeQuery();
 
             while(rs.next())
@@ -133,7 +133,7 @@ public class ProjectDAO
                 pro.setDescription(rs.getString("description"));
                 pro.setStart_date(rs.getDate("start_date"));
                 pro.setEnd_date(rs.getDate("end_date"));
-                pro.setClient_id(rs.getInt("client_id"));
+                pro.setManager_id(rs.getInt("manager_id"));
                 pro.setStatus(rs.getString("status"));
 
                 proList.add(pro);

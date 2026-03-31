@@ -20,15 +20,16 @@ public class WorkLogDAO
         this.taskDAO = new TaskDAO();
     }
 
-    public boolean addWorkLog(int empId, int taskId, int hours, String desc)
+    public boolean addWorkLog(int empId, int taskId, Date workDate, int hours, String desc)
     {
-        String sql = "INSERT INTO worklog (employee_id, task_to, hours, description) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO worklog (employee_id, task_to, work_date, hours_worked, description) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, empId);
             stmt.setInt(2, taskId);
-            stmt.setInt(3, hours);
-            stmt.setString(4, desc);
+            stmt.setDate(3, workDate);
+            stmt.setInt(4, hours);
+            stmt.setString(5, desc);
             stmt.executeUpdate();
 
             return true;

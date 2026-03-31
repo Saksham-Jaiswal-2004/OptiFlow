@@ -33,7 +33,7 @@ public class AuthService
         if(verifyPassword(password, user.getPasswordHash()))
         {
             System.out.println("Login Successful!");
-            auditLogService.logAction(SessionManager.getUser().getUserId(), "LOGIN", "AUTH", SessionManager.getUser().getUserId(), "User Login");
+            auditLogService.logAction(0, "LOGIN", "AUTH", 0, "User Login");
             return user;
         }
 
@@ -66,7 +66,7 @@ public class AuthService
         String hashedPassword = hashPassword(user.getPasswordHash());
         user.setPasswordHash(hashedPassword);
 
-        auditLogService.logAction(SessionManager.getUser().getUserId(), "REGISTER", "AUTH", SessionManager.getUser().getUserId(), "New User Registered");
+        auditLogService.logAction(0, "REGISTER", "AUTH", 0, "New User Registered");
 
         return userDAO.addUser(user.getName(), user.getEmail(), user.getPasswordHash(), user.getRole());
     }
