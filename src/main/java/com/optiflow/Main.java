@@ -36,7 +36,8 @@ public class Main extends Application
             System.out.println("FAILED TO CONNECT DATABASE!");
         launch();
 
-        AppContext.getSocketClient().setListener(message -> {
+        AppContext.getSocketClient().setListener(message ->
+        {
             Platform.runLater(() -> {
                 System.out.println(message.getMessageType());
             });

@@ -1,13 +1,17 @@
 package com.optiflow.models;
 
+import java.sql.Date;
+
 public class AuditLog
 {
     private int log_id;
     private int user_id;
+    private String user_role;
     private String action;
     private String entityType;
     private int entity_id;
     private String details;
+    private Date date;
 
     public AuditLog()
     {
@@ -33,6 +37,11 @@ public class AuditLog
         return user_id;
     }
 
+    public String getUser_role()
+    {
+        return user_role;
+    }
+
     public String getAction()
     {
         return action;
@@ -53,9 +62,19 @@ public class AuditLog
         return details;
     }
 
+    public Date getDate()
+    {
+        return date;
+    }
+
     public void setUser_id(int user_id)
     {
         this.user_id = user_id;
+    }
+
+    public void setUser_role(String role)
+    {
+        this.user_role = role;
     }
 
     public void setAction(String action)
@@ -76,5 +95,10 @@ public class AuditLog
     public void setDetails(String details)
     {
         this.details = details;
+    }
+
+    public void setDate(Date date)
+    {
+        this.date = date;
     }
 }
