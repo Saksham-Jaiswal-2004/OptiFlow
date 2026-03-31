@@ -1,9 +1,12 @@
 package com.optiflow.controllers;
 
+import com.optiflow.utils.SessionManager;
+
 public class DashboardController
 {
     public Object getAdminDashboardData()
     {
+        SessionManager.getUser().isAdmin();
         return true;
     }
 

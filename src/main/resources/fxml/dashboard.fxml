@@ -12,7 +12,7 @@
 
 <BorderPane prefHeight="600.0" prefWidth="900.0" BorderPane.alignment="CENTER" style="-fx-background-color: #F5F7FA;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
 
-    <!-- ================= TOP ================= -->
+
     <top>
         <AnchorPane prefHeight="70" style="-fx-background-color: #111827;">
             <children>
@@ -26,7 +26,7 @@
         </AnchorPane>
     </top>
 
-    <!-- ================= SIDEBAR ================= -->
+
     <left>
         <VBox prefWidth="160" spacing="8" style="-fx-background-color: #111827; -fx-padding: 15;">
 
