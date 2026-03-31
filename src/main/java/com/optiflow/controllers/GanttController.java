@@ -1,100 +1,111 @@
+package com.optiflow.controllers;
+
 import javafx.fxml.FXML;
 import javafx.scene.layout.*;
 import javafx.scene.control.Label;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
+import javafx.scene.control.Separator;
+import javafx.geometry.Pos;
+import javafx.geometry.Orientation;
 
 public class GanttController {
 
     @FXML
-    private HBox dateHeader;
-
-    @FXML
     private VBox ganttContainer;
 
-    private final int DAY_WIDTH = 25;
+    private final int DAY_WIDTH = 80;
+    private final int EMP_WIDTH = 140;
 
     @FXML
     public void initialize() {
 
-        // Define timeline
-        LocalDate start = LocalDate.of(2026, 3, 25);
-        LocalDate end = LocalDate.of(2026, 4, 5);
+        addEmployeeRow("Emp 1", new Task[]{
+                new Task(4, 6, "green", "T1"),
+                new Task(7, 7, "green", "T2")
+        });
 
-        long totalDays = ChronoUnit.DAYS.between(start, end) + 1;
+        addEmployeeRow("Emp 2", new Task[]{
+                new Task(4, 6, "red", "T3")
+        });
 
-        // ================= HEADER =================
-        for (int i = 0; i < totalDays; i++) {
-            LocalDate date = start.plusDays(i);
-
-            Label day = new Label(String.valueOf(date.getDayOfMonth()));
-            day.setPrefWidth(DAY_WIDTH);
-            day.setStyle("-fx-font-size: 11px;");
-
-            dateHeader.getChildren().add(day);
-        }
-
-        // ================= EMPLOYEES =================
-        addEmployee("John", start,
-                new Task("T1", LocalDate.of(2026,3,25), LocalDate.of(2026,3,28), "#3B82F6"));
-
-        addEmployee("Alice", start,
-                new Task("T1", LocalDate.of(2026,3,25), LocalDate.of(2026,3,28), "#F59E0B"),
-                new Task("T2", LocalDate.of(2026,3,28), LocalDate.of(2026,4,5), "#F59E0B"));
+        addEmployeeRow("Emp 3", new Task[]{
+                new Task(4, 6, "blue", "T4")
+        });
     }
 
-    private void addEmployee(String name, LocalDate timelineStart, Task... tasks) {
+    private void addEmployeeRow(String name, Task[] tasks) {
 
-        HBox row = new HBox(5);
-        row.setStyle("-fx-background-color: white; -fx-padding: 10; -fx-background-radius: 8; -fx-border-color: #E5E7EB;");
+        // MATCH HEADER STRUCTURE EXACTLY
+        HBox row = new HBox();
+        row.setSpacing(10);
 
-        Label label = new Label(name);
-        label.setPrefWidth(120);
-        label.setStyle("-fx-font-weight: bold;");
+        // Employee label
+        Label empLabel = new Label(name);
+        empLabel.setPrefWidth(EMP_WIDTH);
+        empLabel.setMinWidth(EMP_WIDTH);
+        empLabel.setMaxWidth(EMP_WIDTH);
+        empLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: white;");
 
-        Pane timeline = new Pane();
-        timeline.setPrefHeight(40);
-        timeline.setStyle("-fx-background-color: #F3F4F6; -fx-background-radius: 6;");
+        // Separator (match header)
+        Separator separator = new Separator();
+        separator.setOrientation(Orientation.VERTICAL);
+        separator.setPrefHeight(30);
 
-        for (Task t : tasks) {
+        // Timeline container
+        HBox timeline = new HBox();
+        timeline.setSpacing(0);
 
-            long startOffset = ChronoUnit.DAYS.between(timelineStart, t.start);
-            long duration = ChronoUnit.DAYS.between(t.start, t.end) + 1;
+        // Create 7 day cells
+        StackPane[] dayCells = new StackPane[7];
 
-            double x = startOffset * DAY_WIDTH;
-            double width = duration * DAY_WIDTH;
+        for (int i = 0; i < 7; i++) {
 
-            Rectangle rect = new Rectangle(x, 8, width, 24);
-            rect.setArcWidth(10);
-            rect.setArcHeight(10);
-            rect.setFill(Color.web(t.color));
+            StackPane cell = new StackPane();
+            cell.setPrefWidth(DAY_WIDTH);
+            cell.setPrefHeight(30);
+            cell.setStyle("-fx-background-color: #6B7280; -fx-background-radius: 6;");
 
-            Label taskLabel = new Label(t.name);
-            taskLabel.setLayoutX(x + 5);
-            taskLabel.setLayoutY(10);
-            taskLabel.setStyle("-fx-text-fill: white; -fx-font-size: 10px;");
-
-            timeline.getChildren().addAll(rect, taskLabel);
+            dayCells[i] = cell;
+            timeline.getChildren().add(cell);
         }
 
-        row.getChildren().addAll(label, timeline);
+        // Add tasks inside cells
+        for (Task t : tasks) {
+
+            StackPane bar = new StackPane();
+            bar.setPrefHeight(30);
+            bar.setPrefWidth((t.endDay - t.startDay + 1) * DAY_WIDTH);
+
+            String color;
+            switch (t.status) {
+                case "green": color = "#10B981"; break;
+                case "red": color = "#EF4444"; break;
+                case "blue": color = "#3B82F6"; break;
+                default: color = "#9CA3AF";
+            }
+
+            bar.setStyle("-fx-background-color: " + color + "; -fx-background-radius: 6;");
+
+            Label taskLabel = new Label(t.name);
+            taskLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
+            bar.getChildren().add(taskLabel);
+
+            // place bar in correct starting cell
+            dayCells[t.startDay - 1].getChildren().add(bar);
+        }
+
+        row.getChildren().addAll(empLabel, separator, timeline);
         ganttContainer.getChildren().add(row);
     }
 
     static class Task {
-        String name;
-        LocalDate start;
-        LocalDate end;
-        String color;
+        int startDay, endDay;
+        String status, name;
 
-        Task(String name, LocalDate start, LocalDate end, String color) {
+        Task(int s, int e, String status, String name) {
+            this.startDay = s;
+            this.endDay = e;
+            this.status = status;
             this.name = name;
-            this.start = start;
-            this.end = end;
-            this.color = color;
         }
     }
 }
