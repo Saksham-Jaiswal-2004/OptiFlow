@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #F5F7FA;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.optiflow.controllers.GanttController">
 
     <!-- ================= TOP ================= -->
     <top>
         <AnchorPane prefHeight="70" style="-fx-background-color: #111827;">
             <children>
-                <Label layoutX="20" layoutY="20" style="-fx-text-fill: white;                               -fx-font-size: 20px;                               -fx-font-weight: bold;" text="OptiFlow" />
+                <Label style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" text="OptiFlow" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
             </children>
         </AnchorPane>
     </top>
@@ -23,62 +26,64 @@
     <left>
         <VBox prefWidth="160" spacing="8" style="-fx-background-color: #111827; -fx-padding: 15;">
 
-            <!-- LOGO / TITLE SPACE -->
-            <Label style="-fx-text-fill: #6B7280;                       -fx-font-size: 11px;                       -fx-font-weight: bold;" text="MENU" />
+            <Label style="-fx-text-fill: #6B7280; -fx-font-size: 11px; -fx-font-weight: bold;" text="MENU" />
 
-            <!-- DASHBOARD (ACTIVE) -->
-            <Button maxWidth="Infinity" style="-fx-background-color: #374151;                        -fx-text-fill: white;                        -fx-alignment: CENTER_LEFT;                        -fx-padding: 10 15;                        -fx-background-radius: 8;" text="Dashboard" />
+            <Button maxWidth="Infinity" style="-fx-background-color: #374151; -fx-text-fill: white;                            -fx-alignment: CENTER_LEFT; -fx-padding: 10 15; -fx-background-radius: 8;" text="Dashboard" />
 
-            <!-- OTHERS -->
-            <Button maxWidth="Infinity" style="-fx-background-color: transparent;                        -fx-text-fill: #D1D5DB;                        -fx-alignment: CENTER_LEFT;                        -fx-padding: 10 15;                        -fx-background-radius: 8;" text="Analytics" />
+            <Button maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #D1D5DB;                            -fx-alignment: CENTER_LEFT; -fx-padding: 10 15;" text="Employees" />
 
-            <Button maxWidth="Infinity" style="-fx-background-color: transparent;                        -fx-text-fill: #D1D5DB;                        -fx-alignment: CENTER_LEFT;                        -fx-padding: 10 15;                        -fx-background-radius: 8;" text="Reports" />
+            <Button maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #D1D5DB;                            -fx-alignment: CENTER_LEFT; -fx-padding: 10 15;" text="Projects" />
 
-            <Button maxWidth="Infinity" style="-fx-background-color: transparent;                        -fx-text-fill: #D1D5DB;                        -fx-alignment: CENTER_LEFT;                        -fx-padding: 10 15;                        -fx-background-radius: 8;" text="Settings" />
+            <Button maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #D1D5DB;                            -fx-alignment: CENTER_LEFT; -fx-padding: 10 15;" text="Reports" />
 
-            <Button maxWidth="Infinity" style="-fx-background-color: transparent;                        -fx-text-fill: #D1D5DB;                        -fx-alignment: CENTER_LEFT;                        -fx-padding: 10 15;                        -fx-background-radius: 8;" text="Help" />
+            <Button maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #D1D5DB;                            -fx-alignment: CENTER_LEFT; -fx-padding: 10 15;" text="Help" />
 
-            <!-- SPACER -->
             <Region VBox.vgrow="ALWAYS" />
 
-            <!-- LOGOUT -->
-            <Button maxWidth="Infinity" style="-fx-background-color: transparent;                        -fx-text-fill: #EF4444;                        -fx-alignment: CENTER_LEFT;                        -fx-padding: 10 15;                        -fx-background-radius: 8;" text="Logout" />
-
+            <Button maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #EF4444;                            -fx-alignment: CENTER_LEFT; -fx-padding: 10 15;" text="Logout" />
         </VBox>
     </left>
-    <center>
-        <ScrollPane fitToWidth="true" style="-fx-background: #F8FAFC;">
 
+    <!-- ================= CENTER ================= -->
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background: #374151;">
             <content>
-                <VBox spacing="20" style="-fx-padding: 20;">
+
+                <VBox spacing="20" style="-fx-padding: 25;">
 
                     <!-- TITLE -->
-                    <Label text="Employee Workload (Gantt Chart)"
-                           style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+                    <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Employee Weekly Workload" />
 
-                    <!-- HEADER ROW -->
-                    <HBox spacing="5"
-                          style="-fx-background-color: #E5E7EB;
-                         -fx-padding: 10;
-                         -fx-background-radius: 6;">
+                    <!-- HEADER -->
+                    <HBox prefHeight="42.0" prefWidth="720.0" spacing="20.0" style="-fx-background-color: #9b9ea3; -fx-padding: 12; -fx-background-radius: 8;">
 
-                        <Label text="Employee"
-                               prefWidth="120"
-                               style="-fx-font-weight: bold;"/>
+                        <Label maxWidth="140" minWidth="108.0" prefHeight="18.0" prefWidth="131.0" style="-fx-font-weight: bold;" text="Employee" />
+                  <Separator orientation="VERTICAL" prefHeight="5.0" prefWidth="6.0" />
 
-                        <!-- DYNAMIC DATES -->
-                        <HBox fx:id="dateHeader" spacing="2"/>
+                        <HBox spacing="25.0">
+                            <Label prefWidth="80" text="Mon" />
+                            <Label prefWidth="80" text="Tue" />
+                            <Label prefWidth="80" text="Wed" />
+                            <Label prefWidth="80" text="Thu" />
+                            <Label prefWidth="80" text="Fri" />
+                            <Label prefWidth="80" text="Sat">
+                        <HBox.margin>
+                           <Insets />
+                        </HBox.margin></Label>
+                            <Label prefWidth="80" text="Sun" />
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                        </HBox>
                     </HBox>
 
-                    <!-- EMPLOYEE ROWS -->
-                    <VBox fx:id="ganttContainer" spacing="15"/>
+                    <!-- GANTT DATA -->
+                    <VBox fx:id="ganttContainer" spacing="20" />
 
                 </VBox>
-            </content>
 
+            </content>
         </ScrollPane>
     </center>
-
-
 
 </BorderPane>
