@@ -2,6 +2,8 @@ package com.optiflow.services;
 
 import com.optiflow.dao.UserDAO;
 import com.optiflow.models.User;
+import com.optiflow.utils.SessionManager;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
@@ -10,10 +12,12 @@ import java.util.regex.Pattern;
 public class AuthService
 {
     private UserDAO userDAO;
+    private AuditLogService auditLogService;
 
     public AuthService()
     {
         this.userDAO = new UserDAO();
+        this.auditLogService = new AuditLogService();
     }
 
     public User login(String email, String password) throws SQLException
@@ -29,6 +33,7 @@ public class AuthService
         if(verifyPassword(password, user.getPasswordHash()))
         {
             System.out.println("Login Successful!");
+            auditLogService.logAction(SessionManager.getUser().getUserId(), "LOGIN", "AUTH", SessionManager.getUser().getUserId(), "User Login");
             return user;
         }
 
@@ -61,11 +66,15 @@ public class AuthService
         String hashedPassword = hashPassword(user.getPasswordHash());
         user.setPasswordHash(hashedPassword);
 
+        auditLogService.logAction(SessionManager.getUser().getUserId(), "REGISTER", "AUTH", SessionManager.getUser().getUserId(), "New User Registered");
+
         return userDAO.addUser(user.getName(), user.getEmail(), user.getPasswordHash(), user.getRole());
     }
 
     public boolean logout(int userId)
     {
+        SessionManager.setUser(null);
+        auditLogService.logAction(SessionManager.getUser().getUserId(), "LOGOUT", "AUTH", SessionManager.getUser().getUserId(), "User Logged Out");
         return true;
     }
 

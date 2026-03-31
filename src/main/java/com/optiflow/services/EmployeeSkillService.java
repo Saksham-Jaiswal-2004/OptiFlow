@@ -5,6 +5,7 @@ import com.optiflow.dao.EmployeeSkillDAO;
 import com.optiflow.dao.SkillsDAO;
 import com.optiflow.models.Employee;
 import com.optiflow.models.Skills;
+import com.optiflow.utils.SessionManager;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -15,18 +16,22 @@ public class EmployeeSkillService
     private EmployeeSkillDAO employeeSkillDAO;
     private EmployeeDAO employeeDAO;
     private SkillsDAO skillsDAO;
+    private AuditLogService auditLogService;
 
     EmployeeSkillService()
     {
         this.employeeSkillDAO = new EmployeeSkillDAO();
         this.employeeDAO = new EmployeeDAO();
         this.skillsDAO = new SkillsDAO();
+        this.auditLogService = new AuditLogService();
     }
 
     public boolean assignSkillToEmployee(int emp_id, int skill_id, int proficiency) throws SQLException
     {
         if(emp_id <= 0 || skill_id <= 0)
             return false;
+
+        auditLogService.logAction(SessionManager.getUser().getUserId(), "ASSIGN_SKILL_TO_EMPLOYEE", "EMPLOYEE_SKILL", skill_id, SessionManager.getUser().getName()+" added a new skill to "+employeeDAO.getEmployeeById(emp_id).getName());
 
         return employeeSkillDAO.addSkillToEmployee(emp_id, skill_id, proficiency);
     }
@@ -35,6 +40,8 @@ public class EmployeeSkillService
     {
         if(emp_id <= 0 || skill_id <= 0)
             return false;
+
+        auditLogService.logAction(SessionManager.getUser().getUserId(), "REMOVE_SKILL_FROM_EMPLOYEE", "EMPLOYEE_SKILL", skill_id, SessionManager.getUser().getName()+" removed a skill from "+employeeDAO.getEmployeeById(emp_id).getName());
 
         return employeeSkillDAO.removeSkillFromEmployee(emp_id, skill_id) == 1;
     }
@@ -105,6 +112,8 @@ public class EmployeeSkillService
         {
             employeeSkillDAO.addSkillToEmployee(emp_id, skill_id, 5);
         }
+
+        auditLogService.logAction(SessionManager.getUser().getUserId(), "UPDATE_EMPLOYEE_SKILLS", "EMPLOYEE_SKILL", emp_id, SessionManager.getUser().getName()+" updated the skills of "+employeeDAO.getEmployeeById(emp_id).getName());
 
         return true;
     }

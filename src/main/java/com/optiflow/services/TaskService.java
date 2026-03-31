@@ -29,6 +29,7 @@ public class TaskService
     private EmployeeSkillService employeeSkillService;
     private WorkloadService workloadService;
     private TaskSkillService taskSkillService;
+    private AuditLogService auditLogService;
 
     TaskService()
     {
@@ -37,12 +38,15 @@ public class TaskService
         this.employeeSkillService = new EmployeeSkillService();
         this.workloadService = new WorkloadService();
         this.taskSkillService = new TaskSkillService();
+        this.auditLogService = new AuditLogService();
     }
 
     public boolean createTask(Tasks task) throws SQLException
     {
         if(task == null)
             return false;
+
+        auditLogService.logAction(SessionManager.getUser().getUserId(), "ADD_TASK", "TASK", SessionManager.getUser().getUserId(), SessionManager.getUser().getName()+" created a new task");
 
         return taskDAO.createTask(task.getProject_id(), task.getAssigned_to(), task.getTitle(), task.getDescription(), task.getStatus(), task.getPriority(), task.getEstimated_hours(), task.getStart_date(), task.getEnd_date());
     }
@@ -71,6 +75,8 @@ public class TaskService
             taskDAO.updateStartDate(task.getTask_id(), task.getStart_date());
             taskDAO.updateEndDate(task.getTask_id(), task.getEnd_date());
 
+            auditLogService.logAction(SessionManager.getUser().getUserId(), "UPDATE_TASK", "TASK", task.getTask_id(), SessionManager.getUser().getName()+" updated a task");
+
             return true;
         } catch (Exception e) {
             return false;
@@ -82,6 +88,8 @@ public class TaskService
         if(task_id <= 0)
             return false;
 
+        auditLogService.logAction(SessionManager.getUser().getUserId(), "DELETE_TASK", "TASK", task_id, SessionManager.getUser().getName()+" deleted a task");
+
         return taskDAO.deleteTask(task_id) == 1;
     }
 
@@ -92,6 +100,8 @@ public class TaskService
 
         if(taskDAO.assignTask(task_id, emp_id) == 1)
         {
+            auditLogService.logAction(SessionManager.getUser().getUserId(), "ASSIGN_TASK", "TASK", task_id, SessionManager.getUser().getName()+" assigned a task to "+employeeDAO.getEmployeeById(emp_id).getName());
+
             AppContext.socketClient.sendMessage(
                 new Message(MessageType.TASK_UPDATE, "New Task Assigned", SessionManager.getUser().getUserId(), emp_id, "EMPLOYEE")
             );
@@ -118,6 +128,8 @@ public class TaskService
 
         if(taskDAO.assignTask(task.getTask_id(), bestEmp.getEmp_id()) == 1)
         {
+            auditLogService.logAction(SessionManager.getUser().getUserId(), "ASSIGN_TASK", "TASK", task.getTask_id(), "AI assigned a task to "+bestEmp.getName());
+
             AppContext.socketClient.sendMessage(
                     new Message(MessageType.COMMENT, "New Task Assigned", SessionManager.getUser().getUserId(), bestEmp.getEmp_id(), "EMPLOYEE")
             );
@@ -134,6 +146,8 @@ public class TaskService
     {
         if(task_id <= 0)
             return false;
+
+        auditLogService.logAction(SessionManager.getUser().getUserId(), "UPDATE_TASK_STATUS", "TASK", task_id, SessionManager.getUser().getName()+" updated task status to "+status);
 
         return taskDAO.updateStatus(task_id,status) == 1;
     }
@@ -204,6 +218,8 @@ public class TaskService
         writer.flush();
         writer.close();
 
+        auditLogService.logAction(SessionManager.getUser().getUserId(), "EXPORT_TASK", "TASK", -1, SessionManager.getUser().getName()+" exported task details via CSV");
+
         return fileName;
     }
 
@@ -247,6 +263,8 @@ public class TaskService
         workbook.write(fileOut);
         fileOut.close();
         workbook.close();
+
+        auditLogService.logAction(SessionManager.getUser().getUserId(), "EXPORT_TASK", "TASK", -1, SessionManager.getUser().getName()+" exported task details via Excel");
 
         return "";
     }
