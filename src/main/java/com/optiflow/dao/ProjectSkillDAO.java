@@ -17,7 +17,7 @@ public class ProjectSkillDAO
 
     public boolean addSkillToProject(int project_id, int skill_id) throws SQLException
     {
-        String query = "INSERT INTO project_skills (project_id, skill_id) VALUES (?, ?)";
+        String query = "INSERT INTO projectskill (project_id, skill_id) VALUES (?, ?)";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setInt(1, project_id);
@@ -28,7 +28,7 @@ public class ProjectSkillDAO
 
     public boolean removeSkillFromProject(int project_id, int skill_id) throws SQLException
     {
-        String query = "DELETE FROM project_skills WHERE project_id = ? AND skill_id = ?";
+        String query = "DELETE FROM projectskill WHERE project_id = ? AND skill_id = ?";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setInt(1, project_id);
@@ -39,7 +39,7 @@ public class ProjectSkillDAO
 
     public List<ProjectSkill> getSkillsByProject(int project_id) throws SQLException
     {
-        String query = "SELECT * FROM project_skills WHERE project_id = ?";
+        String query = "SELECT * FROM projectskill WHERE project_id = ?";
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setInt(1, project_id);
 
@@ -61,7 +61,7 @@ public class ProjectSkillDAO
 
     public List<ProjectSkill> getProjectsBySkill(int skill_id) throws SQLException
     {
-        String query = "SELECT * FROM project_skills WHERE skill_id = ?";
+        String query = "SELECT * FROM projectskill WHERE skill_id = ?";
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setInt(1, skill_id);
 

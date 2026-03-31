@@ -17,7 +17,7 @@ public class TaskSkillDAO
 
     public boolean addSkillToTask(int task_id, int skill_id) throws SQLException
     {
-        String query = "INSERT INTO task_skills (task_id, skill_id) VALUES (?, ?)";
+        String query = "INSERT INTO taskskill (task_id, skill_id) VALUES (?, ?)";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setInt(1, task_id);
@@ -28,7 +28,7 @@ public class TaskSkillDAO
 
     public int removeSkillFromTask(int task_id, int skill_id) throws SQLException
     {
-        String query = "DELETE FROM task_skills WHERE task_id = ? AND skill_id = ?";
+        String query = "DELETE FROM taskskill WHERE task_id = ? AND skill_id = ?";
 
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setInt(1, task_id);
@@ -39,7 +39,7 @@ public class TaskSkillDAO
 
     public List<TaskSkill> getSkillsByTask(int task_id) throws SQLException
     {
-        String query = "SELECT * FROM task_skills WHERE task_id = ?";
+        String query = "SELECT * FROM taskskill WHERE task_id = ?";
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setInt(1, task_id);
 
@@ -60,7 +60,7 @@ public class TaskSkillDAO
 
     public List<TaskSkill> getTasksBySkill(int skill_id) throws SQLException
     {
-        String query = "SELECT * FROM task_skills WHERE skill_id = ?";
+        String query = "SELECT * FROM taskskill WHERE skill_id = ?";
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setInt(1, skill_id);
 

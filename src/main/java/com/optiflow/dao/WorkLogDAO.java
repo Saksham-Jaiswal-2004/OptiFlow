@@ -22,7 +22,7 @@ public class WorkLogDAO
 
     public boolean addWorkLog(int empId, int taskId, int hours, String desc)
     {
-        String sql = "INSERT INTO worklogs (employee_id, task_to, hours, description) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO worklog (employee_id, task_to, hours, description) VALUES (?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, empId);
@@ -40,7 +40,7 @@ public class WorkLogDAO
     public List<WorkLog> getLogsByEmployee(int empId)
     {
         List<WorkLog> workLogs = new LinkedList<>();
-        String sql = "SELECT * FROM worklogs WHERE employee_id=?";
+        String sql = "SELECT * FROM worklog WHERE employee_id=?";
 
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -71,7 +71,7 @@ public class WorkLogDAO
     public List<WorkLog> getLogsByEmployeeByDate(int empId, Date date)
     {
         List<WorkLog> workLogs = new LinkedList<>();
-        String sql = "SELECT * FROM worklogs WHERE (employee_id, work_date) VALUES (?, ?)";
+        String sql = "SELECT * FROM worklog WHERE (employee_id, work_date) VALUES (?, ?)";
 
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -103,7 +103,7 @@ public class WorkLogDAO
     public List<WorkLog> getLogsByTask(int taskId)
     {
         List<WorkLog> workLogs = new LinkedList<>();
-        String sql = "SELECT * FROM worklogs WHERE task_id=?";
+        String sql = "SELECT * FROM worklog WHERE task_id=?";
 
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -134,7 +134,7 @@ public class WorkLogDAO
     public List<WorkLog> getLogsByProject(int projectId)
     {
         List<WorkLog> workLogs = new LinkedList<>();
-        String sql = "SELECT * FROM worklogs";
+        String sql = "SELECT * FROM worklog";
 
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -171,7 +171,7 @@ public class WorkLogDAO
     {
         List<WorkLog> workLogs = new LinkedList<>();
         int total=0;
-        String sql = "SELECT * FROM worklogs WHERE employee_id=?";
+        String sql = "SELECT * FROM worklog WHERE employee_id=?";
 
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {

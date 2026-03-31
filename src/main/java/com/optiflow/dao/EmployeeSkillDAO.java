@@ -15,7 +15,7 @@ public class EmployeeSkillDAO
 {
     public boolean addSkillToEmployee(int emp_id, int skill_id, int proficiency) throws SQLException
     {
-        String sql = "INSERT INTO employee_skills (employee_id, skill_id, proficiency) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO employeeskill (employee_id, skill_id, proficiency) VALUES (?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, emp_id);
@@ -33,7 +33,7 @@ public class EmployeeSkillDAO
     {
         LinkedList<Skills> skillList = new LinkedList<>();
         LinkedList<EmployeeSkill> empSkillList = new LinkedList<>();
-        String sql = "SELECT * FROM employee_skills WHERE employee_id=?";
+        String sql = "SELECT * FROM employeeskill WHERE employee_id=?";
 
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -63,7 +63,7 @@ public class EmployeeSkillDAO
     {
         LinkedList<Employee> empList = new LinkedList<>();
         LinkedList<EmployeeSkill> empSkillList = new LinkedList<>();
-        String sql = "SELECT * FROM employee_skills WHERE skill_id=?";
+        String sql = "SELECT * FROM employeeskill WHERE skill_id=?";
 
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -90,7 +90,7 @@ public class EmployeeSkillDAO
 
     public int updateProficiency(int emp_id, int skill_id, int proficiency) throws SQLException
     {
-        String sql = "UPDATE employee_skills SET proficiency=? WHERE (employee_id, skill_id) VALUES (?, ?) ";
+        String sql = "UPDATE employeeskill SET proficiency=? WHERE (employee_id, skill_id) VALUES (?, ?) ";
         int rs;
 
         try(Connection conn = DBConnection.getConnection();
@@ -109,7 +109,7 @@ public class EmployeeSkillDAO
 
     public int removeSkillFromEmployee(int emp_id, int skill_id) throws SQLException
     {
-        String sql = "DELETE FROM employee_skills WHERE (employee_id, skill_id) VALUES (?, ?)";
+        String sql = "DELETE FROM employeeskill WHERE (employee_id, skill_id) VALUES (?, ?)";
         int rs;
 
         try(Connection conn = DBConnection.getConnection();
