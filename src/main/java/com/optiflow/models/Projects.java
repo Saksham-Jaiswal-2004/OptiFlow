@@ -9,7 +9,7 @@ public class Projects
     private String description;
     private Date start_date;
     private Date end_date;
-    private int client_id;
+    private int manager_id;
     private String status;
 
     public Projects()
@@ -17,12 +17,12 @@ public class Projects
         System.out.println("Mai Projects Hu!");
     }
 
-    public Projects(String name, String description, Date start_date, int client_id)
+    public Projects(String name, String description, Date start_date, int manager_id)
     {
         this.name = name;
         this.description = description;
         this.start_date = start_date;
-        this.client_id = client_id;
+        this.manager_id = manager_id;
     }
 
     public int getProject_id()
@@ -50,9 +50,9 @@ public class Projects
         return end_date;
     }
 
-    public int getClient_id()
+    public int getManager_id()
     {
-        return client_id;
+        return manager_id;
     }
 
     public String getStatus()
@@ -85,9 +85,9 @@ public class Projects
         this.end_date = end_date;
     }
 
-    public void setClient_id(int client_id)
+    public void setManager_id(int client_id)
     {
-        this.client_id = client_id;
+        this.manager_id = client_id;
     }
 
     public void setStatus(String status)

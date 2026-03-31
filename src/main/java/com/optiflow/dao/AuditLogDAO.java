@@ -23,7 +23,7 @@ public class AuditLogDAO
 
     public boolean addLog(int user_id, String action, String entityType, int entity_id, String details)
     {
-        String sql = "INSERT INTO audit_logs (user_id, action, entityType, entitty_id, details) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO auditlog (user_id, action, entityType, entity_id, details) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, user_id);
@@ -43,7 +43,7 @@ public class AuditLogDAO
 
     {
         LinkedList<AuditLog> auditLogs = new LinkedList<>();
-        String sql = "SELECT * FROM audit_logs";
+        String sql = "SELECT * FROM auditlog";
 
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -71,7 +71,7 @@ public class AuditLogDAO
     public List<AuditLog> getLogsByUser(int user_id) throws SQLException
     {
         LinkedList<AuditLog> auditLogs = new LinkedList<>();
-        String sql = "SELECT * FROM audit_logs WHERE user_id=?";
+        String sql = "SELECT * FROM auditlog WHERE user_id=?";
 
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -98,7 +98,7 @@ public class AuditLogDAO
     public List<AuditLog> getLogsByEntity(String entityType, int entity_id)
     {
         LinkedList<AuditLog> auditLogs = new LinkedList<>();
-        String sql = "SELECT * FROM audit_logs WHERE (entityType, entity_id) VALUES (?, ?)";
+        String sql = "SELECT * FROM auditlog WHERE (entityType, entity_id) VALUES (?, ?)";
 
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
