@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.ZoneId;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -57,7 +58,7 @@ public class AuditLogDAO
                 auditLog.setEntityType(rs.getString("entityType"));
                 auditLog.setEntity_id(rs.getInt("entity_id"));
                 auditLog.setDetails(rs.getString("details"));
-                auditLog.setDate(rs.getDate("created_at"));
+                auditLog.setDate(java.sql.Date.valueOf(rs.getDate("created_at").toLocalDate()));
 
                 auditLogs.add(auditLog);
                 return auditLogs;

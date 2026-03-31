@@ -10,7 +10,7 @@ public class AuditLogService
 {
     private AuditLogDAO auditLogDAO;
 
-    AuditLogService()
+    public AuditLogService()
     {
         this.auditLogDAO = new AuditLogDAO();
     }

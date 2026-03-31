@@ -13,6 +13,13 @@ import java.util.List;
 
 public class WorkLogDAO
 {
+    private TaskDAO taskDAO;
+
+    public WorkLogDAO()
+    {
+        this.taskDAO = new TaskDAO();
+    }
+
     public boolean addWorkLog(int empId, int taskId, int hours, String desc)
     {
         String sql = "INSERT INTO worklogs (employee_id, task_to, hours, description) VALUES (?, ?, ?, ?)";
@@ -116,6 +123,36 @@ public class WorkLogDAO
                 workLog.setDescription(rs.getString("description"));
 
                 workLogs.add(workLog);
+            }
+
+            return workLogs;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<WorkLog> getLogsByProject(int projectId)
+    {
+        List<WorkLog> workLogs = new LinkedList<>();
+        String sql = "SELECT * FROM worklogs";
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next())
+            {
+                WorkLog workLog = new WorkLog();
+                workLog.setLogId(rs.getInt("log_id"));
+                workLog.setEmployeeId(rs.getInt("employee_id"));
+                workLog.setTaskId(rs.getInt("task_id"));
+                workLog.setWorkDate(rs.getDate("work_date"));
+                workLog.setHoursWorked(rs.getInt("hours"));
+                workLog.setDescription(rs.getString("description"));
+
+                if(taskDAO.getTaskById(workLog.getTaskId()).getProject_id() == projectId)
+                    workLogs.add(workLog);
             }
 
             return workLogs;

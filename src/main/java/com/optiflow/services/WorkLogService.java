@@ -15,7 +15,7 @@ public class WorkLogService
     private TaskDAO taskDAO;
     private AuditLogService auditLogService;
 
-    WorkLogService()
+    public WorkLogService()
     {
         this.workLogDAO = new WorkLogDAO();
         this.taskDAO = new TaskDAO();
@@ -40,6 +40,11 @@ public class WorkLogService
     public List<WorkLog> getEmployeeLogs(int empId) throws SQLException
     {
         return workLogDAO.getLogsByEmployee(empId);
+    }
+
+    public List<WorkLog> getLogsByProject(int projectId) throws SQLException
+    {
+        return workLogDAO.getLogsByProject(projectId);
     }
 
     public List<WorkLog> getEmployeeLogsByDate(int empId, Date date) throws SQLException
