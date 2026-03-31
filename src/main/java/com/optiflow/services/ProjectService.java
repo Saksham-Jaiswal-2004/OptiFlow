@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -45,11 +46,12 @@ public class ProjectService
         return projectDAO.createProject(project.getName(), project.getDescription(), project.getStart_date(), project.getEnd_date(), project.getClient_id(), project.getStatus());
     }
 
-    public void generateTasksForProjects(String project_title, String project_details)
+    public List<Tasks> generateTasksForProjects(String project_title, String project_details)
     {
         String response = aiService.generateTasks(project_title, project_details);
         System.out.println("Response: "+response);
 
+        List<Tasks> tasksList = new LinkedList<>();
         List<TaskDTO> tasks = null;
         try
         {
@@ -73,22 +75,27 @@ public class ProjectService
                     new TypeReference<List<TaskDTO>>() {}
             );
 
-            System.out.println("Taske: "+tasks);
+            System.out.println("Task: "+tasks);
 
             for(TaskDTO task: tasks)
             {
-                System.out.println();
-                System.out.println(task.getTitle());
-                System.out.println(task.getDescription());
-                System.out.println(task.getSkills());
-                System.out.println(task.getEstimatedHours());
-                System.out.println(task.getPriority());
+                Tasks t = new Tasks();
+                t.setTitle(task.getTitle());
+                t.setDescription(task.getDescription());
+                t.setSkillsList(task.getSkills());
+                t.setEstimated_hours(task.getEstimatedHours());
+                t.setPriority(task.getPriority());
+
+                tasksList.add(t);
             }
 
             auditLogService.logAction(SessionManager.getUser().getUserId(), "DIVIDE_PROJECT_TO_TASKS", "PROJECT", -1, SessionManager.getUser().getName()+" divided a project into its respective tasks");
 
+            return tasksList;
+
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
     }
 
@@ -255,5 +262,18 @@ public class ProjectService
         auditLogService.logAction(SessionManager.getUser().getUserId(), "EXPORT_PROJECT", "PROJECT", SessionManager.getUser().getUserId(), SessionManager.getUser().getName()+" exported project details via Excel");
 
         return "";
+    }
+
+    public static void main(String[] args)
+    {
+        Scanner sc = new Scanner(System.in);
+        ProjectService projectService = new ProjectService();
+
+        System.out.println("Enter Title: ");
+        String title = sc.nextLine();
+        System.out.println("Enter Description: ");
+        String desc = sc.nextLine();
+
+        projectService.generateTasksForProjects(title, desc);
     }
 }

@@ -1,6 +1,7 @@
 package com.optiflow.models;
 
 import java.sql.Date;
+import java.util.List;
 
 public class Tasks
 {
@@ -15,6 +16,7 @@ public class Tasks
     private int actual_hours;
     private Date start_date;
     private Date end_date;
+    private List<String> skillsList;
 
     public Tasks()
     {
@@ -88,6 +90,11 @@ public class Tasks
         return end_date;
     }
 
+    public List<String> getSkillsList()
+    {
+        return skillsList;
+    }
+
     public void setTask_id(int task_id)
     {
         this.task_id = task_id;
@@ -141,5 +148,10 @@ public class Tasks
     public void setEnd_date(Date end_date)
     {
         this.end_date = end_date;
+    }
+
+    public void setSkillsList(List<String> skillsList)
+    {
+        this.skillsList = skillsList;
     }
 }
