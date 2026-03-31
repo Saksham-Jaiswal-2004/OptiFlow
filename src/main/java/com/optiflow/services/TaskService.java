@@ -31,7 +31,7 @@ public class TaskService
     private TaskSkillService taskSkillService;
     private AuditLogService auditLogService;
 
-    TaskService()
+     public TaskService()
     {
         this.taskDAO = new TaskDAO();
         this.employeeDAO = new EmployeeDAO();
@@ -57,6 +57,14 @@ public class TaskService
             return null;
 
         return taskDAO.getTaskById(task_id);
+    }
+
+    public List<Tasks> getTaskByEmp(int emp_id) throws SQLException
+    {
+        if(emp_id <= 0)
+            return null;
+
+        return taskDAO.getTasksByEmployee(emp_id);
     }
 
     public boolean updateTask(Tasks task)
@@ -150,35 +158,6 @@ public class TaskService
         auditLogService.logAction(SessionManager.getUser().getUserId(), "UPDATE_TASK_STATUS", "TASK", task_id, SessionManager.getUser().getName()+" updated task status to "+status);
 
         return taskDAO.updateStatus(task_id,status) == 1;
-    }
-
-    public List<Tasks> getTasksByStatus(String status) throws SQLException
-    {
-        return taskDAO.getTasksByStatus(status);
-    }
-
-    public List<Tasks> getTasksByEmployee(int emp_id) throws SQLException
-    {
-        if(emp_id <= 0)
-            return null;
-
-        return taskDAO.getTasksByEmployee(emp_id);
-    }
-
-    public int calculateTaskHours(int task_id)
-    {
-        return -1;
-    }
-
-    public boolean canAssignTask(int emp_id, int taskHours)
-    {
-        if(emp_id <= 0)
-            return false;
-
-        if(employeeDAO.getWeeklyCapacity(emp_id) - employeeDAO.getAllocatedHours(emp_id) > taskHours)
-            return true;
-
-        return false;
     }
 
     public List<Tasks> getOverdueTasks() throws SQLException

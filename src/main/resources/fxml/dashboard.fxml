@@ -36,9 +36,9 @@
                 <VBox fillWidth="true" spacing="20" style="-fx-padding: 20;">
 
                     <!-- WELCOME -->
-                    <Label style="-fx-font-size: 30px; -fx-font-weight: bold;" text="Welcome  Username" />
+                    <Label style="-fx-font-size: 30px; -fx-font-weight: bold;" text="Welcome  " />
 
-                    <Label style="-fx-text-fill: #6B7280;" text="Here’s your project overview" />
+
 
                     <!-- ================= STATS ================= -->
                     <HBox fx:id="statsContainer" spacing="20" style="-fx-padding: 10 20 10 20;" />
@@ -46,7 +46,7 @@
                   <children>
       
                           <!-- HEADER -->
-                          <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Activity Logs" />
+                          <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" fx:id="logsHeader"/>
       
                           <!-- ================= LOGS ================= -->
                           <VBox spacing="15">

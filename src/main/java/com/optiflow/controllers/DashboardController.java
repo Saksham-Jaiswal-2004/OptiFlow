@@ -1,7 +1,7 @@
 package com.optiflow.controllers;
 
-import com.optiflow.models.User;
-import com.optiflow.services.AuditLogService;
+import com.optiflow.models.*;
+import com.optiflow.services.*;
 import com.optiflow.utils.SessionManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -10,13 +10,29 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+import java.sql.SQLException;
+import java.util.List;
 
 public class DashboardController {
     private AuditLogService auditLogService;
-
+    private WorkLogService workLogService;
+    private TaskService taskService;
+    private EmployeeService employeeService;
+    private ProjectService projectService;
     public DashboardController(){
         this.auditLogService= new AuditLogService();
+        this.workLogService= new WorkLogService();
+        this.taskService=new TaskService();
+        this.employeeService=new EmployeeService();
+        this.projectService= new ProjectService();
     }
+    @FXML
+    private Label logsHeader;
 
     @FXML
     private VBox sidebarContainer;
@@ -40,6 +56,13 @@ public class DashboardController {
             return;
         }
         setBadge(user.getRole());
+        if (user.isAdmin()) {
+            logsHeader.setText("Audit Logs");
+        } else if (user.isManager()) {
+            logsHeader.setText("Work Logs");
+        }else{
+            logsHeader.setText("Your Tasks");
+        }
 
         if (user.isAdmin()) {
             loadAdminSidebar();
@@ -56,7 +79,7 @@ public class DashboardController {
         else if (user.isEmployee()) {
             loadEmployeeSidebar();
             loadEmployeeStats();
-
+            loadEmployeeTasks();
         }
     }
 
@@ -76,16 +99,37 @@ public class DashboardController {
         sidebarContainer.getChildren().setAll(sidebar);
     }
     private void loadAdminStats() {
-        statsContainer.getChildren().setAll(
+        try {
+            List<Employee> emps = employeeService.getAllEmployees();
+            int totEmp = emps.size();
 
-                createStatCard("Total Projects", "10", "#1E3A8A, #3B82F6"),
-                createStatCard("Active Projects", "5", "#065F46, #10B981"),
-                createStatCard("Previous Projects", "50", "#92400E, #F59E0B"),
-                createStatCard("Cancelled Projects", "10", "#7F1D1D, #EF4444")
-        );
+            List<Projects> pros = projectService.getAllProjects();
+            int totPro = pros.size();
+
+            statsContainer.getChildren().setAll(
+                    createStatCard("Total Projects", String.valueOf(totPro), "#1E3A8A, #3B82F6"),
+                    createStatCard("Active Projects", "5", "#065F46, #10B981"),
+                    createStatCard("Previous Projects", "50", "#92400E, #F59E0B"),
+                    createStatCard("Total Employees", String.valueOf(totEmp), "#7F1D1D, #EF4444")
+            );
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-    private void loadAuditLogs(){
+    private void loadAuditLogs() {
+        logsContainer.getChildren().clear();
 
+        try {
+            List<AuditLog> logs = auditLogService.getAllLogs();
+
+            for (AuditLog log : logs) {
+                logsContainer.getChildren().add(createAuditLogCard(log));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // ✅ MANAGER SIDEBAR
@@ -112,6 +156,21 @@ public class DashboardController {
                 createStatCard("Completed Tasks", "30", "#7F1D1D, #EF4444")
         );
     }
+    private void loadWorkLogs() {
+        logsContainer.getChildren().clear();
+
+
+        try {
+            List<WorkLog> logs = workLogService.getLogsByProject(id); // or all logs method
+
+            for (WorkLog log : logs) {
+                logsContainer.getChildren().add(createWorkLogCard(log));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     // ✅ EMPLOYEE SIDEBAR
     private void loadEmployeeSidebar() {
@@ -129,6 +188,23 @@ public class DashboardController {
     }
     private void loadEmployeeStats() {
         statsContainer.getChildren().clear(); // nothing shown
+    }
+    private void loadEmployeeTasks() {
+        logsContainer.getChildren().clear(); // reuse same container
+
+        try {
+            int empId = SessionManager.getUser().getUserId();
+
+            // 👉 YOU will replace this with your service call
+            List<Tasks> tasks = taskService.getTaskByEmp(empId);
+
+            for (Tasks task : tasks) {
+                logsContainer.getChildren().add(createTaskCard(task));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // 🔹 COMMON BUTTON
@@ -211,7 +287,7 @@ public class DashboardController {
 
         return box;
     }
-    private VBox createLogCard(String project, String user, String role, String date, String desc) {
+    private VBox createWorkLogCard(WorkLog log) {
 
         VBox card = new VBox(10);
         card.setStyle(
@@ -220,39 +296,127 @@ public class DashboardController {
                         "-fx-background-radius: 10;"
         );
 
-        // TOP ROW
+        // TOP ROW: Employee + Task + Date
         HBox top = new HBox();
 
-        Label projectLabel = new Label(project);
-        projectLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white;");
+        Label title = new Label("Emp #" + log.getEmployeeId() + " | Task #" + log.getTaskId());
+        title.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white;");
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
 
-        Label dateLabel = new Label(date);
-        dateLabel.setStyle("-fx-text-fill: #a0a5b0;");
+        Label date = new Label(String.valueOf(log.getWorkDate()));
+        date.setStyle("-fx-text-fill: #a0a5b0;");
 
-        top.getChildren().addAll(projectLabel, spacer, dateLabel);
+        top.getChildren().addAll(title, spacer, date);
+
+        // HOURS ROW
+        HBox mid = new HBox(5);
+
+        Label hours = new Label("Hours: " + log.getHoursWorked());
+        hours.setStyle("-fx-text-fill: white;");
+
+        mid.getChildren().add(hours);
+
+        // DESCRIPTION
+        Label desc = new Label(log.getDescription());
+        desc.setWrapText(true);
+        desc.setStyle("-fx-text-fill: #6B7280;");
+
+        card.getChildren().addAll(top, mid, desc);
+
+        return card;
+    }
+    private VBox createAuditLogCard(AuditLog log) {
+
+        VBox card = new VBox(10);
+        card.setStyle(
+                "-fx-background-color: #374151;" +
+                        "-fx-padding: 15;" +
+                        "-fx-background-radius: 10;"
+        );
+
+        // TOP ROW: Entity Type + Entity ID + Date
+        HBox top = new HBox();
+
+        Label entity = new Label(log.getEntityType() + " #" + log.getEntity_id());
+        entity.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white;");
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+
+        Label date = new Label(String.valueOf(log.getDate()));
+        date.setStyle("-fx-text-fill: #a0a5b0;");
+
+        top.getChildren().addAll(entity, spacer, date);
 
         // USER ROW
         HBox userRow = new HBox(5);
 
-        Label userLabel = new Label(user);
-        userLabel.setStyle("-fx-text-fill: white;");
+        Label user = new Label("User ID: " + log.getUser_id());
+        user.setStyle("-fx-text-fill: white;");
 
-        Label roleLabel = new Label("• " + role);
-        roleLabel.setStyle("-fx-text-fill: #a0a5b0;");
-
-        userRow.getChildren().addAll(userLabel, roleLabel);
+        userRow.getChildren().add(user);
 
         // DESCRIPTION
-        Label descLabel = new Label(desc);
-        descLabel.setWrapText(true);
-        descLabel.setStyle("-fx-text-fill: #6B7280;");
+        Label desc = new Label(log.getDetails());
+        desc.setWrapText(true);
+        desc.setStyle("-fx-text-fill: #6B7280;");
 
-        card.getChildren().addAll(top, userRow, descLabel);
+        card.getChildren().addAll(top, userRow, desc);
 
         return card;
     }
+    private VBox createTaskCard(Tasks task) {
 
+        VBox card = new VBox(10);
+        card.setStyle(
+                "-fx-background-color: #374151;" +
+                        "-fx-padding: 15;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.2, 0, 4);"
+        );
+
+        // 🔹 TOP ROW (ONLY TITLE)
+        HBox top = new HBox();
+
+        Label title = new Label(task.getTitle());
+        title.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white;");
+
+        top.getChildren().add(title);
+
+        // 🔹 DESCRIPTION
+        Label desc = new Label(task.getDescription());
+        desc.setWrapText(true);
+        desc.setStyle("-fx-text-fill: #6B7280;");
+
+        // 🔹 OPEN BUTTON
+        Button openBtn = new Button("Open Task");
+        openBtn.setStyle(
+                "-fx-background-color: linear-gradient(to right, #065F46, #10B981);" +
+                        "-fx-text-fill: white;"
+        );
+
+        // 👉 NAVIGATION TO viewTasks.fxml
+        openBtn.setOnAction(e -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/optiflow/views/viewTasks.fxml"));
+                Parent root = loader.load();
+
+                // OPTIONAL: pass task to next controller
+                ViewTasksController controller = loader.getController();
+                controller.setTask(task);
+
+                Stage stage = (Stage) openBtn.getScene().getWindow();
+                stage.setScene(new Scene(root));
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        card.getChildren().addAll(top, desc, openBtn);
+
+        return card;
+    }
 }

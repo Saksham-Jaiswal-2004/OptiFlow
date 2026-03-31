@@ -28,7 +28,7 @@ public class ProjectService
     private AIService aiService;
     private AuditLogService auditLogService;
 
-    ProjectService()
+    public ProjectService()
     {
         this.projectDAO = new ProjectDAO();
         this.taskDAO = new TaskDAO();

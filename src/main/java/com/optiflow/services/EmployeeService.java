@@ -23,7 +23,7 @@ public class EmployeeService
     private TaskDAO taskDAO;
     private AuditLogService auditLogService;
 
-    EmployeeService()
+    public EmployeeService()
     {
         this.employeeDAO = new EmployeeDAO();
         this .taskDAO = new TaskDAO();
