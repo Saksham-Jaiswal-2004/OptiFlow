@@ -8,9 +8,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
+
 
 public class ViewTasksController {
 
@@ -32,7 +32,17 @@ public class ViewTasksController {
 
     @FXML private Label roleBadge;
 
-    @FXML private Button closeBtn; // 🔴 RED CROSS BUTTON
+    @FXML private Button closeBtn;
+
+    @FXML private TextField taskTitleField;
+    @FXML private TextArea descriptionArea;
+    @FXML private DatePicker startDatePicker;
+    @FXML private DatePicker deadlinePicker;
+    @FXML private TextField estimatedHoursField;
+    @FXML private Button saveBtn;
+
+
+    private boolean isEditMode = false;
 
     // 🔹 SERVICES
     private EmployeeService employeeService = new EmployeeService();
@@ -175,6 +185,82 @@ public class ViewTasksController {
 
             Stage stage = (Stage) closeBtn.getScene().getWindow();
             stage.setScene(new Scene(root));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void enableEditMode() {
+        isEditMode = true;
+
+        // 🔥 show edit fields
+        taskTitleField.setVisible(true);
+        descriptionArea.setVisible(true);
+        startDatePicker.setVisible(true);
+        deadlinePicker.setVisible(true);
+        estimatedHoursField.setVisible(true);
+        saveBtn.setVisible(true);
+
+        // 🔥 hide labels
+        taskTitle.setVisible(false);
+        description.setVisible(false);
+        startDate.setVisible(false);
+        deadline.setVisible(false);
+        estimatedHours.setVisible(false);
+
+        populateEditableFields();
+    }
+    private void populateEditableFields() {
+        if (task == null) return;
+
+        taskTitleField.setText(task.getTitle());
+        descriptionArea.setText(task.getDescription());
+
+        if (task.getStart_date() != null)
+            startDatePicker.setValue(task.getStart_date().toLocalDate());
+
+        if (task.getEnd_date() != null)
+            deadlinePicker.setValue(task.getEnd_date().toLocalDate());
+
+        estimatedHoursField.setText(String.valueOf(task.getEstimated_hours()));
+    }
+    @FXML
+    private void handleSave() {
+        try {
+            task.setTitle(taskTitleField.getText());
+            task.setDescription(descriptionArea.getText());
+
+            if (startDatePicker.getValue() != null)
+                task.setStart_date(java.sql.Date.valueOf(startDatePicker.getValue()));
+
+            if (deadlinePicker.getValue() != null)
+                task.setEnd_date(java.sql.Date.valueOf(deadlinePicker.getValue()));
+
+            task.setEstimated_hours(
+                    Integer.parseInt(estimatedHoursField.getText())
+            );
+
+            new TaskService().updateTask(task);
+
+            System.out.println("Task Updated");
+
+            // 🔥 back to view mode
+            isEditMode = false;
+            saveBtn.setVisible(false);
+
+            taskTitleField.setVisible(false);
+            descriptionArea.setVisible(false);
+            startDatePicker.setVisible(false);
+            deadlinePicker.setVisible(false);
+            estimatedHoursField.setVisible(false);
+
+            taskTitle.setVisible(true);
+            description.setVisible(true);
+            startDate.setVisible(true);
+            deadline.setVisible(true);
+            estimatedHours.setVisible(true);
+
+            loadTaskData();
 
         } catch (Exception e) {
             e.printStackTrace();
