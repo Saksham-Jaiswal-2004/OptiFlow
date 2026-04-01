@@ -1,141 +1,148 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<?import javafx.scene.control.Button?>
-<BorderPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #F5F7FA;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="600.0" prefWidth="900.0"
+            style="-fx-background-color: #F5F7FA;"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.optiflow.controllers.ViewTasksController">
 
-    <!-- ================= TOP (UNCHANGED) ================= -->
+    <!-- ================= TOP ================= -->
     <top>
-        <AnchorPane prefHeight="68.0" style="-fx-background-color: #111827;">
+        <AnchorPane prefHeight="70.0" style="-fx-background-color: #111827;">
             <children>
-                <Label style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" text="OptiFlow" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
 
-                <Label layoutX="714.0" layoutY="22.0" style="-fx-background-color: linear-gradient(to right, #8e2de2, #c471ed);                               -fx-background-radius: 50;                               -fx-text-fill: white;                               -fx-font-weight: bold;" text="Manager" AnchorPane.rightAnchor="114.79999999999995" AnchorPane.topAnchor="22.0">
-                    <padding>
-                        <Insets bottom="2" left="10" right="10" top="2" />
-                    </padding>
-                </Label>
-                <Button fx:id="closeButton" layoutX="855.0" layoutY="20.0" prefHeight="27.0" prefWidth="23.0" style="-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 8px; -fx-font-weight: bold;" text="✕" />
+                <!-- APP NAME -->
+                <Label text="OptiFlow"
+                       style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"
+                       AnchorPane.leftAnchor="20.0"
+                       AnchorPane.topAnchor="20.0"/>
+
+                <!-- ROLE BADGE -->
+                <Label fx:id="roleBadge"
+                       style="-fx-background-radius: 50; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 12;"
+                       AnchorPane.rightAnchor="120.0"
+                       AnchorPane.topAnchor="20.0"/>
+
+                <!-- CLOSE BUTTON -->
+                <Button fx:id="closeBtn"
+                        text="✕"
+                        onAction="#handleClose"
+                        style="-fx-background-color: red; -fx-text-fill: white; -fx-font-weight: bold;"
+                        AnchorPane.rightAnchor="20.0"
+                        AnchorPane.topAnchor="20.0"/>
+
             </children>
         </AnchorPane>
     </top>
 
-    <!-- ================= CENTER (YOUR FORM) ================= -->
+    <!-- ================= CENTER ================= -->
     <center>
-        <ScrollPane fitToWidth="true" prefHeight="458.0" prefWidth="900.0" style="-fx-background: #1F2937;">
+        <ScrollPane fitToWidth="true" style="-fx-background: transparent;">
             <content>
 
-                <VBox prefHeight="389.0" prefWidth="838.0" spacing="18" style="-fx-background-color: #1F2937; -fx-padding: 25; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 12, 0, 0, 4);">
+                <VBox spacing="20"
+                      style="-fx-background-color: #1F2937; -fx-padding: 25; -fx-background-radius: 10;">
 
-                    <!-- HEADER -->
-                    <VBox spacing="10">
-                        <children>
-
-                            <HBox alignment="CENTER_LEFT" spacing="15">
-                                <children>
-                                    <Label style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" text="Task Astro" />
-
-                                    <Separator orientation="VERTICAL" prefHeight="25.0" />
-
-                                    <Label style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" text="Project ABC" />
-                                </children>
-                            </HBox>
-
-                            <Label style="-fx-background-color: linear-gradient(to right, #8e2de2, #c471ed);                           -fx-background-radius: 50;                           -fx-text-fill: white;                           -fx-font-weight: bold;" text="In Progress">
-                                <padding>
-                                    <Insets bottom="2.0" left="10.0" right="10.0" top="2.0" />
-                                </padding>
-                            </Label>
-
-                        </children>
-                    </VBox>
-
-                    <!-- EMPLOYEE INFO -->
+                    <!-- ===== HEADER ===== -->
                     <VBox spacing="10">
 
-                        <HBox alignment="CENTER_LEFT" spacing="10">
-                            <children>
-                                <Label style="-fx-text-fill: #D1D5DB;" text="Employee:" />
-                                <Label style="-fx-text-fill: white;" text="Ram" />
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label fx:id="taskTitle"
+                                   style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"/>
 
-                                <Separator orientation="VERTICAL" prefHeight="20.0" />
+                            <Label text="|"
+                                   style="-fx-text-fill: #9CA3AF;"/>
 
-                                <Label style="-fx-text-fill: #D1D5DB;" text="Id:" />
-                                <Label style="-fx-text-fill: white;" text="7878878" />
-                            </children>
+                            <Label fx:id="projectName"
+                                   style="-fx-text-fill: #D1D5DB; -fx-font-size: 16px;"/>
                         </HBox>
 
-                        <HBox alignment="CENTER_LEFT" spacing="10">
-                            <children>
-                                <Label style="-fx-text-fill: #D1D5DB;" text="Skills:" />
-                                <Label style="-fx-text-fill: white;" text="AI" />
-                            </children>
-                        </HBox>
+                        <Label fx:id="statusBadge"
+                               style="-fx-background-radius: 50; -fx-text-fill: white; -fx-padding: 5 12;"/>
 
                     </VBox>
 
-                    <!-- DATES & HOURS -->
-                    <HBox spacing="50">
+                    <Separator style="-fx-background-color: #374151;"/>
+
+                    <!-- ===== EMPLOYEE INFO ===== -->
+                    <VBox spacing="10">
+
+                        <HBox spacing="15">
+                            <Label text="Employee:"
+                                   style="-fx-text-fill: #9CA3AF;"/>
+                            <Label fx:id="employeeName"
+                                   style="-fx-text-fill: white;"/>
+
+                            <Label text="ID:"
+                                   style="-fx-text-fill: #9CA3AF;"/>
+                            <Label fx:id="employeeId"
+                                   style="-fx-text-fill: white;"/>
+                        </HBox>
+
+                        <HBox spacing="10">
+                            <Label text="Skills:"
+                                   style="-fx-text-fill: #9CA3AF;"/>
+                            <Label fx:id="skills"
+                                   style="-fx-text-fill: white;"/>
+                        </HBox>
+
+                    </VBox>
+
+                    <Separator style="-fx-background-color: #374151;"/>
+
+                    <!-- ===== DATES & HOURS ===== -->
+                    <HBox spacing="60">
 
                         <!-- LEFT -->
                         <VBox spacing="10">
-                            <children>
-                                <HBox spacing="8">
-                                    <children>
-                                        <Label style="-fx-text-fill: #D1D5DB;" text="Start Date:" />
-                                        <Label style="-fx-text-fill: white;" text="-" />
-                                    </children>
-                                </HBox>
+                            <HBox spacing="8">
+                                <Label text="Start Date:"
+                                       style="-fx-text-fill: #9CA3AF;"/>
+                                <Label fx:id="startDate"
+                                       style="-fx-text-fill: white;"/>
+                            </HBox>
 
-                                <HBox spacing="8">
-                                    <children>
-                                        <Label style="-fx-text-fill: #D1D5DB;" text="Deadline:" />
-                                        <Label style="-fx-text-fill: white;" text="-" />
-                                    </children>
-                                </HBox>
-                            </children>
+                            <HBox spacing="8">
+                                <Label text="Deadline:"
+                                       style="-fx-text-fill: #9CA3AF;"/>
+                                <Label fx:id="deadline"
+                                       style="-fx-text-fill: white;"/>
+                            </HBox>
                         </VBox>
 
                         <!-- RIGHT -->
                         <VBox spacing="10">
-                            <children>
-                                <HBox spacing="8">
-                                    <children>
-                                        <Label style="-fx-text-fill: #D1D5DB;" text="Estimated Hours:" />
-                                        <Label style="-fx-text-fill: white;" text="-" />
-                                    </children>
-                                </HBox>
+                            <HBox spacing="8">
+                                <Label text="Estimated Hours:"
+                                       style="-fx-text-fill: #9CA3AF;"/>
+                                <Label fx:id="estimatedHours"
+                                       style="-fx-text-fill: white;"/>
+                            </HBox>
 
-                                <HBox spacing="8">
-                                    <children>
-                                        <Label style="-fx-text-fill: #D1D5DB;" text="Current Hours:" />
-                                        <Label style="-fx-text-fill: white;" text="-" />
-                                    </children>
-                                </HBox>
-                            </children>
+                            <HBox spacing="8">
+                                <Label text="Current Hours:"
+                                       style="-fx-text-fill: #9CA3AF;"/>
+                                <Label fx:id="currentHours"
+                                       style="-fx-text-fill: white;"/>
+                            </HBox>
                         </VBox>
 
                     </HBox>
-               <HBox prefHeight="30.0" prefWidth="849.0">
-                  <children>
-                     <Label style="-fx-text-fill: #D1D5DB;" text="Status:" />
-                     <Label style="-fx-text-fill: White;" text="Label" />
-                  </children>
-               </HBox>
 
-                    <!-- DESCRIPTION -->
-                    <VBox spacing="5">
-                        <Label style="-fx-text-fill: #D1D5DB;" text="Task Description" />
-                        <TextArea fx:id="descriptionArea" prefHeight="100.0" style="-fx-control-inner-background: #374151;                          -fx-text-fill: white;                          -fx-background-radius: 6;" wrapText="true" />
+                    <Separator style="-fx-background-color: #374151;"/>
+
+                    <!-- ===== DESCRIPTION ===== -->
+                    <VBox spacing="8">
+                        <Label text="Task Description"
+                               style="-fx-text-fill: #9CA3AF;"/>
+
+                        <Label fx:id="description"
+                               wrapText="true"
+                               style="-fx-text-fill: white; -fx-background-color: #374151; -fx-padding: 10; -fx-background-radius: 6;"/>
                     </VBox>
 
                 </VBox>

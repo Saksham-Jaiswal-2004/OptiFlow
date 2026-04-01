@@ -107,12 +107,17 @@ public class ProjectService
         return projectDAO.getProjectById(project_id);
     }
 
-    public List<Projects> getProjectByManager(int manager_id) throws SQLException
+    public int getProjectByManager(int manager_id) throws SQLException
     {
         if(manager_id<=0)
-            return null;
+            return -1;
 
-        return projectDAO.getProjectsByManager(manager_id);
+        int id=0;
+
+        for(Projects p: projectDAO.getProjectsByManager(manager_id))
+            id = p.getProject_id();
+
+        return id;
     }
 
     public List<Projects> getAllProjects() throws SQLException

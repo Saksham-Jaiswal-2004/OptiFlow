@@ -48,7 +48,7 @@ public class DashboardController {
     private HBox statsContainer;
 
     @FXML
-    public void initialize() {
+    public void initialize() throws SQLException {
         User user = SessionManager.getUser();
 
         if (user == null) {
@@ -102,14 +102,23 @@ public class DashboardController {
         try {
             List<Employee> emps = employeeService.getAllEmployees();
             int totEmp = emps.size();
-
+            int active=0;
+            int completed=0;
             List<Projects> pros = projectService.getAllProjects();
+            for(Projects pro: pros){
+                if ("active".equalsIgnoreCase(pro.getStatus())){
+                    active+=1;
+                }
+                if ("completed".equalsIgnoreCase(pro.getStatus())){
+                    completed+=1;
+                }
+            }
             int totPro = pros.size();
 
             statsContainer.getChildren().setAll(
                     createStatCard("Total Projects", String.valueOf(totPro), "#1E3A8A, #3B82F6"),
-                    createStatCard("Active Projects", "5", "#065F46, #10B981"),
-                    createStatCard("Previous Projects", "50", "#92400E, #F59E0B"),
+                    createStatCard("Active Projects", String.valueOf(active), "#065F46, #10B981"),
+                    createStatCard("Previous Projects", String.valueOf(completed), "#92400E, #F59E0B"),
                     createStatCard("Total Employees", String.valueOf(totEmp), "#7F1D1D, #EF4444")
             );
 
@@ -148,20 +157,41 @@ public class DashboardController {
 
         sidebarContainer.getChildren().setAll(sidebar);
     }
-    private void loadManagerStats() {
+    private void loadManagerStats() throws SQLException {
+        User user = SessionManager.getUser();
+        int mid= user.getUserId();
+        List<Employee> emps = employeeService.getEmployeesByManager(mid);
+        int totEmp = emps.size();
+        List<Projects> pros = projectService.getAllProjects();
+        int totPro = pros.size();
+        int pid=projectService.getProjectByManager(mid);
+        List<Tasks> tasks = projectService.getTasksByProject(pid);
+        int totTasks=tasks.size();
+        int active=0;
+        for(Tasks task: tasks){
+            if ("active".equalsIgnoreCase(task.getStatus())){
+                active+=1;
+            }
+
+            }
+
+
+
         statsContainer.getChildren().setAll(
-                createStatCard("Total Projects", "8", "#1E3A8A, #3B82F6"),
-                createStatCard("Employees", "12", "#065F46, #10B981"),
-                createStatCard("Total Tasks", "40", "#92400E, #F59E0B"),
-                createStatCard("Completed Tasks", "30", "#7F1D1D, #EF4444")
+                createStatCard("Total Projects", String.valueOf(totPro), "#1E3A8A, #3B82F6"),
+                createStatCard("Employees", String.valueOf(totEmp), "#065F46, #10B981"),
+                createStatCard("Total Tasks", String.valueOf(totTasks), "#92400E, #F59E0B"),
+                createStatCard("Completed Tasks", String.valueOf(active), "#7F1D1D, #EF4444")
         );
     }
-    private void loadWorkLogs() {
+    private void loadWorkLogs() throws SQLException {
         logsContainer.getChildren().clear();
-
+        User user = SessionManager.getUser();
+        int Mid=user.getUserId();
+        int Pid=projectService.getProjectByManager(Mid);
 
         try {
-            List<WorkLog> logs = workLogService.getLogsByProject(id); // or all logs method
+            List<WorkLog> logs = workLogService.getLogsByProject(Pid); // or all logs method
 
             for (WorkLog log : logs) {
                 logsContainer.getChildren().add(createWorkLogCard(log));
