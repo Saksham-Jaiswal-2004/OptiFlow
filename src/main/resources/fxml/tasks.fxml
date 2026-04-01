@@ -10,17 +10,29 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #F5F7FA;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="600.0" prefWidth="900.0"
+            style="-fx-background-color: #F5F7FA;"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.optiflow.controllers.TasksController">
 
     <!-- ================= TOP ================= -->
     <top>
         <AnchorPane prefHeight="70" style="-fx-background-color: #111827;">
             <children>
-                <Label layoutX="20" layoutY="20" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" text="OptiFlow" />
+                <Label layoutX="20" layoutY="20"
+                       style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"
+                       text="OptiFlow" />
 
-                <Label layoutX="841" layoutY="22" style="-fx-background-color: linear-gradient(to right, #8e2de2, #c471ed);                               -fx-background-radius: 50;                               -fx-text-fill: white;                               -fx-font-weight: bold;" text="Manager">
+                <!-- 🔥 ROLE BADGE -->
+                <Label fx:id="roleBadge"
+                       layoutX="820" layoutY="22"
+                       style="-fx-background-color: linear-gradient(to right, #8e2de2, #c471ed);
+                              -fx-background-radius: 50;
+                              -fx-text-fill: white;
+                              -fx-font-weight: bold;">
                     <padding>
-                        <Insets bottom="2" left="8" right="8" top="2" />
+                        <Insets bottom="2" left="8" right="8" top="2"/>
                     </padding>
                 </Label>
             </children>
@@ -29,21 +41,28 @@
 
     <!-- ================= SIDEBAR ================= -->
     <left>
-        <VBox prefWidth="160" spacing="8" style="-fx-background-color: #111827; -fx-padding: 15;">
+        <VBox prefWidth="160" spacing="8"
+              style="-fx-background-color: #111827; -fx-padding: 15;">
 
-            <Label style="-fx-text-fill: #6B7280; -fx-font-size: 11px; -fx-font-weight: bold;" text="MENU" />
+            <Label style="-fx-text-fill: #6B7280; -fx-font-size: 11px; -fx-font-weight: bold;"
+                   text="MENU" />
 
-            <Button maxWidth="Infinity" style="-fx-background-color: #374151; -fx-text-fill: white; -fx-alignment: CENTER_LEFT; -fx-padding: 10 15; -fx-background-radius: 8;" text="Analytics" />
+            <Button text="Analytics" maxWidth="Infinity"
+                    style="-fx-background-color: #374151; -fx-text-fill: white; -fx-alignment: CENTER_LEFT; -fx-padding: 10 15; -fx-background-radius: 8;" />
 
-            <Button maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #D1D5DB; -fx-alignment: CENTER_LEFT; -fx-padding: 10 15;" text="Project" />
+            <Button text="Project" maxWidth="Infinity"
+                    style="-fx-background-color: transparent; -fx-text-fill: #D1D5DB; -fx-alignment: CENTER_LEFT; -fx-padding: 10 15;" />
 
-            <Button maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #D1D5DB; -fx-alignment: CENTER_LEFT; -fx-padding: 10 15;" text="Tasks" />
+            <Button text="Tasks" maxWidth="Infinity"
+                    style="-fx-background-color: transparent; -fx-text-fill: #D1D5DB; -fx-alignment: CENTER_LEFT; -fx-padding: 10 15;" />
 
-            <Button maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #D1D5DB; -fx-alignment: CENTER_LEFT; -fx-padding: 10 15;" text="Employees" />
+            <Button text="Employees" maxWidth="Infinity"
+                    style="-fx-background-color: transparent; -fx-text-fill: #D1D5DB; -fx-alignment: CENTER_LEFT; -fx-padding: 10 15;" />
 
             <Region VBox.vgrow="ALWAYS" />
 
-            <Button maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #EF4444; -fx-alignment: CENTER_LEFT; -fx-padding: 10 15;" text="Logout" />
+            <Button text="Logout" maxWidth="Infinity"
+                    style="-fx-background-color: transparent; -fx-text-fill: #EF4444; -fx-alignment: CENTER_LEFT; -fx-padding: 10 15;" />
         </VBox>
     </left>
 
@@ -55,87 +74,44 @@
                 <VBox spacing="20" style="-fx-padding: 20;">
 
                     <!-- TITLE -->
-                    <Label style="-fx-font-size: 30px; -fx-font-weight: bold;" text="Tasks" />
+                    <Label text="Tasks"
+                           style="-fx-font-size: 30px; -fx-font-weight: bold;" />
 
-                    <Label style="-fx-text-fill: #6B7280;" text="Here’s your task overview" />
+                    <Label text="Here’s your task overview"
+                           style="-fx-text-fill: #6B7280;" />
 
                     <!-- ================= STATS ================= -->
-                    <HBox spacing="20">
+                    <HBox fx:id="statsContainer" spacing="20"/>
 
-                        <VBox style="-fx-background-radius: 12; -fx-padding: 18; -fx-background-color: linear-gradient(to right, #1E3A8A, #3B82F6);" HBox.hgrow="ALWAYS">
-                            <Label style="-fx-text-fill: white;" text="Total Tasks" />
-                            <Label style="-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold;" text="10" />
-                        </VBox>
-
-                        <VBox style="-fx-background-radius: 12; -fx-padding: 18; -fx-background-color: linear-gradient(to right, #065F46, #10B981);" HBox.hgrow="ALWAYS">
-                            <Label style="-fx-text-fill: white;" text="Completed Tasks" />
-                            <Label style="-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold;" text="5" />
-                        </VBox>
-
-                        <VBox style="-fx-background-radius: 12; -fx-padding: 18; -fx-background-color: linear-gradient(to right, #7F1D1D, #EF4444);" HBox.hgrow="ALWAYS">
-                            <Label style="-fx-text-fill: white;" text="Total Employees" />
-                            <Label style="-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold;" text="10" />
-                        </VBox>
-
-                    </HBox>
-
-                    <!-- ================= FILTER BAR ================= -->
+                    <!-- ================= HEADER ================= -->
                     <HBox alignment="CENTER_LEFT" spacing="15">
 
-                        <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Tasks" />
+                        <Label text="Tasks"
+                               style="-fx-font-size: 24px; -fx-font-weight: bold;" />
 
                         <Region HBox.hgrow="ALWAYS" />
 
-                        <Button style="-fx-background-color: linear-gradient(to right, #05a857, #6EE7B7);                                        -fx-text-fill: white;                                        -fx-font-weight: bold;" text="+ Add" />
-
+                        <!-- 🔥 ADD BUTTON -->
+                        <Button fx:id="addBtn"
+                                text="+ Add"
+                                style="-fx-background-color: linear-gradient(to right, #05a857, #6EE7B7);
+                                       -fx-text-fill: white;
+                                       -fx-font-weight: bold;" />
                     </HBox>
 
-                    <!-- ================= TASK CARD ================= -->
-                    <VBox spacing="10" style="-fx-background-color: #374151;                                  -fx-padding: 15;                                  -fx-background-radius: 10;                                  -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.2, 0, 4);">
+                    <!-- 🔥 DYNAMIC TASK LIST -->
+                    <VBox fx:id="tasksContainer" spacing="15"/>
 
-                        <HBox alignment="CENTER_LEFT">
-                            <children>
-                        <HBox prefHeight="26.0" prefWidth="247.0">
-                           <children>
-      
-                                      <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Task Alpha" textFill="WHITE" />
-                              <Label prefHeight="26.0" prefWidth="79.0" style="-fx-background-color: linear-gradient(to right, #8e2de2, #c471ed);                               -fx-background-radius: 50;                               -fx-text-fill: white;                               -fx-font-weight: bold;" text="Completed">
-                                 <padding>
-                                    <Insets bottom="2" left="8" right="8" top="2" />
-                                 </padding>
-                                 <HBox.margin>
-                                    <Insets left="4.0" />
-                                 </HBox.margin>
-                              </Label>
-                              <Region HBox.hgrow="ALWAYS" />
-                              <Label prefHeight="29.0" prefWidth="67.0" style="-fx-background-color: linear-gradient(to right, #92400E, #F59E0B); -fx-background-radius: 50; -fx-text-fill: white; -fx-font-weight: bold;" text="Assigned">
-                                 <padding>
-                                    <Insets bottom="2" left="8" right="8" top="2" />
-                                 </padding>
-                                 <HBox.margin>
-                                    <Insets />
-                                 </HBox.margin>
-                              </Label>
-                           </children>
-                        </HBox>
-
-                                <Region HBox.hgrow="ALWAYS" />
-
-                                <Button style="-fx-background-color: linear-gradient(to right, #1E3A8A, #3B82F6);                                                -fx-text-fill: white;" text="Edit" />
-
-                            </children>
-                        </HBox>
-
-                        <Label style="-fx-text-fill: #6B7280;" text="To Build An Email Service for the System" wrapText="true" />
-
-                        <Button style="-fx-background-color: linear-gradient(to right, #065F46, #10B981); -fx-text-fill: white;" text="Open Task" />
-
-                    </VBox>
-               <Button mnemonicParsing="false" style="-fx-background-color: linear-gradient(to right, #1E3A8A, #3B82F6); -fx-text-fill: white;" text="Export">
-                  <VBox.margin>
-                     <Insets left="650.0" />
-                  </VBox.margin>
-               </Button>
+                    <!-- 🔥 EXPORT BUTTON -->
+                    <Button fx:id="exportBtn"
+                            onAction="#handleExport"
+                            text="Export"
+                            style="-fx-background-color: linear-gradient(to right, #1E3A8A, #3B82F6);
+                                   -fx-text-fill: white;">
+                        <VBox.margin>
+                            <Insets left="650.0"/>
+                        </VBox.margin>
+                    </Button>
 
                 </VBox>
 

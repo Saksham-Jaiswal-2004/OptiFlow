@@ -1,59 +1,213 @@
 package com.optiflow.controllers;
 
-public class TaskController
-{
-    public boolean createTask(int projectId, int assignedTo, String title, String description, String status, String priority, int estimatedHours, java.sql.Date startDate, java.sql.Date endDate)
-    {
-        return true;
+import com.optiflow.models.*;
+import com.optiflow.services.*;
+import com.optiflow.utils.SessionManager;
+
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.stage.Stage;
+
+import java.util.List;
+
+public class TasksController {
+
+    // 🔹 UI
+    @FXML private Label roleBadge;
+    @FXML private HBox statsContainer;
+    @FXML private VBox tasksContainer;
+
+    @FXML private Button exportBtn;
+    @FXML private Button addBtn;
+
+    // 🔹 SERVICES
+    private TaskService taskService = new TaskService();
+    private ProjectService projectService = new ProjectService();
+    private EmployeeService employeeService = new EmployeeService();
+
+
+    private int managerId;
+    private int projectId;
+
+    // 🔹 INIT
+    @FXML
+    public void initialize() {
+        try {
+            User user = SessionManager.getUser();
+            if (user == null) return;
+
+            managerId = user.getUserId();
+            projectId = projectService.getProjectByManager(managerId);
+
+            setRoleBadge(user.getRole());
+
+            loadStats();
+            loadTasks();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public boolean updateTask(int taskId, String title, String description, String status, String priority, java.sql.Date startDate, java.sql.Date endDate)
-    {
-        return true;
+    // 🔹 ROLE BADGE
+    private void setRoleBadge(String role) {
+        roleBadge.setText(role.toUpperCase());
+
+        roleBadge.setStyle(
+                "-fx-background-color: linear-gradient(to right, #8e2de2, #c471ed);" +
+                        "-fx-background-radius: 50;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-padding: 5 10;"
+        );
     }
 
-    public boolean deleteTask(int taskId)
-    {
-        return true;
+    // 🔹 LOAD STATS
+    private void loadStats() {
+        try {
+            List<Tasks> tasks = taskService.getTasksByProject(projectId);
+            int total = tasks.size();
+
+            int completed = 0;
+            for (Tasks t : tasks) {
+                if ("completed".equalsIgnoreCase(t.getStatus())) {
+                    completed++;
+                }
+            }
+
+            List<Employee> emps = employeeService.getEmployeesByManager(managerId);
+
+            statsContainer.getChildren().setAll(
+                    createStatCard("Total Tasks", String.valueOf(total), "#1E3A8A, #3B82F6"),
+                    createStatCard("Completed Tasks", String.valueOf(completed), "#065F46, #10B981"),
+                    createStatCard("Total Employees", String.valueOf(emps.size()), "#7F1D1D, #EF4444")
+            );
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public boolean assignTask(int taskId, int empId)
-    {
-        return true;
+    // 🔹 LOAD TASKS
+    private void loadTasks() {
+        tasksContainer.getChildren().clear();
+
+        try {
+            List<Tasks> tasks = taskService.getTasksByProject(projectId);
+
+            for (Tasks task : tasks) {
+                tasksContainer.getChildren().add(createTaskCard(task));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public boolean autoAssignTask(int taskId)
-    {
-        return true;
+    // 🔹 TASK CARD UI
+    private VBox createTaskCard(Tasks task) {
+
+        VBox card = new VBox(10);
+        card.setStyle(
+                "-fx-background-color: #374151;" +
+                        "-fx-padding: 15;" +
+                        "-fx-background-radius: 10;"
+        );
+
+        // 🔹 TOP ROW
+        HBox top = new HBox(10);
+
+        Label title = new Label(task.getTitle());
+        title.setStyle("-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;");
+
+        Label status = new Label(task.getStatus());
+        status.setStyle("-fx-background-color: purple; -fx-text-fill: white; -fx-padding: 3 8;");
+
+        Label assigned = new Label("Assigned");
+        assigned.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-padding: 3 8;");
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        Button editBtn = new Button("Edit");
+        editBtn.setStyle("-fx-background-color: #2563EB; -fx-text-fill: white;");
+
+        // 🔥 EDIT → VIEW TASK (EDIT MODE)
+        editBtn.setOnAction(e -> openTask(task, true));
+
+        top.getChildren().addAll(title, status, assigned, spacer, editBtn);
+
+        // 🔹 DESCRIPTION
+        Label desc = new Label(task.getDescription());
+        desc.setStyle("-fx-text-fill: #9CA3AF;");
+        desc.setWrapText(true);
+
+        // 🔹 OPEN BUTTON
+        Button openBtn = new Button("Open Task");
+        openBtn.setStyle("-fx-background-color: #10B981; -fx-text-fill: white;");
+
+        // 🔥 OPEN → VIEW TASK (READ MODE)
+        openBtn.setOnAction(e -> openTask(task, false));
+
+        card.getChildren().addAll(top, desc, openBtn);
+
+        return card;
     }
 
-    public boolean updateTaskStatus(int taskId, String status)
-    {
-        return true;
+    // 🔹 NAVIGATION TO VIEW TASK PAGE
+    private void openTask(Tasks task, boolean editable) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/optiflow/views/viewTasks.fxml"));
+            Parent root = loader.load();
+
+            ViewTasksController controller = loader.getController();
+            controller.setTask(task);
+
+            // 🔥 OPTIONAL: set editable mode (you add later)
+            if (editable) {
+                controller.enableEditMode(); // you will implement this
+            }
+
+            Stage stage = (Stage) tasksContainer.getScene().getWindow();
+            stage.setScene(new Scene(root));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public Object getTaskById(int taskId)
-    {
-        return true;
+    // 🔹 EXPORT CSV
+    @FXML
+    private void handleExport() {
+        try {
+            TaskService.exportTasksToCSV(projectId);
+            System.out.println("Exported Successfully");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public Object getTasksByEmployee(int empId)
-    {
-        return true;
-    }
+    // 🔹 STAT CARD
+    private VBox createStatCard(String title, String value, String gradient) {
+        VBox box = new VBox(5);
 
-    public Object getTasksByStatus(String status)
-    {
-        return true;
-    }
+        box.setStyle(
+                "-fx-background-radius: 12;" +
+                        "-fx-padding: 18;" +
+                        "-fx-background-color: linear-gradient(to right, " + gradient + ");"
+        );
 
-    public Object getOverdueTasks()
-    {
-        return true;
-    }
+        Label t = new Label(title);
+        t.setStyle("-fx-text-fill: white;");
 
-    public Object getTasksDueSoon()
-    {
-        return true;
+        Label v = new Label(value);
+        v.setStyle("-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;");
+
+        box.getChildren().addAll(t, v);
+        return box;
     }
 }

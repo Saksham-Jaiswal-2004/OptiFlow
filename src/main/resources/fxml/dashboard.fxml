@@ -8,110 +8,62 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #F5F7FA;" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="600.0" prefWidth="900.0"
+            style="-fx-background-color: #F5F7FA;"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.optiflow.controllers.DashboardController">
 
-
+    <!-- ================= TOP ================= -->
     <top>
         <AnchorPane prefHeight="70" style="-fx-background-color: #111827;">
             <children>
-                <Label layoutX="20" layoutY="20" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" text="OptiFlow" />
+                <Label layoutX="20" layoutY="20"
+                       style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"
+                       text="OptiFlow" />
 
-                <Label fx:id="badge" layoutX="825.0" layoutY="26.0" prefHeight="18.0" prefWidth="0.0" />
-
-
+                <Label fx:id="badge"
+                       layoutX="800"
+                       layoutY="25" />
             </children>
         </AnchorPane>
     </top>
 
-
+    <!-- ================= SIDEBAR ================= -->
     <left>
-        <VBox fx:id="sidebarContainer" />
+        <VBox fx:id="sidebarContainer"/>
     </left>
 
-    <!-- ================= RIGHT ================= -->
+    <!-- ================= MAIN CONTENT ================= -->
     <center>
-        <ScrollPane fitToWidth="true" pannable="true" style="-fx-background: #1F2937;" vbarPolicy="ALWAYS">
+        <ScrollPane fitToWidth="true"
+                    pannable="true"
+                    vbarPolicy="ALWAYS"
+                    style="-fx-background: #1F2937;">
 
             <content>
-                <VBox fillWidth="true" spacing="20" style="-fx-padding: 20;">
+                <VBox spacing="20" style="-fx-padding: 20;">
 
                     <!-- WELCOME -->
-                    <Label style="-fx-font-size: 30px; -fx-font-weight: bold;" text="Welcome  " />
-
-
+                    <Label text="Welcome"
+                           style="-fx-font-size: 30px; -fx-font-weight: bold;" />
 
                     <!-- ================= STATS ================= -->
-                    <HBox fx:id="statsContainer" spacing="20" style="-fx-padding: 10 20 10 20;" />
-               <VBox>
-                  <children>
-      
-                          <!-- HEADER -->
-                          <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" fx:id="logsHeader"/>
-      
-                          <!-- ================= LOGS ================= -->
-                          <VBox spacing="15">
-      
-                              <!-- LOG CARD -->
-                              <VBox spacing="10" style="-fx-background-color: #374151;                                      -fx-padding: 15;                                      -fx-background-radius: 10;">
-      
-                                  <!-- TOP ROW -->
-                                  <HBox>
-                                      <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Project Alpha" textFill="WHITE" />
-      
-                                      <Region HBox.hgrow="ALWAYS" />
-      
-                                      <Label style="-fx-text-fill: #a0a5b0;" text="18/08/2026" />
-                                  </HBox>
-      
-                                  <!-- USER + ROLE -->
-                                  <HBox spacing="5">
-                                      <Label style="-fx-text-fill: white;" text="Raj" />
-                                      <Label style="-fx-text-fill: #a0a5b0;" text="• Developer" />
-                                  </HBox>
-      
-                                  <!-- DESCRIPTION -->
-                                  <Label style="-fx-text-fill: #6B7280;" text="This is a sample project description." wrapText="true" />
-                              </VBox>
-                        <VBox spacing="10" style="-fx-background-color: #374151;                                      -fx-padding: 15;                                      -fx-background-radius: 10;">
-                           <children>
-                              <HBox>
-                                 <children>
-                                    <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Project Alpha" textFill="WHITE" />
-                                    <Region HBox.hgrow="ALWAYS" />
-                                    <Label style="-fx-text-fill: #a0a5b0;" text="18/08/2026" />
-                                 </children>
-                              </HBox>
-                              <HBox spacing="5">
-                                 <children>
-                                    <Label style="-fx-text-fill: white;" text="Raj" />
-                                    <Label style="-fx-text-fill: #a0a5b0;" text="• Developer" />
-                                 </children>
-                              </HBox>
-                              <Label style="-fx-text-fill: #6B7280;" text="This is a sample project description." wrapText="true" />
-                           </children>
-                        </VBox>
-                        <VBox spacing="10" style="-fx-background-color: #374151;                                      -fx-padding: 15;                                      -fx-background-radius: 10;">
-                           <children>
-                              <HBox>
-                                 <children>
-                                    <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Project Alpha" textFill="WHITE" />
-                                    <Region HBox.hgrow="ALWAYS" />
-                                    <Label style="-fx-text-fill: #a0a5b0;" text="18/08/2026" />
-                                 </children>
-                              </HBox>
-                              <HBox spacing="5">
-                                 <children>
-                                    <Label style="-fx-text-fill: white;" text="Raj" />
-                                    <Label style="-fx-text-fill: #a0a5b0;" text="• Developer" />
-                                 </children>
-                              </HBox>
-                              <Label style="-fx-text-fill: #6B7280;" text="This is a sample project description." wrapText="true" />
-                           </children>
-                        </VBox>
-      
-                          </VBox>
-                  </children>
-               </VBox>
+                    <HBox fx:id="statsContainer"
+                          spacing="20"
+                          style="-fx-padding: 10 20 10 20;" />
+
+                    <!-- ================= LOG SECTION ================= -->
+                    <VBox spacing="15">
+
+                        <!-- HEADER (Dynamic) -->
+                        <Label fx:id="logsHeader"
+                               style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+
+                        <!-- DYNAMIC LOGS / TASKS -->
+                        <VBox fx:id="logsContainer"
+                              spacing="15"/>
+                    </VBox>
 
                 </VBox>
             </content>

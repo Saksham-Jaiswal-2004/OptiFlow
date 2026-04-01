@@ -138,6 +138,7 @@
                     <!-- ===== DESCRIPTION ===== -->
                     <VBox spacing="8">
                         <Label text="Task Description"
+
                                style="-fx-text-fill: #9CA3AF;"/>
 
                         <Label fx:id="description"

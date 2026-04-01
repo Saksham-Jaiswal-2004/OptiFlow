@@ -147,11 +147,30 @@ public class DashboardController {
         sidebar.setPrefWidth(160);
         sidebar.setStyle("-fx-background-color: #111827; -fx-padding: 15;");
 
+        Button analyticsBtn = createButton("Analytics", true);
+        Button projectBtn = createButton("View Project", false);
+        Button tasksBtn = createButton("Tasks", false);
+        Button empBtn = createButton("Employees", false);
+
+        // 🔥 NAVIGATION
+        tasksBtn.setOnAction(e -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/optiflow/views/tasks.fxml"));
+                Parent root = loader.load();
+
+                Stage stage = (Stage) tasksBtn.getScene().getWindow();
+                stage.setScene(new Scene(root));
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+
         sidebar.getChildren().addAll(
-                createButton("Analytics", true),
-                createButton("View Project", false),
-                createButton("Tasks", false),
-                createButton("Employees", false),
+                analyticsBtn,
+                projectBtn,
+                tasksBtn,
+                empBtn,
                 createLogoutButton()
         );
 
