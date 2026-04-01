@@ -3,6 +3,7 @@ package com.optiflow.dao;
 import com.optiflow.database.DBConnection;
 import com.optiflow.models.ProjectSkill;
 import com.optiflow.models.Tasks;
+import org.apache.poi.ss.formula.functions.T;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
@@ -35,6 +36,7 @@ public class TaskDAO
 
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -569,5 +571,16 @@ public class TaskDAO
             }
         }
         return taskList;
+    }
+
+    public static void main(String[] args) throws SQLException
+    {
+        TaskDAO taskDAO = new TaskDAO();
+
+        Date date = java.sql.Date.valueOf(java.time.LocalDate.now());
+        taskDAO.createTask(1, 7, "Task 1", "Task 1 desc", "TODO", "HIGH", 6, date, date);
+        taskDAO.createTask(2, 7, "Task 2", "Task 2 desc", "TODO", "MEDIUM", 6, date, date);
+        taskDAO.createTask(3, 7, "Task 3", "Task 3 desc", "TODO", "LOW", 6, date, date);
+        taskDAO.createTask(4, 7, "Task 4", "Task 4 desc", "TODO", "HIGH", 6, date, date);
     }
 }

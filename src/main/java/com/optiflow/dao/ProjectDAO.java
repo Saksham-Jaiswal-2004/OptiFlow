@@ -28,6 +28,7 @@ public class ProjectDAO
 
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -292,5 +293,15 @@ public class ProjectDAO
             }
         }
         return taskList;
+    }
+
+    public static void main(String[] args) throws SQLException
+    {
+        ProjectDAO projectDAO = new ProjectDAO();
+        Date date = java.sql.Date.valueOf(java.time.LocalDate.now());
+        projectDAO.createProject("Project 1", "Project Desc 1", date, date, 8, "IN_PROGRESS");
+        projectDAO.createProject("Project 2", "Project Desc 2", date, date, 8, "IN_PROGRESS");
+        projectDAO.createProject("Project 3", "Project Desc 3", date, date, 8, "IN_PROGRESS");
+        projectDAO.createProject("Project 4", "Project Desc 4", date, date, 8, "IN_PROGRESS");
     }
 }

@@ -14,7 +14,7 @@
             style="-fx-background-color: #F5F7FA;"
             xmlns="http://javafx.com/javafx/25"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.optiflow.controllers.TasksController">
+            fx:controller="com.optiflow.controllers.TaskController">
 
     <!-- ================= TOP ================= -->
     <top>

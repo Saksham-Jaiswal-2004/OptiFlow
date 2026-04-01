@@ -49,11 +49,12 @@ public class AuditLogDAO
             PreparedStatement stmt = conn.prepareStatement(sql)) {
             ResultSet rs = stmt.executeQuery();
 
-            if (rs.next())
+            while(rs.next())
             {
                 AuditLog auditLog = new AuditLog();
                 auditLog.setUser_id(rs.getInt("user_id"));
-                auditLog.setUser_role(userDAO.getUserById(rs.getInt("user_id")).getRole());
+//                auditLog.setUser_role(userDAO.getUserById(rs.getInt("user_id")).getRole());
+                auditLog.setUser_role("Test");
                 auditLog.setAction(rs.getString("action"));
                 auditLog.setEntityType(rs.getString("entityType"));
                 auditLog.setEntity_id(rs.getInt("entity_id"));
@@ -61,11 +62,10 @@ public class AuditLogDAO
                 auditLog.setDate(java.sql.Date.valueOf(rs.getDate("created_at").toLocalDate()));
 
                 auditLogs.add(auditLog);
-                return auditLogs;
             }
+            System.out.println("Logs: "+auditLogs);
+            return auditLogs;
         }
-
-        return null;
     }
 
     public List<AuditLog> getLogsByUser(int user_id) throws SQLException
@@ -78,27 +78,28 @@ public class AuditLogDAO
             stmt.setInt(1, user_id);
             ResultSet rs = stmt.executeQuery();
 
-            if (rs.next())
+            while(rs.next())
             {
                 AuditLog auditLog = new AuditLog();
                 auditLog.setUser_id(rs.getInt("user_id"));
-                auditLog.setAction(rs.getString("user_id"));
-                auditLog.setEntityType(rs.getString("user_id"));
-                auditLog.setEntity_id(rs.getInt("user_id"));
-                auditLog.setDetails(rs.getString("user_id"));
+                auditLog.setUser_role(userDAO.getUserById(rs.getInt("user_id")).getRole());
+                auditLog.setAction(rs.getString("action"));
+                auditLog.setEntityType(rs.getString("entityType"));
+                auditLog.setEntity_id(rs.getInt("entity_id"));
+                auditLog.setDetails(rs.getString("details"));
+                auditLog.setDate(java.sql.Date.valueOf(rs.getDate("created_at").toLocalDate()));
 
                 auditLogs.add(auditLog);
-                return auditLogs;
             }
-        }
 
-        return null;
+            return auditLogs;
+        }
     }
 
     public List<AuditLog> getLogsByEntity(String entityType, int entity_id)
     {
         LinkedList<AuditLog> auditLogs = new LinkedList<>();
-        String sql = "SELECT * FROM auditlog WHERE (entityType, entity_id) VALUES (?, ?)";
+        String sql = "SELECT * FROM auditlog WHERE entityType=? AND entity_id=?";
 
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -106,22 +107,29 @@ public class AuditLogDAO
             stmt.setInt(2, entity_id);
             ResultSet rs = stmt.executeQuery();
 
-            if (rs.next())
+            while(rs.next())
             {
                 AuditLog auditLog = new AuditLog();
                 auditLog.setUser_id(rs.getInt("user_id"));
-                auditLog.setAction(rs.getString("user_id"));
-                auditLog.setEntityType(rs.getString("user_id"));
-                auditLog.setEntity_id(rs.getInt("user_id"));
-                auditLog.setDetails(rs.getString("user_id"));
+                auditLog.setUser_role(userDAO.getUserById(rs.getInt("user_id")).getRole());
+                auditLog.setAction(rs.getString("action"));
+                auditLog.setEntityType(rs.getString("entityType"));
+                auditLog.setEntity_id(rs.getInt("entity_id"));
+                auditLog.setDetails(rs.getString("details"));
+                auditLog.setDate(java.sql.Date.valueOf(rs.getDate("created_at").toLocalDate()));
 
                 auditLogs.add(auditLog);
-                return auditLogs;
             }
+
+            return auditLogs;
         } catch (SQLException e) {
             return null;
         }
+    }
 
-        return null;
+    public static void main(String[] args) throws SQLException
+    {
+        AuditLogDAO auditLogDAO = new AuditLogDAO();
+        System.out.println(auditLogDAO.getAllLogs());
     }
 }

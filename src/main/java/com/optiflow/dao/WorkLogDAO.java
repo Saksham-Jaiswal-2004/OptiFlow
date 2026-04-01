@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Scanner;
 
 public class WorkLogDAO
 {
@@ -22,7 +23,7 @@ public class WorkLogDAO
 
     public boolean addWorkLog(int empId, int taskId, Date workDate, int hours, String desc)
     {
-        String sql = "INSERT INTO worklog (employee_id, task_to, work_date, hours_worked, description) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO worklog (employee_id, task_id, work_date, hours_worked, description) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, empId);
@@ -34,6 +35,7 @@ public class WorkLogDAO
 
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -89,7 +91,7 @@ public class WorkLogDAO
                 workLog.setEmployeeId(rs.getInt("employee_id"));
                 workLog.setTaskId(rs.getInt("task_id"));
                 workLog.setWorkDate(rs.getDate("work_date"));
-                workLog.setHoursWorked(rs.getInt("hours"));
+                workLog.setHoursWorked(rs.getInt("hours_worked"));
                 workLog.setDescription(rs.getString("description"));
 
                 workLogs.add(workLog);
@@ -120,7 +122,7 @@ public class WorkLogDAO
                 workLog.setEmployeeId(rs.getInt("employee_id"));
                 workLog.setTaskId(rs.getInt("task_id"));
                 workLog.setWorkDate(rs.getDate("work_date"));
-                workLog.setHoursWorked(rs.getInt("hours"));
+                workLog.setHoursWorked(rs.getInt("hours_worked"));
                 workLog.setDescription(rs.getString("description"));
 
                 workLogs.add(workLog);
@@ -149,7 +151,7 @@ public class WorkLogDAO
                 workLog.setEmployeeId(rs.getInt("employee_id"));
                 workLog.setTaskId(rs.getInt("task_id"));
                 workLog.setWorkDate(rs.getDate("work_date"));
-                workLog.setHoursWorked(rs.getInt("hours"));
+                workLog.setHoursWorked(rs.getInt("hours_worked"));
                 workLog.setDescription(rs.getString("description"));
 
                 if(taskDAO.getTaskById(workLog.getTaskId()).getProject_id() == projectId)
@@ -200,5 +202,15 @@ public class WorkLogDAO
         } catch (Exception e) {
             return -1;
         }
+    }
+
+    public static void main(String[] args)
+    {
+        WorkLogDAO workLogDAO = new WorkLogDAO();
+        Date date = java.sql.Date.valueOf(java.time.LocalDate.now());
+        workLogDAO.addWorkLog(1, 1, date, 6, "All Good");
+        workLogDAO.addWorkLog(1, 2, date, 6, "Error Error Error");
+        workLogDAO.addWorkLog(1, 3, date, 7, "Fine by me");
+        workLogDAO.addWorkLog(1, 4, date, 3, "All Good");
     }
 }
