@@ -12,7 +12,7 @@
 
 <BorderPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #F5F7FA;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
 
-    <!-- ================= TOP ================= -->
+
     <top>
         <AnchorPane prefHeight="70" style="-fx-background-color: #111827;">
             <children>
@@ -25,17 +25,16 @@
         </AnchorPane>
     </top>
 
-    <!-- ================= SIDEBAR ================= -->
     <left>
         <VBox prefWidth="160" spacing="8" style="-fx-background-color: #111827; -fx-padding: 15;">
 
-            <!-- LOGO / TITLE SPACE -->
+
             <Label style="-fx-text-fill: #6B7280;                       -fx-font-size: 11px;                       -fx-font-weight: bold;" text="MENU" />
 
-            <!-- DASHBOARD (ACTIVE) -->
+
             <Button maxWidth="Infinity" style="-fx-background-color: #374151;                        -fx-text-fill: white;                        -fx-alignment: CENTER_LEFT;                        -fx-padding: 10 15;                        -fx-background-radius: 8;" text="Dashboard" />
 
-            <!-- OTHERS -->
+
             <Button maxWidth="Infinity" style="-fx-background-color: transparent;                        -fx-text-fill: #D1D5DB;                        -fx-alignment: CENTER_LEFT;                        -fx-padding: 10 15;                        -fx-background-radius: 8;" text="Managers" />
 
             <Button maxWidth="Infinity" style="-fx-background-color: transparent;                        -fx-text-fill: #D1D5DB;                        -fx-alignment: CENTER_LEFT;                        -fx-padding: 10 15;                        -fx-background-radius: 8;" text="Projects" />
@@ -44,10 +43,10 @@
 
             <Button maxWidth="Infinity" style="-fx-background-color: transparent;                        -fx-text-fill: #D1D5DB;                        -fx-alignment: CENTER_LEFT;                        -fx-padding: 10 15;                        -fx-background-radius: 8;" text="Help" />
 
-            <!-- SPACER -->
+
             <Region VBox.vgrow="ALWAYS" />
 
-            <!-- LOGOUT -->
+
             <Button maxWidth="Infinity" style="-fx-background-color: transparent;                        -fx-text-fill: #EF4444;                        -fx-alignment: CENTER_LEFT;                        -fx-padding: 10 15;                        -fx-background-radius: 8;" text="Logout">
                 <VBox.margin>
                     <Insets bottom="170.0" />
@@ -61,15 +60,14 @@
             <content>
                 <VBox fx:id="mainContainer" spacing="20" style="-fx-padding: 20;">
 
-                    <!-- WELCOME -->
+
                     <Label fx:id="welcomeLabel" style="-fx-font-size: 30px; -fx-font-weight: bold;" text="Projects" />
 
                     <Label style="-fx-text-fill: #6B7280;" text="Here’s your project overview" />
 
-                    <!-- ================= STATS ================= -->
                     <HBox spacing="20" style="-fx-padding: 10 20 10 20;">
 
-                        <!-- PROJECTS -->
+
                         <VBox alignment="CENTER_LEFT" style="-fx-background-radius: 12;                  -fx-padding: 18;                  -fx-background-color: linear-gradient(to right, #1E3A8A, #3B82F6);" HBox.hgrow="ALWAYS">
 
                             <children>
@@ -78,7 +76,7 @@
                             </children>
                         </VBox>
 
-                        <!-- ACTIVE -->
+
                         <VBox alignment="CENTER_LEFT" style="-fx-background-radius: 12;                  -fx-padding: 18;                  -fx-background-color: linear-gradient(to right, #065F46, #10B981);" HBox.hgrow="ALWAYS">
 
                             <children>
@@ -87,7 +85,7 @@
                             </children>
                         </VBox>
 
-                        <!-- EMPLOYEES -->
+
                         <VBox alignment="CENTER_LEFT" style="-fx-background-radius: 12;                  -fx-padding: 18;                  -fx-background-color: linear-gradient(to right, #92400E, #F59E0B);" HBox.hgrow="ALWAYS">
 
                             <children>
@@ -96,7 +94,7 @@
                             </children>
                         </VBox>
 
-                        <!-- MANAGERS -->
+
                         <VBox alignment="CENTER_LEFT" style="-fx-background-radius: 12;                  -fx-padding: 18;                  -fx-background-color: linear-gradient(to right, #7F1D1D, #EF4444);" HBox.hgrow="ALWAYS">
 
                             <children>
@@ -108,10 +106,9 @@
                     </HBox>
                     <HBox alignment="CENTER_LEFT" spacing="450.0" VBox.vgrow="ALWAYS">
 
-                        <!-- DROPDOWN -->
                         <ComboBox fx:id="projectFilterDropdown" prefWidth="200" promptText="Select Type" style="-fx-background-color: #374151;                      -fx-text-fill: white;                      -fx-background-radius: 6;" />
 
-                        <!-- ADD BUTTON -->
+
                         <Button prefHeight="32" style="-fx-background-color: linear-gradient(to right, #05a857, #6EE7B7);                    -fx-text-fill: white;                    -fx-font-weight: bold;                    -fx-background-radius: 6;" text="+ Add" />
                   <VBox.margin>
                      <Insets left="5.0" />
@@ -119,9 +116,6 @@
 
                     </HBox>
 
-                    <!-- ================= PROJECT CARDS ================= -->
-
-                    <!-- SAMPLE CARD -->
                     <VBox spacing="10" style="-fx-background-color: #374151; -fx-padding: 15; -fx-background-radius: 10; -fx-border-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.2, 0, 4);">
 
                         <HBox spacing="510.0">

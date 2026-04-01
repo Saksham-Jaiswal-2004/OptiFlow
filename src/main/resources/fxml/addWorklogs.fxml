@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="500.0" prefWidth="800.0"
+            style="-fx-background-color: #F5F7FA;"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.optiflow.controllers.WorkLogController">
+
+
+    <top>
+        <AnchorPane prefHeight="60.0" style="-fx-background-color: #111827;">
+            <children>
+                <Label text="OptiFlow"
+                       style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"
+                       AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="18.0"/>
+
+
+                <Label text="Employee"
+                       style="-fx-background-color: linear-gradient(to right, #8e2de2, #c471ed);
+                              -fx-background-radius: 50;
+                              -fx-text-fill: white;
+                              -fx-font-weight: bold;"
+                       AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="18.0">
+                    <padding>
+                        <Insets top="2" bottom="2" left="8" right="8"/>
+                    </padding>
+                </Label>
+            </children>
+        </AnchorPane>
+    </top>
+
+
+    <center>
+        <VBox alignment="CENTER" spacing="20" style="-fx-padding: 30;">
+
+            <VBox spacing="15"
+                  style="-fx-background-color: #1F2937;
+                         -fx-padding: 25;
+                         -fx-background-radius: 12;">
+
+
+                <Label text="Add Worklog"
+                       style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" />
+
+
+                <VBox spacing="5">
+                    <Label text="Employee ID" style="-fx-text-fill: #D1D5DB;" />
+                    <TextField fx:id="employeeIdField"
+                               promptText="Enter employee ID"
+                               style="-fx-background-color: #4b5563; -fx-text-fill: white;" />
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Task Name" style="-fx-text-fill: #D1D5DB;" />
+                    <TextField fx:id="taskNameField"
+                               promptText="Enter task name"
+                               style="-fx-background-color: #4b5563; -fx-text-fill: white;" />
+                </VBox>
+
+
+                <VBox spacing="5">
+                    <Label text="Hours Worked" style="-fx-text-fill: #D1D5DB;" />
+                    <TextField fx:id="hoursField"
+                               promptText="Enter hours"
+                               style="-fx-background-color: #4b5563; -fx-text-fill: white;" />
+                </VBox>
+
+
+                <VBox spacing="5">
+                    <Label text="Description" style="-fx-text-fill: #D1D5DB;" />
+                    <TextArea fx:id="descriptionArea"
+                              prefHeight="80"
+                              promptText="Write work details..."
+                              wrapText="true"
+                              style="-fx-background-color: #4b5563;
+                                     -fx-text-fill: white;
+                                     -fx-control-inner-background: #4b5563;" />
+                </VBox>
+
+                <Button text="Submit Worklog"
+                        onAction="#handleSubmitWorklog"
+                        style="-fx-background-color: linear-gradient(to right, #8e2de2, #c471ed);
+                               -fx-text-fill: white;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 8;" />
+
+            </VBox>
+
+        </VBox>
+    </center>
+
+</BorderPane>

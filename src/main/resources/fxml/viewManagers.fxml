@@ -13,7 +13,7 @@
 
 <BorderPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #F5F7FA;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
 
-    <!-- ================= TOP ================= -->
+
     <top>
         <AnchorPane prefHeight="68.0" style="-fx-background-color: #111827;">
             <children>
@@ -29,14 +29,14 @@
         </AnchorPane>
     </top>
 
-    <!-- ================= CENTER ================= -->
+
     <center>
         <ScrollPane fitToWidth="true" style="-fx-background: #1F2937;">
             <content>
 
                 <VBox spacing="20" style="-fx-background-color: #1F2937;                              -fx-padding: 25;                              -fx-background-radius: 12;">
 
-                    <!-- HEADER -->
+
                     <VBox spacing="10">
 
                         <HBox alignment="CENTER_LEFT" spacing="15">
@@ -49,7 +49,7 @@
                             </children>
                         </HBox>
 
-                        <!-- STATUS -->
+
                         <Label fx:id="statusField" style="-fx-background-color: linear-gradient(to right, #8e2de2, #c471ed);                                       -fx-background-radius: 50;                                       -fx-text-fill: white;                                       -fx-font-weight: bold;" text="In Progress">
                             <padding>
                                 <Insets bottom="2" left="12" right="12" top="2" />
@@ -58,7 +58,6 @@
 
                     </VBox>
 
-                    <!-- MANAGER INFO -->
                     <HBox alignment="CENTER_LEFT" spacing="10">
                         <children>
                             <Label style="-fx-text-fill: #D1D5DB;" text="Manager ID:" />
@@ -71,7 +70,6 @@
                         </children>
                     </HBox>
 
-                    <!-- DATES -->
                     <HBox spacing="40">
                         <children>
                             <HBox spacing="8">
@@ -86,37 +84,30 @@
                         </children>
                     </HBox>
 
-                    <!-- DESCRIPTION -->
                     <VBox spacing="5">
                         <Label style="-fx-text-fill: #D1D5DB;" text="Project Description" />
                         <TextArea fx:id="descField" prefHeight="70" style="-fx-control-inner-background: #374151;                                          -fx-text-fill: white;                                          -fx-background-radius: 6;" wrapText="true" />
                     </VBox>
 
-                    <!-- ================= EMPLOYEES SECTION ================= -->
                     <VBox spacing="15">
 
-                        <!-- HEADING -->
                         <Label style="-fx-text-fill: white;                                       -fx-font-size: 18px;                                       -fx-font-weight: bold;" text="Employees" />
 
-                        <!-- EMPLOYEE CARD 1 -->
                         <VBox spacing="10" style="-fx-background-color: #374151;                                      -fx-padding: 15;                                      -fx-background-radius: 10;                                      -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0.2, 0, 3);">
 
                             <HBox alignment="CENTER_LEFT" spacing="20">
                                 <children>
 
-                                    <!-- NAME + ID -->
                                     <VBox spacing="5">
                                         <Label style="-fx-text-fill: white; -fx-font-weight: bold;" text="Ram Sharma" />
                                         <Label style="-fx-text-fill: #D1D5DB; -fx-font-size: 11px;" text="ID: 787878" />
                                     </VBox>
 
-                                    <!-- SKILL -->
                                     <VBox spacing="5">
                                         <Label style="-fx-text-fill: #D1D5DB; -fx-font-size: 11px;" text="Skill" />
                                         <Label style="-fx-text-fill: white;" text="AI" />
                                     </VBox>
 
-                                    <!-- TASK -->
                                     <VBox spacing="5">
                                         <Label style="-fx-text-fill: #D1D5DB; -fx-font-size: 11px;" text="Task" />
                                         <Label style="-fx-text-fill: white;" text="Task Astro" />
@@ -127,7 +118,6 @@
 
                         </VBox>
 
-                        <!-- EMPLOYEE CARD 2 -->
                         <VBox spacing="10" style="-fx-background-color: #374151;                                      -fx-padding: 15;                                      -fx-background-radius: 10;">
 
                             <HBox alignment="CENTER_LEFT" spacing="20">

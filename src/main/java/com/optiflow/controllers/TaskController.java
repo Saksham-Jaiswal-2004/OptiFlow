@@ -18,7 +18,7 @@ import java.util.List;
 
 public class TaskController {
 
-    // 🔹 UI
+
     @FXML private Label roleBadge;
     @FXML private HBox statsContainer;
     @FXML private VBox tasksContainer;
@@ -26,7 +26,7 @@ public class TaskController {
     @FXML private Button exportBtn;
     @FXML private Button addBtn;
 
-    // 🔹 SERVICES
+
     private TaskService taskService = new TaskService();
     private ProjectService projectService = new ProjectService();
     private EmployeeService employeeService = new EmployeeService();
@@ -35,7 +35,7 @@ public class TaskController {
     private int managerId;
     private int projectId;
 
-    // 🔹 INIT
+
     @FXML
     public void initialize() {
         try {
@@ -55,7 +55,7 @@ public class TaskController {
         }
     }
 
-    // 🔹 ROLE BADGE
+
     private void setRoleBadge(String role) {
         roleBadge.setText(role.toUpperCase());
 
@@ -67,7 +67,7 @@ public class TaskController {
         );
     }
 
-    // 🔹 LOAD STATS
+
     private void loadStats() {
         try {
             List<Tasks> tasks = taskService.getTaskByProject(projectId);
@@ -93,7 +93,7 @@ public class TaskController {
         }
     }
 
-    // 🔹 LOAD TASKS
+
     private void loadTasks() {
         tasksContainer.getChildren().clear();
 
@@ -109,7 +109,7 @@ public class TaskController {
         }
     }
 
-    // 🔹 TASK CARD UI
+
     private VBox createTaskCard(Tasks task) {
 
         VBox card = new VBox(10);
@@ -119,7 +119,7 @@ public class TaskController {
                         "-fx-background-radius: 10;"
         );
 
-        // 🔹 TOP ROW
+
         HBox top = new HBox(10);
 
         Label title = new Label(task.getTitle());
@@ -137,21 +137,21 @@ public class TaskController {
         Button editBtn = new Button("Edit");
         editBtn.setStyle("-fx-background-color: #2563EB; -fx-text-fill: white;");
 
-        // 🔥 EDIT → VIEW TASK (EDIT MODE)
+
         editBtn.setOnAction(e -> openTask(task, true));
 
         top.getChildren().addAll(title, status, assigned, spacer, editBtn);
 
-        // 🔹 DESCRIPTION
+
         Label desc = new Label(task.getDescription());
         desc.setStyle("-fx-text-fill: #9CA3AF;");
         desc.setWrapText(true);
 
-        // 🔹 OPEN BUTTON
+
         Button openBtn = new Button("Open Task");
         openBtn.setStyle("-fx-background-color: #10B981; -fx-text-fill: white;");
 
-        // 🔥 OPEN → VIEW TASK (READ MODE)
+
         openBtn.setOnAction(e -> openTask(task, false));
 
         card.getChildren().addAll(top, desc, openBtn);
@@ -159,7 +159,7 @@ public class TaskController {
         return card;
     }
 
-    // 🔹 NAVIGATION TO VIEW TASK PAGE
+
     private void openTask(Tasks task, boolean editable) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/optiflow/views/viewTasks.fxml"));
@@ -168,9 +168,9 @@ public class TaskController {
             ViewTasksController controller = loader.getController();
             controller.setTask(task);
 
-            // 🔥 OPTIONAL: set editable mode (you add later)
+
             if (editable) {
-                controller.enableEditMode(); // you will implement this
+                controller.enableEditMode();
             }
 
             Stage stage = (Stage) tasksContainer.getScene().getWindow();
@@ -181,6 +181,19 @@ public class TaskController {
         }
     }
 
+    @FXML
+    private void handleAnalytics() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/optiflow/views/dashboard.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) tasksContainer.getScene().getWindow();
+            stage.setScene(new Scene(root));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     // 🔹 EXPORT CSV
 
     @FXML
@@ -189,10 +202,8 @@ public class TaskController {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Save Tasks CSV");
 
-            // Default file name
-            fileChooser.setInitialFileName("tasks_" + java.time.LocalDate.now() + ".csv");
 
-            // Extension filter
+            fileChooser.setInitialFileName("tasks_" + java.time.LocalDate.now() + ".csv");
             fileChooser.getExtensionFilters().add(
                     new FileChooser.ExtensionFilter("CSV Files", "*.csv")
             );
@@ -214,7 +225,7 @@ public class TaskController {
         }
     }
 
-    // 🔹 STAT CARD
+
     private VBox createStatCard(String title, String value, String gradient) {
         VBox box = new VBox(5);
 

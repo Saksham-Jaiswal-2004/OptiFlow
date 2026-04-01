@@ -11,39 +11,38 @@
 
 <VBox alignment="CENTER" spacing="20" style="-fx-background-color: #111827;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.optiflow.controllers.AuthController">
 
-    <!-- Padding -->
+
     <padding>
         <Insets bottom="50" left="40" right="40" top="50" />
     </padding>
 
-    <!-- CARD -->
+
     <VBox alignment="CENTER" spacing="18" style="-fx-background-color: #1F2937;                  -fx-padding: 30;                  -fx-background-radius: 12;                  -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 15, 0.2, 0, 5);">
 
-        <!-- TITLE -->
+
         <Label style="-fx-text-fill: white;                       -fx-font-size: 24px;                       -fx-font-weight: bold;" text="Create Account" />
 
-        <!-- USERNAME -->
         <VBox alignment="CENTER_LEFT" spacing="5">
             <Label style="-fx-text-fill: #D1D5DB; -fx-font-weight: bold;" text="Username" />
 
             <TextField fx:id="usernameField" prefWidth="260" promptText="Enter username" style="-fx-background-color: #374151;                               -fx-text-fill: white;                               -fx-prompt-text-fill: #9CA3AF;                               -fx-background-radius: 8;" />
         </VBox>
 
-        <!-- EMAIL -->
+
         <VBox alignment="CENTER_LEFT" spacing="5">
             <Label style="-fx-text-fill: #D1D5DB; -fx-font-weight: bold;" text="Email" />
 
             <TextField fx:id="emailField" prefWidth="260" promptText="Enter email" style="-fx-background-color: #374151;                               -fx-text-fill: white;                               -fx-prompt-text-fill: #9CA3AF;                               -fx-background-radius: 8;" />
         </VBox>
 
-        <!-- PASSWORD -->
+
         <VBox alignment="CENTER_LEFT" spacing="5">
             <Label style="-fx-text-fill: #D1D5DB; -fx-font-weight: bold;" text="Password" />
 
             <PasswordField fx:id="passwordField" prefWidth="260" promptText="Enter password" style="-fx-background-color: #374151;                                   -fx-text-fill: white;                                   -fx-prompt-text-fill: #9CA3AF;                                   -fx-background-radius: 8;" />
         </VBox>
 
-        <!-- CONFIRM PASSWORD -->
+
         <VBox alignment="CENTER_LEFT" spacing="5">
             <Label style="-fx-text-fill: #D1D5DB; -fx-font-weight: bold;" text="Confirm Password" />
 
@@ -53,7 +52,7 @@
                textFill="red"
                style="-fx-font-size: 12px; -fx-font-weight: bold"
                wrapText="true" />
-        <!-- REGISTER BUTTON -->
+
         <Button prefWidth="260" style="-fx-background-color: linear-gradient(to right, #8e2de2, #c471ed);                        -fx-cursor: hand;                        -fx-text-fill: white;                        -fx-font-weight: bold;                        -fx-background-radius: 8;" text="Register"  onAction="#handleRegister"/>
 
         <!-- LOGIN LINK -->
