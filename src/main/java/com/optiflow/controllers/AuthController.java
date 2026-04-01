@@ -129,7 +129,7 @@ public class AuthController
             return false;
         }
 
-        User u1 = new User(username, email, password, "employee");
+        User u1 = new User(username, email, password, "admin");
 
         boolean registerCheck = authService.register(u1);
 

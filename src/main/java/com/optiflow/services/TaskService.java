@@ -67,6 +67,14 @@ public class TaskService
         return taskDAO.getTasksByEmployee(emp_id);
     }
 
+    public List<Tasks> getTaskByProject(int project_id) throws SQLException
+    {
+        if(project_id <= 0)
+            return null;
+
+        return taskDAO.getTasksByProject(project_id);
+    }
+
     public boolean updateTask(Tasks task)
     {
         if(task == null)
