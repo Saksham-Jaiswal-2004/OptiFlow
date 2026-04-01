@@ -178,21 +178,19 @@ public class TaskService
         return taskDAO.getTasksDueSoon();
     }
 
-    public String exportTasksToCSV(int project_id) throws Exception
+    public String exportTasksToCSV(int project_id, String filePath) throws Exception
     {
         List<Tasks> tasks = taskDAO.getTasksByProject(project_id);
 
-        String fileName = "tasks_" + LocalDate.now() + ".csv";
-
-        FileWriter writer = new FileWriter(fileName);
+        FileWriter writer = new FileWriter(filePath);
 
         writer.append("ID,Project ID,Title,Description,Status,Priority,Assigned To,Estimated Hours,Actual Hours,Start Date,End Date\n");
 
         for (Tasks t : tasks) {
             writer.append(t.getTask_id() + ",")
                     .append(t.getProject_id() + ",")
-                    .append(t.getTitle() + ",")
-                    .append(t.getDescription() + ",")
+                    .append("\"" + t.getTitle() + "\",")
+                    .append("\"" + t.getDescription() + "\",")
                     .append(t.getStatus() + ",")
                     .append(t.getPriority() + ",")
                     .append(t.getAssigned_to() + ",")
@@ -205,9 +203,15 @@ public class TaskService
         writer.flush();
         writer.close();
 
-        auditLogService.logAction(SessionManager.getUser().getUserId(), "EXPORT_TASK", "TASK", -1, SessionManager.getUser().getName()+" exported task details via CSV");
+        auditLogService.logAction(
+                SessionManager.getUser().getUserId(),
+                "EXPORT_TASK",
+                "TASK",
+                -1,
+                SessionManager.getUser().getName() + " exported task details via CSV"
+        );
 
-        return fileName;
+        return filePath;
     }
 
     public String exportTasksToExcel() throws Exception

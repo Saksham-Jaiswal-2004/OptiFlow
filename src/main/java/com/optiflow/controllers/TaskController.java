@@ -10,11 +10,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.util.List;
 
-public class TasksController {
+public class TaskController {
 
     // 🔹 UI
     @FXML private Label roleBadge;
@@ -68,7 +70,7 @@ public class TasksController {
     // 🔹 LOAD STATS
     private void loadStats() {
         try {
-            List<Tasks> tasks = taskService.getTasksByProject(projectId);
+            List<Tasks> tasks = taskService.getTaskByProject(projectId);
             int total = tasks.size();
 
             int completed = 0;
@@ -96,7 +98,7 @@ public class TasksController {
         tasksContainer.getChildren().clear();
 
         try {
-            List<Tasks> tasks = taskService.getTasksByProject(projectId);
+            List<Tasks> tasks = taskService.getTaskByProject(projectId);
 
             for (Tasks task : tasks) {
                 tasksContainer.getChildren().add(createTaskCard(task));
@@ -180,11 +182,32 @@ public class TasksController {
     }
 
     // 🔹 EXPORT CSV
+
     @FXML
     private void handleExport() {
         try {
-            TaskService.exportTasksToCSV(projectId);
-            System.out.println("Exported Successfully");
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Save Tasks CSV");
+
+            // Default file name
+            fileChooser.setInitialFileName("tasks_" + java.time.LocalDate.now() + ".csv");
+
+            // Extension filter
+            fileChooser.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("CSV Files", "*.csv")
+            );
+
+            Stage stage = (Stage) tasksContainer.getScene().getWindow();
+
+            File file = fileChooser.showSaveDialog(stage);
+
+            if (file != null) {
+                String filePath = file.getAbsolutePath();
+
+                String savedFile = taskService.exportTasksToCSV(projectId, filePath);
+
+                System.out.println("Saved to: " + savedFile);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
