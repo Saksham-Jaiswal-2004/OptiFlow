@@ -47,7 +47,10 @@
             <Label style="-fx-text-fill: #6B7280; -fx-font-size: 11px; -fx-font-weight: bold;"
                    text="MENU" />
 
-            <Button text="Analytics" maxWidth="Infinity"
+            <Button fx:id="analyticsBtn"
+                    text="Analytics"
+                    onAction="#handleAnalytics"
+                    maxWidth="Infinity"
                     style="-fx-background-color: #374151; -fx-text-fill: white; -fx-alignment: CENTER_LEFT; -fx-padding: 10 15; -fx-background-radius: 8;" />
 
             <Button text="Project" maxWidth="Infinity"

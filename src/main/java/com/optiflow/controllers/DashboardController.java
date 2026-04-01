@@ -83,15 +83,28 @@ public class DashboardController {
         }
     }
 
-    // ✅ ADMIN SIDEBAR
     private void loadAdminSidebar() {
         VBox sidebar = new VBox(8);
         sidebar.setPrefWidth(160);
         sidebar.setStyle("-fx-background-color: #111827; -fx-padding: 15;");
+        Button managersBtn = createButton("Managers", false);
+
+        managersBtn.setOnAction(e -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/optiflow/views/managers.fxml"));
+                Parent root = loader.load();
+
+                Stage stage = (Stage) managersBtn.getScene().getWindow();
+                stage.setScene(new Scene(root));
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
 
         sidebar.getChildren().addAll(
                 createButton("Analytics", true),
-                createButton("Managers", false),
+                managersBtn,
                 createButton("Projects", false),
                 createLogoutButton()
         );
@@ -141,7 +154,7 @@ public class DashboardController {
         }
     }
 
-    // ✅ MANAGER SIDEBAR
+
     private void loadManagerSidebar() {
         VBox sidebar = new VBox(8);
         sidebar.setPrefWidth(160);
@@ -227,7 +240,6 @@ public class DashboardController {
         }
     }
 
-    // ✅ EMPLOYEE SIDEBAR
     private void loadEmployeeSidebar() {
         VBox sidebar = new VBox(8);
         sidebar.setPrefWidth(160);
@@ -262,7 +274,7 @@ public class DashboardController {
         }
     }
 
-    // 🔹 COMMON BUTTON
+
     private Button createButton(String text, boolean active) {
         Button btn = new Button(text);
         btn.setMaxWidth(Double.MAX_VALUE);
@@ -279,7 +291,7 @@ public class DashboardController {
         return btn;
     }
 
-    // 🔹 LOGOUT BUTTON
+
     private Button createLogoutButton() {
         Button btn = new Button("Logout");
         btn.setMaxWidth(Double.MAX_VALUE);

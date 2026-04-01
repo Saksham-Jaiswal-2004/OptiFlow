@@ -14,7 +14,6 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.optiflow.controllers.DashboardController">
 
-    <!-- ================= TOP ================= -->
     <top>
         <AnchorPane prefHeight="70" style="-fx-background-color: #111827;">
             <children>
@@ -29,12 +28,11 @@
         </AnchorPane>
     </top>
 
-    <!-- ================= SIDEBAR ================= -->
     <left>
         <VBox fx:id="sidebarContainer"/>
     </left>
 
-    <!-- ================= MAIN CONTENT ================= -->
+
     <center>
         <ScrollPane fitToWidth="true"
                     pannable="true"
@@ -44,23 +42,23 @@
             <content>
                 <VBox spacing="20" style="-fx-padding: 20;">
 
-                    <!-- WELCOME -->
+
                     <Label text="Welcome"
                            style="-fx-font-size: 30px; -fx-font-weight: bold;" />
 
-                    <!-- ================= STATS ================= -->
+
                     <HBox fx:id="statsContainer"
                           spacing="20"
                           style="-fx-padding: 10 20 10 20;" />
 
-                    <!-- ================= LOG SECTION ================= -->
+
                     <VBox spacing="15">
 
-                        <!-- HEADER (Dynamic) -->
+
                         <Label fx:id="logsHeader"
                                style="-fx-font-size: 24px; -fx-font-weight: bold;" />
 
-                        <!-- DYNAMIC LOGS / TASKS -->
+
                         <VBox fx:id="logsContainer"
                               spacing="15"/>
                     </VBox>
