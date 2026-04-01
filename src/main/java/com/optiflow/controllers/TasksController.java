@@ -68,7 +68,7 @@ public class TasksController {
     // 🔹 LOAD STATS
     private void loadStats() {
         try {
-            List<Tasks> tasks = taskService.getTasksByProject(projectId);
+            List<Tasks> tasks = taskService.getTaskByProject(projectId);
             int total = tasks.size();
 
             int completed = 0;
@@ -96,7 +96,7 @@ public class TasksController {
         tasksContainer.getChildren().clear();
 
         try {
-            List<Tasks> tasks = taskService.getTasksByProject(projectId);
+            List<Tasks> tasks = taskService.getTaskByProject(projectId);
 
             for (Tasks task : tasks) {
                 tasksContainer.getChildren().add(createTaskCard(task));
@@ -168,7 +168,7 @@ public class TasksController {
 
             // 🔥 OPTIONAL: set editable mode (you add later)
             if (editable) {
-                controller.enableEditMode(); // you will implement this
+//                controller.enableEditMode();
             }
 
             Stage stage = (Stage) tasksContainer.getScene().getWindow();
@@ -183,7 +183,7 @@ public class TasksController {
     @FXML
     private void handleExport() {
         try {
-            TaskService.exportTasksToCSV(projectId);
+//            TaskService.exportTasksToCSV(projectId);
             System.out.println("Exported Successfully");
 
         } catch (Exception e) {

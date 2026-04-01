@@ -1,5 +1,7 @@
 package com.optiflow.networking;
 
+import com.optiflow.dao.UserDAO;
+
 import java.net.*;
 import java.io.*;
 
@@ -9,10 +11,12 @@ public class SocketClient
     private ObjectOutputStream out;
     private ObjectInputStream in;
     private MessageListener listener;
+    private UserDAO userDAO;
 
     public void setListener(MessageListener listener)
     {
         this.listener = listener;
+        this.userDAO = new UserDAO();
     }
 
     public void connect() throws Exception
@@ -37,7 +41,7 @@ public class SocketClient
             while(true)
             {
                 Message message = (Message) in.readObject();
-                System.out.println("New Message: " + message.getContent());
+                System.out.println("New: " + message.getContent());
 
                 if(listener != null)
                 {
@@ -46,6 +50,7 @@ public class SocketClient
             }
         } catch(Exception e) {
             e.printStackTrace();
+            System.out.println("Listener is null!");
         }
     }
 }

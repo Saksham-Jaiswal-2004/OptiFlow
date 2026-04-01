@@ -185,16 +185,22 @@ public class DashboardController {
         int totPro = pros.size();
         int pid=projectService.getProjectByManager(mid);
         List<Tasks> tasks = projectService.getTasksByProject(pid);
-        int totTasks=tasks.size();
+        int totTasks;
         int active=0;
-        for(Tasks task: tasks){
-            if ("active".equalsIgnoreCase(task.getStatus())){
-                active+=1;
+        if(tasks!=null)
+        {
+            totTasks = tasks.size();
+
+            for (Tasks task : tasks)
+            {
+                if ("active".equalsIgnoreCase(task.getStatus()))
+                {
+                    active += 1;
+                }
             }
-
-            }
-
-
+        }
+        else
+            totTasks=0;
 
         statsContainer.getChildren().setAll(
                 createStatCard("Total Projects", String.valueOf(totPro), "#1E3A8A, #3B82F6"),
