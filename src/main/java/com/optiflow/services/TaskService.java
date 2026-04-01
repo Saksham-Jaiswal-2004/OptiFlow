@@ -178,9 +178,9 @@ public class TaskService
         return taskDAO.getTasksDueSoon();
     }
 
-    public String exportTasksToCSV() throws Exception
+    public String exportTasksToCSV(int project_id) throws Exception
     {
-        List<Tasks> tasks = taskDAO.getAllTasks();
+        List<Tasks> tasks = taskDAO.getTasksByProject(project_id);
 
         String fileName = "tasks_" + LocalDate.now() + ".csv";
 
