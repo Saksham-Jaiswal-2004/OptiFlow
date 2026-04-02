@@ -14,9 +14,7 @@ public class Employee
     private int allocated_hours = 0;
 
     public Employee()
-    {
-        System.out.println("Mai Employee Hu!");
-    }
+    {}
 
     public Employee(String name, String skill, String designation, String department, int manager_id, String status, int weeklyCapacity)
     {

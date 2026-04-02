@@ -7,9 +7,7 @@ public class EmployeeSkill
     private int proficiency;
 
     public EmployeeSkill()
-    {
-        System.out.println("Mai Employee Skills Connector Hu!");
-    }
+    {}
 
     public EmployeeSkill(int emp_id, int skill_id, int proficiency)
     {

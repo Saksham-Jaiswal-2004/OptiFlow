@@ -126,10 +126,4 @@ public class AuditLogDAO
             return null;
         }
     }
-
-    public static void main(String[] args) throws SQLException
-    {
-        AuditLogDAO auditLogDAO = new AuditLogDAO();
-        System.out.println(auditLogDAO.getAllLogs());
-    }
 }

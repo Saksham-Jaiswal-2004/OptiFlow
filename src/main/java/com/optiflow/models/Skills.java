@@ -7,9 +7,7 @@ public class Skills
     private String description;
 
     public Skills()
-    {
-        System.out.println("Mai Skills Hu!");;
-    }
+    {}
 
     public Skills(String name, String description)
     {

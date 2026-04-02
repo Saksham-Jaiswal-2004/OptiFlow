@@ -19,9 +19,7 @@ public class Tasks
     private List<String> skillsList;
 
     public Tasks()
-    {
-        System.out.println("Mai Tasks Hu!");
-    }
+    {}
 
     public Tasks(int project_id, int assigned_to, String title, String description, String status, String priority, int estimated_hours, Date start_date)
     {

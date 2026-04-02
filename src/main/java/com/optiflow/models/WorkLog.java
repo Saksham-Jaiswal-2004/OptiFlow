@@ -13,9 +13,7 @@ public class WorkLog
     private String description;
 
     public WorkLog()
-    {
-        System.out.println("Mai WorkLog Hu!");
-    }
+    {}
 
     public WorkLog(int employeeId, int taskId, Date workDate, int hoursWorked, String description)
     {

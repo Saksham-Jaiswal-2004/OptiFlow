@@ -13,9 +13,7 @@ public class Projects
     private String status;
 
     public Projects()
-    {
-        System.out.println("Mai Projects Hu!");
-    }
+    {}
 
     public Projects(String name, String description, Date start_date, int manager_id)
     {

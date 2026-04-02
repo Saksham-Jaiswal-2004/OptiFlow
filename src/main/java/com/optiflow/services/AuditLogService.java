@@ -20,6 +20,7 @@ public class AuditLogService
         try
         {
             auditLogDAO.addLog(user_id, action, entityType, entity_id, details);
+            System.out.println("Audit Logged!");
         } catch(Exception e) {
             e.printStackTrace();
         }

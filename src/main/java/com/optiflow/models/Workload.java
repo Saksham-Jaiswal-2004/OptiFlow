@@ -12,9 +12,7 @@ public class Workload
     private Date date;
 
     Workload()
-    {
-        System.out.println("Mai WorkLoad Hu!");
-    }
+    {}
 
     Workload(int employee_id, int task_id, int hours_allocated, int hours_logged, Date date)
     {

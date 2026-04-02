@@ -8,9 +8,7 @@ public class Comments
     private String content;
 
     public Comments()
-    {
-        System.out.println("Mai Comments Hu!");
-    }
+    {}
 
     public Comments(int task_id, int user_id, String content)
     {

@@ -14,9 +14,7 @@ public class AuditLog
     private Date date;
 
     public AuditLog()
-    {
-        System.out.println("Mai Audit Logs Hu!");
-    }
+    {}
 
     public AuditLog(int user_id, String action, String entityType, int entity_id, String details)
     {

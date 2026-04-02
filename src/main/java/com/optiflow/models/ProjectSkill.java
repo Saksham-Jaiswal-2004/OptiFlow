@@ -7,9 +7,7 @@ public class ProjectSkill
     private int skill_id;
 
     public ProjectSkill()
-    {
-        System.out.println("Mai Project Skill Hu!");
-    }
+    {}
 
     public ProjectSkill(int project_id, int skill_id)
     {
