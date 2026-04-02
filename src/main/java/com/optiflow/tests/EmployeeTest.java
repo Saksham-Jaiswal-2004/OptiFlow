@@ -13,7 +13,7 @@ public class EmployeeTest
         Scanner sc = new Scanner(System.in);
         EmployeeDAO testEmployee = new EmployeeDAO();
 
-        System.out.println("********    User Test    ********");
+        System.out.println("********    Employee Test    ********");
         System.out.print("Enter User ID: ");
         int user_id = sc.nextInt();
         sc.nextLine();

@@ -1,8 +1,11 @@
 package com.optiflow.tests;
 
+import com.optiflow.models.Employee;
 import com.optiflow.models.Skills;
 import com.optiflow.services.EmployeeSkillService;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class EmployeeSkillTest
@@ -47,6 +50,34 @@ public class EmployeeSkillTest
 
                 for(Skills skill : employeeSkillService.getSkillsByEmployee(empId))
                     System.out.println(skill.getName());
+            break;
+            case 4: System.out.print("Enter Skill Id: ");
+                skillId = sc.nextInt();
+
+                for(Employee employee : employeeSkillService.getEmployeesBySkill(skillId))
+                    System.out.println(employee.getName());
+            break;
+            case 5: List<Integer> skillIds = new ArrayList<>();
+                for(int i=0 ; i<3 ; i++)
+                {
+                    System.out.print("Enter Skill-Id "+i+": ");
+                    int a = sc.nextInt();
+                    skillIds.add(a);
+                }
+
+                System.out.println(employeeSkillService.getEmployeesByMultipleSkills(skillIds));
+            break;
+            case 6: System.out.print("Enter Employee Id: ");
+                empId = sc.nextInt();
+                    skillIds = new ArrayList<>();
+                    for(int i=0 ; i<3 ; i++)
+                    {
+                        System.out.print("Enter Skill-Id "+i+": ");
+                        int a = sc.nextInt();
+                        skillIds.add(a);
+                    }
+
+                employeeSkillService.updateEmployeeSkills(empId, skillIds);
             break;
             default: System.out.println("Invalid Input!");
         }

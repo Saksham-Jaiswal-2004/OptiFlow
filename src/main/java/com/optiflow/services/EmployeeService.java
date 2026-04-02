@@ -1,6 +1,7 @@
 package com.optiflow.services;
 
 import com.optiflow.dao.EmployeeDAO;
+import com.optiflow.dao.EmployeeSkillDAO;
 import com.optiflow.dao.TaskDAO;
 import com.optiflow.models.Employee;
 import com.optiflow.utils.SessionManager;
@@ -22,12 +23,14 @@ public class EmployeeService
     private EmployeeDAO employeeDAO;
     private TaskDAO taskDAO;
     private AuditLogService auditLogService;
+    private EmployeeSkillDAO employeeSkillDAO;
 
     public EmployeeService()
     {
         this.employeeDAO = new EmployeeDAO();
         this .taskDAO = new TaskDAO();
         this.auditLogService = new AuditLogService();
+        this.employeeSkillDAO = new EmployeeSkillDAO();
     }
 
     public boolean createEmployee(Employee emp) throws SQLException
@@ -102,6 +105,8 @@ public class EmployeeService
             return false;
 
         auditLogService.logAction(SessionManager.getUser().getUserId(), "DELETE_EMPLOYEE", "EMPLOYEE", emp_id, SessionManager.getUser().getName()+" deleted employee "+getEmployeeById(emp_id).getName());
+
+        employeeSkillDAO.deleteAllSkillsOfEmployee(emp_id);
 
         return employeeDAO.deleteEmployee(emp_id) == 1;
     }
