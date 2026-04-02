@@ -69,6 +69,11 @@ public class EmployeeService
         return employeeDAO.getAllEmployees();
     }
 
+    public List<Employee> getAllManagers() throws SQLException
+    {
+        return employeeDAO.getAllManagers();
+    }
+
     public boolean updateEmployee(Employee emp) throws SQLException
     {
         if(emp == null)

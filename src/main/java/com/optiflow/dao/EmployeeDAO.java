@@ -123,6 +123,37 @@ public class EmployeeDAO
         return empList;
     }
 
+    public List<Employee> getAllManagers() throws SQLException
+    {
+        LinkedList<Employee> empList = new LinkedList<>();
+        String sql = "SELECT * FROM employees WHERE role=?";
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            stmt.setString(1, "manager");
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next())
+            {
+                Employee emp = new Employee();
+                emp.setEmp_id(rs.getInt("employee_id"));
+                emp.setUser_id(rs.getInt("user_id"));
+                emp.setName(rs.getString("name"));
+                emp.setSkill(rs.getString("skills"));
+                emp.setDesignation(rs.getString("designation"));
+                emp.setDepartment(rs.getString("department"));
+                emp.setManager_id(rs.getInt("manager_id"));
+                emp.setStatus(rs.getString("status"));
+                emp.setWeeklyCapacity(rs.getInt("weekly_capacity"));
+//                user.setCreatedAt(rs.getTimestamp("created_at"));
+
+                empList.add(emp);
+            }
+        }
+        return empList;
+    }
+
     public List<Employee> getEmployeesByManager(int managerId) throws SQLException
     {
         LinkedList<Employee> empList = new LinkedList<>();
