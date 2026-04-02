@@ -16,7 +16,7 @@ public class CommentService
     private CommentsDAO commentsDAO;
     private AuditLogService auditLogService;
 
-    CommentService()
+    public CommentService()
     {
         this.commentsDAO = new CommentsDAO();
         this.auditLogService = new AuditLogService();

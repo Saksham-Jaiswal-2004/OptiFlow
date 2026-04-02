@@ -21,7 +21,7 @@ public class SocketClient
 
     public void connect() throws Exception
     {
-        socket = new Socket("localhost", 5000);
+        socket = new Socket("192.168.56.1", 5000);
 
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());

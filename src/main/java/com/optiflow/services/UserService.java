@@ -25,7 +25,7 @@ public class UserService
     private AuthService auth;
     private AuditLogService auditLogService;
 
-    UserService()
+    public UserService()
     {
         this.userDAO = new UserDAO();
         this.auth = new AuthService();

@@ -3,11 +3,12 @@ package com.optiflow.networking;
 import java.net.*;
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class SocketServer
 {
 
-    static List<ClientHandler> clients = new ArrayList<>();
+    static List<ClientHandler> clients = new CopyOnWriteArrayList<>();
 
     public static void main(String[] args) throws Exception
     {
@@ -28,9 +29,14 @@ public class SocketServer
 
     public static void broadcast(Message message)
     {
-        for(ClientHandler client : clients)
+        for (ClientHandler client : clients)
         {
-            client.sendMessage(message);
+            try
+            {
+                client.sendMessage(message);
+            } catch (Exception e) {
+                clients.remove(client);
+            }
         }
     }
 }
