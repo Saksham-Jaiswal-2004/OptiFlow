@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane fx:id="root" xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../css/dashboard.css">
+
+    <!-- TOP BAR -->
+    <top>
+        <HBox styleClass="top-bar" spacing="16" alignment="CENTER_RIGHT">
+            <Label text="OptiFlow" styleClass="brand-name"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="Admin / Manager / Employee" styleClass="hero-sub"/>
+            <Button text="Notifications" styleClass="glass-btn"/>
+            <Button text="Logout" styleClass="glass-btn"/>
+        </HBox>
+    </top>
+
+    <!-- SIDEBAR -->
+    <left>
+        <VBox fx:id="sidebar" styleClass="sidebar" spacing="20">
+            <!-- Employee Menu -->
+            <Button text="Dashboard" styleClass="glass-btn"/>
+            <Button text="My Tasks" styleClass="glass-btn"/>
+            <Button text="Worklog" styleClass="glass-btn"/>
+            <Button text="Progress" styleClass="glass-btn"/>
+            <Button text="Comments" styleClass="glass-btn"/>
+
+            <!-- Manager Menu -->
+            <Button text="Team Overview" styleClass="glass-btn"/>
+            <Button text="Tasks Tracker" styleClass="glass-btn"/>
+            <Button text="Gantt Chart" styleClass="glass-btn"/>
+            <Button text="Performance Analytics" styleClass="glass-btn"/>
+
+            <!-- Admin Menu -->
+            <Button text="Projects Overview" styleClass="glass-btn"/>
+            <Button text="Employee Management" styleClass="glass-btn"/>
+            <Button text="Manager Management" styleClass="glass-btn"/>
+            <Button text="Full Reports" styleClass="glass-btn"/>
+        </VBox>
+    </left>
+
+    <!-- CENTER DYNAMIC CONTENT -->
+    <center>
+        <StackPane fx:id="contentArea" styleClass="content-area">
+            <!-- Placeholder for dynamic components -->
+            <VBox spacing="24">
+
+                <!-- Example Glass Cards -->
+                <HBox spacing="24">
+                    <VBox styleClass="glass-card" prefWidth="250" prefHeight="150">
+                        <Label text="Tasks Assigned" styleClass="card-title"/>
+                        <Label text="5" styleClass="card-sub"/>
+                    </VBox>
+                    <VBox styleClass="glass-card" prefWidth="250" prefHeight="150">
+                        <Label text="Tasks Completed" styleClass="card-title"/>
+                        <Label text="3" styleClass="card-sub"/>
+                    </VBox>
+                    <VBox styleClass="glass-card" prefWidth="250" prefHeight="150">
+                        <Label text="Overdue Tasks" styleClass="card-title"/>
+                        <Label text="1" styleClass="card-sub"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Placeholder for Gantt Chart / Tables -->
+                <VBox styleClass="glass-card" prefHeight="400" spacing="16">
+                    <Label text="Dynamic Component Area" styleClass="card-title"/>
+                    <Label text="This area will be replaced with Tasks Table, Gantt Chart or Analytics depending on role/menu" styleClass="card-sub" wrapText="true"/>
+                </VBox>
+            </VBox>
+        </StackPane>
+    </center>
+
+    <!-- BACKGROUND AURORA BLOBS -->
+    <children>
+        <Circle styleClass="aurora-violet" centerX="150" centerY="150" radius="200"/>
+        <Circle styleClass="aurora-indigo" centerX="900" centerY="100" radius="250"/>
+        <Circle styleClass="aurora-cyan" centerX="500" centerY="700" radius="300"/>
+    </children>
+</BorderPane>

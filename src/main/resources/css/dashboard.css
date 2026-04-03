@@ -1,0 +1,114 @@
+/* ── ROOT ───────────────────────────────────────────── */
+.root {
+    -fx-font-family: "Segoe UI", "Inter", sans-serif;
+    -fx-background-color: #0b0621;
+}
+
+/* ── BACKGROUND ────────────────────────────────────── */
+.bg-base {
+    -fx-background-color: radial-gradient(center 50% 50%, radius 80%, #1a0f2c, #05020a);
+}
+
+.grid-overlay {
+    -fx-background-color:
+        linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
+    -fx-background-size: 60 60;
+    -fx-opacity: 0.10;
+}
+
+/* ── TOP BAR ───────────────────────────────────────── */
+.top-bar {
+    -fx-background-color: rgba(12,8,30,0.75);
+    -fx-padding: 12;
+    -fx-spacing: 12;
+    -fx-alignment: center-left;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.85), 20, 0.3, 0, 0);
+}
+
+/* ── SIDEBAR ───────────────────────────────────────── */
+.sidebar {
+    -fx-background-color: rgba(12,8,30,0.5);
+    -fx-background-radius: 24;
+    -fx-padding: 24;
+    -fx-spacing: 16;
+}
+
+/* ── GLASS CARD ────────────────────────────────────── */
+.glass-card {
+    -fx-background-color: rgba(12,8,30,0.30);
+    -fx-background-radius: 24;
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-radius: 24;
+    -fx-padding: 24;
+    -fx-effect:
+        dropshadow(gaussian, rgba(0,0,0,0.85), 25, 0.3, 0, 10),
+        dropshadow(gaussian, rgba(124,58,237,0.2), 20, 0.2, 0, 0);
+}
+
+/* ── TEXT ─────────────────────────────────────────── */
+.card-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 22px;
+    -fx-font-weight: 800;
+}
+
+.card-sub {
+    -fx-text-fill: rgba(255,255,255,0.75);
+    -fx-font-size: 14px;
+}
+
+/* ── BUTTON ───────────────────────────────────────── */
+.glass-btn {
+    -fx-background-color: linear-gradient(to right, #7c3aed, #4f46e5);
+    -fx-background-radius: 12;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-pref-height: 48;
+    -fx-cursor: hand;
+}
+
+.glass-btn:hover {
+    -fx-background-color: linear-gradient(to right, #8b5cf6, #6366f1);
+}
+
+.glass-btn:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+/* ── AURORA BLOBS ─────────────────────────────────── */
+.aurora-violet {
+    -fx-fill: radial-gradient(center 50% 50%, radius 60%, #7c3aed66, transparent);
+    -fx-opacity: 0.4;
+}
+
+.aurora-indigo {
+    -fx-fill: radial-gradient(center 50% 50%, radius 60%, #3b82f655, transparent);
+    -fx-opacity: 0.3;
+}
+
+.aurora-cyan {
+    -fx-fill: radial-gradient(center 50% 50%, radius 60%, #ec489944, transparent);
+    -fx-opacity: 0.35;
+}
+
+/* ── INPUT FIELDS ─────────────────────────────────── */
+.glass-field {
+    -fx-background-color: #120d2b;
+    -fx-border-color: rgba(255,255,255,0.14);
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-text-fill: #ffffff;
+    -fx-prompt-text-fill: rgba(255,255,255,0.5);
+    -fx-font-size: 14px;
+    -fx-padding: 14 16;
+    -fx-pref-height: 48;
+}
+
+.glass-field:focused {
+    -fx-border-color: #7c3aed;
+    -fx-background-color: #0e0925;
+    -fx-effect: dropshadow(gaussian, rgba(124,58,237,0.5), 14, 0.3, 0, 0);
+}

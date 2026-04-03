@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml/1"
+           fx:id="root"
+           prefWidth="1280"
+           prefHeight="720"
+           styleClass="bg-base"
+           stylesheets="@../css/style.css">
+
+    <!-- GLASSMORPHISM BACKGROUND -->
+        <Pane styleClass="bg-base" prefWidth="1280" prefHeight="720" mouseTransparent="true"/>
+        <Pane styleClass="grid-overlay" prefWidth="1280" prefHeight="720" mouseTransparent="true"/>
+
+    <!-- SUBTLE AURORA BLOBS -->
+    <Circle managed="false" radius="340" layoutX="180" layoutY="240" styleClass="aurora-violet" mouseTransparent="true"/>
+    <Circle managed="false" radius="280" layoutX="1080" layoutY="140" styleClass="aurora-indigo" mouseTransparent="true"/>
+    <Circle managed="false" radius="220" layoutX="680" layoutY="620" styleClass="aurora-cyan" mouseTransparent="true"/>
+
+    <!-- MAIN LAYOUT -->
+    <HBox prefWidth="1280" prefHeight="720" alignment="CENTER">
+
+        <!-- BRANDING PANEL -->
+        <VBox HBox.hgrow="ALWAYS" maxWidth="640" alignment="CENTER_LEFT" styleClass="brand-panel" spacing="28">
+            <HBox alignment="CENTER_LEFT" spacing="16">
+                <Label text="OptiFlow" styleClass="brand-name"/>
+            </HBox>
+
+            <Region prefHeight="20"/>
+
+            <Label text="WORKFLOW INTELLIGENCE" styleClass="hero-eyebrow"/>
+            <VBox spacing="-12">
+                <Label text="Command" styleClass="hero-italic"/>
+                <Label text="your workflow." styleClass="hero-bold"/>
+            </VBox>
+            <Label text="Precision tools for the people who build what's next. Automate, Analyse, Accelerate."
+                   styleClass="hero-sub" wrapText="true" maxWidth="480"/>
+
+            <Region prefHeight="32"/>
+
+            <VBox spacing="14">
+                <HBox spacing="14">
+                    <Label text="⚡ Real-time sync" styleClass="chip"/>
+                    <Label text="🔒 End-to-end encrypted" styleClass="chip"/>
+                </HBox>
+                <HBox spacing="14">
+                    <Label text="📊 Live analytics" styleClass="chip"/>
+                    <Label text="🌐 Cross-platform" styleClass="chip"/>
+                </HBox>
+            </VBox>
+
+            <Region prefHeight="52"/>
+
+            <HBox alignment="CENTER_LEFT" spacing="18">
+                <VBox spacing="3">
+                    <Label text="50,000+ teams worldwide" styleClass="proof-main"/>
+                    <Label text="★★★★★ 4.9 / 5 from 12k reviews" styleClass="proof-sub"/>
+                </VBox>
+            </HBox>
+        </VBox>
+
+        <!-- GLASS FORM CARD -->
+        <VBox prefWidth="520" alignment="CENTER" styleClass="card-col">
+            <VBox styleClass="glass-card" maxWidth="420">
+
+                <VBox styleClass="card-head" spacing="12">
+                    <Label text="Create Account" styleClass="card-title"/>
+                    <Label text="Register to start your journey" styleClass="card-sub"/>
+                </VBox>
+
+                <Pane styleClass="c-div" prefHeight="1"/>
+
+                <VBox styleClass="card-body" spacing="24">
+
+                    <!-- Name -->
+                    <VBox spacing="10">
+                        <Label text="Full Name" styleClass="field-lbl"/>
+                        <TextField fx:id="nameField"
+                                   promptText="Your full name"
+                                   styleClass="glass-field"/>
+                    </VBox>
+
+                    <!-- Email -->
+                    <VBox spacing="10">
+                        <Label text="Email Address" styleClass="field-lbl"/>
+                        <TextField fx:id="emailField"
+                                   promptText="you@company.com"
+                                   styleClass="glass-field"/>
+                    </VBox>
+
+                    <!-- Password -->
+                    <VBox spacing="10">
+                        <Label text="Password" styleClass="field-lbl"/>
+                        <PasswordField fx:id="passwordField"
+                                       promptText="Enter your password"
+                                       styleClass="glass-field"/>
+                    </VBox>
+
+                    <!-- Confirm Password -->
+                    <VBox spacing="10">
+                        <Label text="Confirm Password" styleClass="field-lbl"/>
+                        <PasswordField fx:id="confirmPasswordField"
+                                       promptText="Re-enter your password"
+                                       styleClass="glass-field"/>
+                    </VBox>
+
+                    <!-- Register Button -->
+                    <Button fx:id="registerBtn"
+                            text="Register"
+                            styleClass="glass-btn"
+                            maxWidth="Infinity"/>
+
+                    <!-- Already have account -->
+                    <HBox alignment="CENTER" spacing="8">
+                        <Label text="Already have an account?" styleClass="reg-p"/>
+                        <Hyperlink text="Login" styleClass="glass-link"/>
+                    </HBox>
+
+                </VBox>
+
+            </VBox>
+        </VBox>
+    </HBox>
+</StackPane>
