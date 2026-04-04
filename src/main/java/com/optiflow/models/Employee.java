@@ -5,7 +5,6 @@ public class Employee
     private int emp_id;
     private int user_id;
     private String name;
-    private String skill;
     private String designation;
     private String department;
     private int manager_id;
@@ -16,10 +15,9 @@ public class Employee
     public Employee()
     {}
 
-    public Employee(String name, String skill, String designation, String department, int manager_id, String status, int weeklyCapacity)
+    public Employee(String name, String designation, String department, int manager_id, String status, int weeklyCapacity)
     {
         this.name = name;
-        this.skill = skill;
         this.designation = designation;
         this.department = department;
         this.manager_id = manager_id;
@@ -40,11 +38,6 @@ public class Employee
     public String getName()
     {
         return name;
-    }
-
-    public String getSkill()
-    {
-        return skill;
     }
 
     public String getDesignation()
@@ -90,11 +83,6 @@ public class Employee
     public void setName(String name)
     {
         this.name = name;
-    }
-
-    public void setSkill(String skill)
-    {
-        this.skill = skill;
     }
 
     public void setDesignation(String designation)

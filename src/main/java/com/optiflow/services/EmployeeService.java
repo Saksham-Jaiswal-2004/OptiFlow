@@ -40,7 +40,7 @@ public class EmployeeService
 
         auditLogService.logAction(SessionManager.getUser().getUserId(), "CREATE_EMPLOYEE", "EMPLOYEE", emp.getUser_id(), SessionManager.getUser().getName()+" added a new employee");
 
-        return employeeDAO.addEmployee(emp.getUser_id(), emp.getName(), emp.getSkill(), emp.getDesignation(), emp.getDepartment(), emp.getManager_id(), emp.getStatus(), emp.getWeeklyCapacity());
+        return employeeDAO.addEmployee(emp.getUser_id(), emp.getName(), emp.getDesignation(), emp.getDepartment(), emp.getManager_id(), emp.getStatus(), emp.getWeeklyCapacity());
     }
 
     public Employee getEmployeeById(int emp_id) throws SQLException
@@ -84,7 +84,6 @@ public class EmployeeService
 
         try {
             employeeDAO.updateName(emp.getEmp_id(), emp.getName());
-            employeeDAO.updateSkill(emp.getEmp_id(), emp.getSkill());
             employeeDAO.updateDesignation(emp.getEmp_id(), emp.getDesignation());
             employeeDAO.updateDepartment(emp.getEmp_id(), emp.getDepartment());
             employeeDAO.updateManager(emp.getEmp_id(), emp.getManager_id());

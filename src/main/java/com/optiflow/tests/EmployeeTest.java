@@ -19,8 +19,6 @@ public class EmployeeTest
         sc.nextLine();
         System.out.print("Enter Name: ");
         String name = sc.nextLine();
-        System.out.print("Enter Skill: ");
-        String skill = sc.nextLine();
         System.out.print("Enter Designation: ");
         String designation = sc.nextLine();
         System.out.print("Enter Department: ");
@@ -35,7 +33,7 @@ public class EmployeeTest
         sc.nextLine();
 
         try {
-            testEmployee.addEmployee(user_id, name, skill, designation, department, manager_id, status, weekly_capacity);
+            testEmployee.addEmployee(user_id, name, designation, department, manager_id, status, weekly_capacity);
             System.out.println("Employee Added Successfully!");
         } catch (Exception e) {
             e.printStackTrace();

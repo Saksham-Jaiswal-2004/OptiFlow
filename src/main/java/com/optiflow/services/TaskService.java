@@ -46,8 +46,6 @@ public class TaskService
         if(task == null)
             return false;
 
-        auditLogService.logAction(SessionManager.getUser().getUserId(), "ADD_TASK", "TASK", SessionManager.getUser().getUserId(), SessionManager.getUser().getName()+" created a new task");
-
         return taskDAO.createTask(task.getProject_id(), task.getAssigned_to(), task.getTitle(), task.getDescription(), task.getStatus(), task.getPriority(), task.getEstimated_hours(), task.getStart_date(), task.getEnd_date());
     }
 

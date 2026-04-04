@@ -2,12 +2,22 @@ package com.optiflow.dao;
 
 import com.optiflow.database.DBConnection;
 import com.optiflow.models.Skills;
+import com.optiflow.services.AuditLogService;
+import com.optiflow.utils.SessionManager;
+
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
 public class SkillsDAO
 {
+    private AuditLogService auditLogService;
+
+    public SkillsDAO()
+    {
+        this.auditLogService = new AuditLogService();
+    }
+
     public boolean createSkill(String name, String description) throws SQLException
     {
         String sql = "INSERT INTO skills (name, description) VALUES (?, ?)";
@@ -15,7 +25,19 @@ public class SkillsDAO
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, name);
             stmt.setString(2, description);
-            stmt.executeUpdate();
+
+            int rows = stmt.executeUpdate();
+
+            if (rows > 0)
+            {
+                ResultSet rs = stmt.getGeneratedKeys();
+
+                if (rs.next())
+                {
+                    int generatedId = rs.getInt(1);
+                    auditLogService.logAction(SessionManager.getUser().getUserId(), "ADD_SKILL", "SKILL", generatedId, SessionManager.getUser().getName()+" addeded a new skill to database");
+                }
+            }
 
             return true;
         } catch (SQLException e) {

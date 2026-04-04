@@ -3,6 +3,8 @@ package com.optiflow.dao;
 import com.optiflow.database.DBConnection;
 import com.optiflow.models.Comments;
 import com.optiflow.models.Skills;
+import com.optiflow.services.AuditLogService;
+import com.optiflow.utils.SessionManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,6 +15,12 @@ import java.util.List;
 
 public class CommentsDAO
 {
+    private AuditLogService auditLogService;
+
+    public CommentsDAO()
+    {
+        this.auditLogService = new AuditLogService();
+    }
     public boolean addComment(int task_id, int user_id, String content) throws SQLException
     {
         String sql = "INSERT INTO comments (task_id, user_id, content) VALUES (?, ?, ?)";
@@ -21,7 +29,18 @@ public class CommentsDAO
             stmt.setInt(1, task_id);
             stmt.setInt(2, user_id);
             stmt.setString(3, content);
-            stmt.executeUpdate();
+            int rows = stmt.executeUpdate();
+
+            if(rows > 0)
+            {
+                ResultSet rs = stmt.getGeneratedKeys();
+
+                if (rs.next())
+                {
+                    int generatedId = rs.getInt(1);
+                    auditLogService.logAction(SessionManager.getUser().getUserId(), "ADD_COMMENT", "COMMENT", generatedId, SessionManager.getUser().getName()+" added a comment");
+                }
+            }
 
             return true;
         } catch (SQLException e) {

@@ -9,22 +9,21 @@ import com.optiflow.models.User;
 
 public class EmployeeDAO
 {
-    public boolean addEmployee(int user_id, String name, String skill, String designation, String department, int manager_id, String status, int weeklyCapacity) throws SQLException
+    public boolean addEmployee(int user_id, String name, String designation, String department, int manager_id, String status, int weeklyCapacity) throws SQLException
     {
-        String sql = "INSERT INTO Employees (user_id, name, skills, designation, department, manager_id, status, weekly_capacity) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Employees (user_id, name, designation, department, manager_id, status, weekly_capacity) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, user_id);
             stmt.setString(2, name);
-            stmt.setString(3, skill);
-            stmt.setString(4, designation);
-            stmt.setString(5, department);
+            stmt.setString(3, designation);
+            stmt.setString(4, department);
             if(manager_id == 0)
-                stmt.setNull(6, java.sql.Types.INTEGER);
+                stmt.setNull(5, java.sql.Types.INTEGER);
             else
-                stmt.setInt(6, manager_id);
-            stmt.setString(7, status);
-            stmt.setInt(8, weeklyCapacity);
+                stmt.setInt(5, manager_id);
+            stmt.setString(6, status);
+            stmt.setInt(7, weeklyCapacity);
             stmt.executeUpdate();
             return true;
         } catch (Exception e) {
@@ -50,7 +49,6 @@ public class EmployeeDAO
                 emp.setEmp_id(rs.getInt("employee_id"));
                 emp.setUser_id(rs.getInt("user_id"));
                 emp.setName(rs.getString("name"));
-                emp.setSkill(rs.getString("skills"));
                 emp.setDesignation(rs.getString("designation"));
                 emp.setDepartment(rs.getString("department"));
                 emp.setManager_id(rs.getInt("manager_id"));
@@ -80,7 +78,6 @@ public class EmployeeDAO
                 emp.setEmp_id(rs.getInt("employee_id"));
                 emp.setUser_id(rs.getInt("user_id"));
                 emp.setName(rs.getString("name"));
-                emp.setSkill(rs.getString("skills"));
                 emp.setDesignation(rs.getString("designation"));
                 emp.setDepartment(rs.getString("department"));
                 emp.setManager_id(rs.getInt("manager_id"));
@@ -109,7 +106,6 @@ public class EmployeeDAO
                 emp.setEmp_id(rs.getInt("employee_id"));
                 emp.setUser_id(rs.getInt("user_id"));
                 emp.setName(rs.getString("name"));
-                emp.setSkill(rs.getString("skills"));
                 emp.setDesignation(rs.getString("designation"));
                 emp.setDepartment(rs.getString("department"));
                 emp.setManager_id(rs.getInt("manager_id"));
@@ -126,7 +122,7 @@ public class EmployeeDAO
     public List<Employee> getAllManagers() throws SQLException
     {
         LinkedList<Employee> empList = new LinkedList<>();
-        String sql = "SELECT * FROM employees WHERE role=?";
+        String sql = "SELECT * FROM users WHERE role=?";
 
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql);)
@@ -140,7 +136,6 @@ public class EmployeeDAO
                 emp.setEmp_id(rs.getInt("employee_id"));
                 emp.setUser_id(rs.getInt("user_id"));
                 emp.setName(rs.getString("name"));
-                emp.setSkill(rs.getString("skills"));
                 emp.setDesignation(rs.getString("designation"));
                 emp.setDepartment(rs.getString("department"));
                 emp.setManager_id(rs.getInt("manager_id"));
@@ -171,7 +166,6 @@ public class EmployeeDAO
                 emp.setEmp_id(rs.getInt("employee_id"));
                 emp.setUser_id(rs.getInt("user_id"));
                 emp.setName(rs.getString("name"));
-                emp.setSkill(rs.getString("skills"));
                 emp.setDesignation(rs.getString("designation"));
                 emp.setDepartment(rs.getString("department"));
                 emp.setManager_id(rs.getInt("manager_id"));
@@ -202,7 +196,6 @@ public class EmployeeDAO
                 emp.setEmp_id(rs.getInt("employee_id"));
                 emp.setUser_id(rs.getInt("user_id"));
                 emp.setName(rs.getString("name"));
-                emp.setSkill(rs.getString("skills"));
                 emp.setDesignation(rs.getString("designation"));
                 emp.setDepartment(rs.getString("department"));
                 emp.setManager_id(rs.getInt("manager_id"));
@@ -233,7 +226,6 @@ public class EmployeeDAO
                 emp.setEmp_id(rs.getInt("employee_id"));
                 emp.setUser_id(rs.getInt("user_id"));
                 emp.setName(rs.getString("name"));
-                emp.setSkill(rs.getString("skills"));
                 emp.setDesignation(rs.getString("designation"));
                 emp.setDepartment(rs.getString("department"));
                 emp.setManager_id(rs.getInt("manager_id"));

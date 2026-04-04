@@ -3,6 +3,8 @@ package com.optiflow.dao;
 import com.optiflow.database.DBConnection;
 import com.optiflow.models.ProjectSkill;
 import com.optiflow.models.Tasks;
+import com.optiflow.services.AuditLogService;
+import com.optiflow.utils.SessionManager;
 import org.apache.poi.ss.formula.functions.T;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,6 +16,13 @@ import java.util.List;
 
 public class TaskDAO
 {
+    private AuditLogService auditLogService;
+
+    public TaskDAO()
+    {
+        this.auditLogService = new AuditLogService();
+    }
+
     public boolean createTask(int project_id, int assigned_to, String title, String description, String status, String priority, int estimated_hours, Date start_date, Date end_date) throws SQLException
     {
         String sql = "INSERT INTO tasks (project_id, assigned_to, title, description, status, priority, estimated_hours, actual_hours, start_date, end_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -32,7 +41,19 @@ public class TaskDAO
             stmt.setInt(8, 0);
             stmt.setDate(9, Date.valueOf(start_date.toLocalDate()));
             stmt.setDate(10, Date.valueOf(end_date.toLocalDate()));
-            stmt.executeUpdate();
+
+            int rows = stmt.executeUpdate();
+
+            if (rows > 0)
+            {
+                ResultSet rs = stmt.getGeneratedKeys();
+
+                if (rs.next())
+                {
+                    int generatedId = rs.getInt(1);
+                    auditLogService.logAction(SessionManager.getUser().getUserId(), "ADD_TASK", "TASK", generatedId, SessionManager.getUser().getName()+" created a new task");
+                }
+            }
 
             return true;
         } catch (Exception e) {

@@ -41,8 +41,6 @@ public class ProjectService
         if(project == null)
             return false;
 
-        auditLogService.logAction(SessionManager.getUser().getUserId(), "ADD_PROJECT", "PROJECT", SessionManager.getUser().getUserId(), SessionManager.getUser().getName()+" added a new project");
-
         return projectDAO.createProject(project.getName(), project.getDescription(), project.getStart_date(), project.getEnd_date(), project.getManager_id(), project.getStatus());
     }
 

@@ -81,7 +81,7 @@ public class ViewTasksController {
             if (emp != null) {
                 employeeName.setText(emp.getName());
                 employeeId.setText(String.valueOf(emp.getEmp_id()));
-                skills.setText(emp.getSkill());
+//                skills.setText(emp.getSkill());
             } else {
                 employeeName.setText("-");
                 employeeId.setText("-");

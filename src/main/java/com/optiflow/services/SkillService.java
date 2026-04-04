@@ -25,8 +25,6 @@ public class SkillService
         if(skill == null)
             return false;
 
-        auditLogService.logAction(SessionManager.getUser().getUserId(), "ADD_SKILL", "SKILL", SessionManager.getUser().getUserId(), SessionManager.getUser().getName()+" addeded a new skill to database");
-
         return skillsDAO.createSkill(skill.getName(), skill.getDescription());
     }
 

@@ -3,6 +3,8 @@ package com.optiflow.dao;
 import com.optiflow.database.DBConnection;
 import com.optiflow.models.Projects;
 import com.optiflow.models.Tasks;
+import com.optiflow.services.AuditLogService;
+import com.optiflow.utils.SessionManager;
 
 import java.sql.*;
 import java.util.LinkedList;
@@ -10,6 +12,13 @@ import java.util.List;
 
 public class ProjectDAO
 {
+    private AuditLogService auditLogService;
+
+    public  ProjectDAO()
+    {
+        this.auditLogService = new AuditLogService();
+    }
+
     public boolean createProject(String name, String description, Date start_date, Date end_date, int client_id, String status) throws SQLException
     {
         String sql = "INSERT INTO projects (name, description, start_date, end_date, manager_id, status) VALUES (?, ?, ?, ?, ?, ?)";
@@ -24,7 +33,19 @@ public class ProjectDAO
             else
                 stmt.setInt(5, client_id);
             stmt.setString(6, status);
-            stmt.executeUpdate();
+
+            int rows = stmt.executeUpdate();
+
+            if (rows > 0)
+            {
+                ResultSet rs = stmt.getGeneratedKeys();
+
+                if (rs.next())
+                {
+                    int generatedId = rs.getInt(1);
+                    auditLogService.logAction(SessionManager.getUser().getUserId(), "ADD_PROJECT", "PROJECT", generatedId, SessionManager.getUser().getName()+" added a new project");
+                }
+            }
 
             return true;
         } catch (Exception e) {

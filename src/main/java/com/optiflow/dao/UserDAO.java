@@ -4,9 +4,17 @@ import java.sql.*;
 import java.util.*;
 import com.optiflow.database.DBConnection;
 import com.optiflow.models.User;
+import com.optiflow.services.AuditLogService;
 
 public class UserDAO
 {
+    private AuditLogService auditLogService;
+
+    public UserDAO()
+    {
+        this.auditLogService = new AuditLogService();
+    }
+
     public boolean addUser(String name, String email, String passwordHash, String role) throws SQLException
     {
         String sql = "INSERT INTO Users (name, email, password_hash, role) VALUES (?, ?, ?, ?)";
@@ -16,7 +24,21 @@ public class UserDAO
             stmt.setString(2, email);
             stmt.setString(3, passwordHash);
             stmt.setString(4, role);
-            stmt.executeUpdate();
+
+            int rows = stmt.executeUpdate();
+
+            if (rows > 0)
+            {
+                ResultSet rs = stmt.getGeneratedKeys();
+
+                if (rs.next())
+                {
+                    int generatedId = rs.getInt(1);
+
+                    auditLogService.logAction(generatedId, "REGISTER", "AUTH", generatedId, "New User Registered");
+                }
+            }
+
             return true;
         } catch (Exception e) {
             e.printStackTrace();

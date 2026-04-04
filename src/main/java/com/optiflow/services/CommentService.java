@@ -33,8 +33,6 @@ public class CommentService
                     new Message(MessageType.COMMENT, comment.getContent(), SessionManager.getUser().getUserId(), comment.getTask_id(), "TASK")
             );
 
-            auditLogService.logAction(SessionManager.getUser().getUserId(), "ADD_COMMENT", "COMMENT", comment.getComment_id(), SessionManager.getUser().getName()+" added a comment");
-
             return true;
         }
         else
