@@ -22,14 +22,14 @@ public class AutoAssignEngine
         this.taskDAO = new TaskDAO();
     }
 
-    public Employee getBestEmployeeForTask(int taskId) throws SQLException
+    public Employee getBestEmployeeForTask(int taskId, int managerId) throws SQLException
     {
         List<TaskSkill> requiredSkills = taskSkillDAO.getSkillsByTask(taskId);
 
         if(requiredSkills == null || requiredSkills.isEmpty())
             return null;
 
-        List<Employee> employees = employeeDAO.getAllEmployees();
+        List<Employee> employees = employeeDAO.getEmployeesByManager(managerId);
 
         Employee bestEmployee = null;
         double bestScore = -1;

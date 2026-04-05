@@ -4,6 +4,9 @@ import com.optiflow.dao.EmployeeDAO;
 import com.optiflow.dao.EmployeeSkillDAO;
 import com.optiflow.dao.TaskDAO;
 import com.optiflow.models.Employee;
+import com.optiflow.models.ProjectSkill;
+import com.optiflow.models.Skills;
+import com.optiflow.models.User;
 import com.optiflow.utils.SessionManager;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -14,9 +17,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class EmployeeService
 {
@@ -75,6 +76,83 @@ public class EmployeeService
     public List<Employee> getAllManagers() throws SQLException
     {
         return employeeDAO.getAllManagers();
+    }
+
+    public double calculateManagerWorkload(Employee manager) throws SQLException
+    {
+        int allocated = 0;
+        int capacity = 0;
+
+        List<Employee> empList = employeeDAO.getEmployeesByManager(manager.getUser_id());
+        for(Employee emp: empList)
+        {
+            allocated += emp.getAllocated_hours();
+            capacity += emp.getWeeklyCapacity();
+        }
+
+        if (capacity == 0)
+            return 0;
+
+        double score = 1 - ((double) allocated / capacity);
+
+        return Math.max(score, 0);
+    }
+
+    public double calculateTeamStrength(Employee manager, List<ProjectSkill> requiredSkills) throws SQLException
+    {
+        List<Employee> team = employeeDAO.getEmployeesByManager(manager.getUser_id());
+
+        if (team.isEmpty())
+            return 0;
+
+        int capableEmployees = 0;
+
+        for (Employee emp : team)
+        {
+            List<Skills> empSkills = employeeSkillDAO.getSkillsByEmployee(emp.getEmp_id());
+
+            for (Skills s : empSkills)
+            {
+                for (ProjectSkill ps : requiredSkills)
+                {
+                    if (s.getSkill_id() == ps.getSkillId())
+                    {
+                        capableEmployees++;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return (double) capableEmployees / team.size();
+    }
+
+    private double calculateManagerSkillScore(Employee manager, List<ProjectSkill> requiredSkills) throws SQLException
+    {
+        List<Skills> managerSkills = employeeSkillDAO.getSkillsByEmployee(manager.getEmp_id());
+
+        Set<Integer> skillIds = new HashSet<>();
+        for (Skills s : managerSkills)
+            skillIds.add(s.getSkill_id());
+
+        int match = 0;
+        for (ProjectSkill ps : requiredSkills)
+        {
+            if (skillIds.contains(ps.getSkillId()))
+                match++;
+        }
+
+        return requiredSkills.isEmpty() ? 0 : (double) match / requiredSkills.size();
+    }
+
+    public double calculateManagerScore(Employee manager, List<ProjectSkill> requiredSkills) throws SQLException
+    {
+        double skillScore = calculateManagerSkillScore(manager, requiredSkills);
+        double teamStrength = calculateTeamStrength(manager, requiredSkills);
+        double workloadScore = calculateManagerWorkload(manager);
+        double performanceScore = employeeDAO.getManagerPerformance(manager.getEmp_id());
+
+        return (0.35 * skillScore) + (0.30 * teamStrength) + (0.20 * workloadScore) + (0.15 * performanceScore);
     }
 
     public boolean updateEmployee(Employee emp) throws SQLException

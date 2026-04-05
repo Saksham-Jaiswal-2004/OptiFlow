@@ -1,822 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.shape.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.layout.Region?>
 
-<!--
-    OptiFlow — Role-Based Admin Dashboard
-    File: DashboardView.fxml
-    CSS:  dashboard.css  (same directory)
-    No controller required — pure FXML + CSS showcase
--->
-<HBox xmlns="http://javafx.com/javafx/21"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:id="root"
-      prefWidth="1440"
-      prefHeight="900"
-      stylesheets="@../css/dashboard.css"
-      styleClass="root-shell">
+<StackPane xmlns:fx="http://javafx.com/fxml/1"
+           prefWidth="1280"
+           prefHeight="720"
+           styleClass="root-shell"
+           stylesheets="@../css/dashboard.css, @../css/style.css">
 
-    <!-- ═══════════════════════════════════════════════════════
-         LEFT SIDEBAR
-    ═══════════════════════════════════════════════════════ -->
-    <VBox prefWidth="240" prefHeight="900" styleClass="sidebar">
+    <!-- AURORA BACKGROUND -->
+    <Circle radius="320" layoutX="200" layoutY="200" styleClass="aurora-violet" mouseTransparent="true"/>
+    <Circle radius="260" layoutX="1050" layoutY="120" styleClass="aurora-indigo" mouseTransparent="true"/>
+    <Circle radius="220" layoutX="700" layoutY="620" styleClass="aurora-cyan" mouseTransparent="true"/>
 
-        <!-- Logo -->
-        <HBox styleClass="sidebar-logo" alignment="CENTER_LEFT" spacing="12">
-            <StackPane styleClass="logo-mark" prefWidth="36" prefHeight="36">
-                <Circle radius="18" styleClass="logo-outer"/>
-                <Circle radius="10" styleClass="logo-inner"/>
-                <Circle radius="4"  styleClass="logo-core"/>
-            </StackPane>
-            <VBox spacing="1">
-                <Label text="OptiFlow" styleClass="logo-name"/>
-                <Label text="Enterprise" styleClass="logo-tier"/>
+    <HBox>
+
+        <!-- SIDEBAR -->
+        <VBox styleClass="sidebar" spacing="10">
+
+            <Label text="OptiFlow" styleClass="logo-name" />
+
+            <VBox spacing="8">
+                <HBox styleClass="nav-item nav-active">
+                    <Label text="Dashboard" styleClass="nav-label"/>
+                </HBox>
+
+                <HBox styleClass="nav-item">
+                    <Label text="Tasks" styleClass="nav-label"/>
+                </HBox>
+
+                <HBox styleClass="nav-item">
+                    <Label text="Analytics" styleClass="nav-label"/>
+                </HBox>
+
+                <HBox styleClass="nav-item">
+                    <Label text="Settings" styleClass="nav-label"/>
+                </HBox>
             </VBox>
-        </HBox>
 
-        <!-- Role badge -->
-        <HBox styleClass="role-badge-wrap" alignment="CENTER_LEFT">
-            <Label text="● ADMIN ACCESS" styleClass="role-badge"/>
-        </HBox>
-
-        <Pane styleClass="sidebar-sep" prefHeight="1"/>
-
-        <!-- Navigation -->
-        <VBox styleClass="nav-section" spacing="2">
-            <Label text="MAIN" styleClass="nav-group-label"/>
-
-            <!-- Active item -->
-            <HBox styleClass="nav-item nav-active" alignment="CENTER_LEFT" spacing="12">
-                <Label text="⬡" styleClass="nav-icon"/>
-                <Label text="Dashboard"   styleClass="nav-label"/>
-                <Pane HBox.hgrow="ALWAYS"/>
-                <Label text="●" styleClass="nav-dot-active"/>
-            </HBox>
-
-            <HBox styleClass="nav-item" alignment="CENTER_LEFT" spacing="12">
-                <Label text="◈" styleClass="nav-icon"/>
-                <Label text="Analytics"  styleClass="nav-label"/>
-                <Pane HBox.hgrow="ALWAYS"/>
-                <Label text="3" styleClass="nav-badge"/>
-            </HBox>
-
-            <HBox styleClass="nav-item" alignment="CENTER_LEFT" spacing="12">
-                <Label text="⟁" styleClass="nav-icon"/>
-                <Label text="Workflows"  styleClass="nav-label"/>
-            </HBox>
-
-            <HBox styleClass="nav-item" alignment="CENTER_LEFT" spacing="12">
-                <Label text="◻" styleClass="nav-icon"/>
-                <Label text="Projects"   styleClass="nav-label"/>
-                <Pane HBox.hgrow="ALWAYS"/>
-                <Label text="12" styleClass="nav-badge"/>
-            </HBox>
-
-            <HBox styleClass="nav-item" alignment="CENTER_LEFT" spacing="12">
-                <Label text="⬙" styleClass="nav-icon"/>
-                <Label text="Reports"    styleClass="nav-label"/>
-            </HBox>
         </VBox>
 
-        <Pane styleClass="sidebar-sep" prefHeight="1"/>
+        <!-- MAIN AREA -->
+        <VBox styleClass="main-area" VBox.vgrow="ALWAYS">
 
-        <VBox styleClass="nav-section" spacing="2">
-            <Label text="MANAGEMENT" styleClass="nav-group-label"/>
-
-            <HBox styleClass="nav-item" alignment="CENTER_LEFT" spacing="12">
-                <Label text="◑" styleClass="nav-icon"/>
-                <Label text="Team"       styleClass="nav-label"/>
-            </HBox>
-
-            <HBox styleClass="nav-item" alignment="CENTER_LEFT" spacing="12">
-                <Label text="◎" styleClass="nav-icon"/>
-                <Label text="Roles &amp; Permissions" styleClass="nav-label"/>
-            </HBox>
-
-            <HBox styleClass="nav-item" alignment="CENTER_LEFT" spacing="12">
-                <Label text="⬕" styleClass="nav-icon"/>
-                <Label text="Integrations" styleClass="nav-label"/>
-                <Pane HBox.hgrow="ALWAYS"/>
-                <Label text="NEW" styleClass="nav-badge-new"/>
-            </HBox>
-
-            <HBox styleClass="nav-item" alignment="CENTER_LEFT" spacing="12">
-                <Label text="◧" styleClass="nav-icon"/>
-                <Label text="Audit Log"  styleClass="nav-label"/>
-            </HBox>
-        </VBox>
-
-        <Pane styleClass="sidebar-sep" prefHeight="1"/>
-
-        <VBox styleClass="nav-section" spacing="2">
-            <Label text="SYSTEM" styleClass="nav-group-label"/>
-
-            <HBox styleClass="nav-item" alignment="CENTER_LEFT" spacing="12">
-                <Label text="⬗" styleClass="nav-icon"/>
-                <Label text="Settings"   styleClass="nav-label"/>
-            </HBox>
-
-            <HBox styleClass="nav-item" alignment="CENTER_LEFT" spacing="12">
-                <Label text="?" styleClass="nav-icon"/>
-                <Label text="Help &amp; Docs" styleClass="nav-label"/>
-            </HBox>
-        </VBox>
-
-        <Pane VBox.vgrow="ALWAYS"/>
-
-        <!-- Storage indicator -->
-        <VBox styleClass="sidebar-storage" spacing="8">
-            <HBox>
-                <Label text="Storage Used" styleClass="storage-label" HBox.hgrow="ALWAYS"/>
-                <Label text="74%" styleClass="storage-pct"/>
-            </HBox>
-            <Pane styleClass="storage-track" prefHeight="4">
-                <Pane styleClass="storage-fill" prefHeight="4" prefWidth="130"/>
-            </Pane>
-            <Label text="148 GB of 200 GB used" styleClass="storage-detail"/>
-        </VBox>
-
-        <Pane styleClass="sidebar-sep" prefHeight="1"/>
-
-        <!-- User profile -->
-        <HBox styleClass="sidebar-user" alignment="CENTER_LEFT" spacing="12">
-            <StackPane styleClass="user-avatar" prefWidth="38" prefHeight="38">
-                <Circle radius="19" styleClass="user-av-bg"/>
-                <Label text="AR" styleClass="user-av-initials"/>
-            </StackPane>
-            <VBox spacing="2" HBox.hgrow="ALWAYS">
-                <Label text="Arjun Reddy"  styleClass="user-name"/>
-                <Label text="System Admin" styleClass="user-role"/>
-            </VBox>
-            <Label text="⋮" styleClass="user-menu-icon"/>
-        </HBox>
-
-    </VBox>
-
-    <!-- ═══════════════════════════════════════════════════════
-         MAIN CONTENT AREA
-    ═══════════════════════════════════════════════════════ -->
-    <VBox HBox.hgrow="ALWAYS" prefHeight="900" styleClass="main-area">
-
-        <!-- ── TOP HEADER ── -->
-        <HBox styleClass="top-header" alignment="CENTER_LEFT" spacing="20">
-
-            <!-- Page title -->
-            <VBox spacing="3" HBox.hgrow="ALWAYS">
-                <HBox alignment="CENTER_LEFT" spacing="10">
+            <!-- TOP HEADER -->
+            <HBox styleClass="top-header" alignment="CENTER_LEFT" spacing="20">
+                <VBox>
                     <Label text="Dashboard" styleClass="page-title"/>
-                    <Label text="LIVE" styleClass="live-badge"/>
-                </HBox>
-                <Label text="Friday, 4 April 2026  ·  Last synced 2 minutes ago" styleClass="page-sub"/>
-            </VBox>
-
-            <!-- Search bar -->
-            <HBox styleClass="search-bar" alignment="CENTER_LEFT" spacing="10">
-                <Label text="⌕" styleClass="search-icon"/>
-                <Label text="Search anything..." styleClass="search-placeholder"/>
-                <Pane HBox.hgrow="ALWAYS"/>
-                <Label text="⌘K" styleClass="search-kbd"/>
+                    <Label text="Welcome back 👋" styleClass="page-sub"/>
+                </VBox>
             </HBox>
 
-            <!-- Header actions -->
-            <HBox spacing="10" alignment="CENTER">
+            <!-- CONTENT -->
+            <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="content-scroll" VBox.vgrow="ALWAYS">
 
-                <StackPane styleClass="hdr-icon-btn">
-                    <Label text="🔔" styleClass="hdr-icon"/>
-                    <Circle radius="5" layoutX="22" layoutY="6" styleClass="notif-dot"/>
-                </StackPane>
+                <VBox styleClass="content-body" spacing="20">
 
-                <StackPane styleClass="hdr-icon-btn">
-                    <Label text="⚙" styleClass="hdr-icon"/>
-                </StackPane>
-
-                <HBox styleClass="hdr-user-pill" alignment="CENTER" spacing="10">
-                    <StackPane styleClass="hdr-av" prefWidth="30" prefHeight="30">
-                        <Circle radius="15" styleClass="hdr-av-bg"/>
-                        <Label text="AR" styleClass="hdr-av-txt"/>
-                    </StackPane>
-                    <Label text="Arjun Reddy" styleClass="hdr-user-name"/>
-                    <Label text="▾" styleClass="hdr-caret"/>
-                </HBox>
-
-            </HBox>
-        </HBox>
-
-        <!-- ── SCROLLABLE CONTENT ── -->
-        <ScrollPane VBox.vgrow="ALWAYS" styleClass="content-scroll" fitToWidth="true">
-            <VBox styleClass="content-body" spacing="24">
-
-                <!-- ─────────────────────────────────────────
-                     ALERT BANNER
-                ───────────────────────────────────────── -->
-                <HBox styleClass="alert-banner" alignment="CENTER_LEFT" spacing="14">
-                    <Label text="⚠" styleClass="alert-icon"/>
-                    <Label text="3 workflows are approaching their deadline · " styleClass="alert-msg"/>
-                    <Label text="Review now →" styleClass="alert-link"/>
-                    <Pane HBox.hgrow="ALWAYS"/>
-                    <Label text="Dismiss" styleClass="alert-dismiss"/>
-                </HBox>
-
-                <!-- ─────────────────────────────────────────
-                     KPI STAT CARDS  (4 across)
-                ───────────────────────────────────────── -->
-                <HBox spacing="16">
-
-                    <!-- Card 1: Revenue -->
-                    <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS" spacing="12">
-                        <HBox alignment="CENTER_LEFT">
-                            <Label text="Total Revenue" styleClass="kpi-label" HBox.hgrow="ALWAYS"/>
-                            <StackPane styleClass="kpi-icon-wrap kpi-icon-purple">
-                                <Label text="$" styleClass="kpi-icon-glyph"/>
-                            </StackPane>
-                        </HBox>
-                        <Label text="₹ 84,32,500" styleClass="kpi-value"/>
-                        <HBox alignment="CENTER_LEFT" spacing="6">
-                            <Label text="▲ 14.2%" styleClass="kpi-delta-pos"/>
-                            <Label text="vs last month" styleClass="kpi-delta-sub"/>
-                        </HBox>
-                        <!-- Mini sparkline bars -->
-                        <HBox spacing="3" alignment="BOTTOM_LEFT" prefHeight="28">
-                            <Pane styleClass="spark-bar" prefWidth="6" prefHeight="12"/>
-                            <Pane styleClass="spark-bar" prefWidth="6" prefHeight="18"/>
-                            <Pane styleClass="spark-bar" prefWidth="6" prefHeight="10"/>
-                            <Pane styleClass="spark-bar" prefWidth="6" prefHeight="22"/>
-                            <Pane styleClass="spark-bar" prefWidth="6" prefHeight="16"/>
-                            <Pane styleClass="spark-bar" prefWidth="6" prefHeight="26"/>
-                            <Pane styleClass="spark-bar spark-bar-hi" prefWidth="6" prefHeight="28"/>
-                        </HBox>
-                    </VBox>
-
-                    <!-- Card 2: Active Users -->
-                    <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS" spacing="12">
-                        <HBox alignment="CENTER_LEFT">
-                            <Label text="Active Users" styleClass="kpi-label" HBox.hgrow="ALWAYS"/>
-                            <StackPane styleClass="kpi-icon-wrap kpi-icon-blue">
-                                <Label text="◑" styleClass="kpi-icon-glyph"/>
-                            </StackPane>
-                        </HBox>
-                        <Label text="2,847" styleClass="kpi-value"/>
-                        <HBox alignment="CENTER_LEFT" spacing="6">
-                            <Label text="▲ 8.7%" styleClass="kpi-delta-pos"/>
-                            <Label text="vs last month" styleClass="kpi-delta-sub"/>
-                        </HBox>
-                        <HBox spacing="3" alignment="BOTTOM_LEFT" prefHeight="28">
-                            <Pane styleClass="spark-bar-b" prefWidth="6" prefHeight="20"/>
-                            <Pane styleClass="spark-bar-b" prefWidth="6" prefHeight="14"/>
-                            <Pane styleClass="spark-bar-b" prefWidth="6" prefHeight="24"/>
-                            <Pane styleClass="spark-bar-b" prefWidth="6" prefHeight="18"/>
-                            <Pane styleClass="spark-bar-b" prefWidth="6" prefHeight="28"/>
-                            <Pane styleClass="spark-bar-b" prefWidth="6" prefHeight="22"/>
-                            <Pane styleClass="spark-bar-b spark-bar-b-hi" prefWidth="6" prefHeight="28"/>
-                        </HBox>
-                    </VBox>
-
-                    <!-- Card 3: Workflows -->
-                    <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS" spacing="12">
-                        <HBox alignment="CENTER_LEFT">
-                            <Label text="Workflows Run" styleClass="kpi-label" HBox.hgrow="ALWAYS"/>
-                            <StackPane styleClass="kpi-icon-wrap kpi-icon-teal">
-                                <Label text="⟁" styleClass="kpi-icon-glyph"/>
-                            </StackPane>
-                        </HBox>
-                        <Label text="18,493" styleClass="kpi-value"/>
-                        <HBox alignment="CENTER_LEFT" spacing="6">
-                            <Label text="▲ 31.4%" styleClass="kpi-delta-pos"/>
-                            <Label text="vs last month" styleClass="kpi-delta-sub"/>
-                        </HBox>
-                        <HBox spacing="3" alignment="BOTTOM_LEFT" prefHeight="28">
-                            <Pane styleClass="spark-bar-t" prefWidth="6" prefHeight="8"/>
-                            <Pane styleClass="spark-bar-t" prefWidth="6" prefHeight="16"/>
-                            <Pane styleClass="spark-bar-t" prefWidth="6" prefHeight="20"/>
-                            <Pane styleClass="spark-bar-t" prefWidth="6" prefHeight="14"/>
-                            <Pane styleClass="spark-bar-t" prefWidth="6" prefHeight="24"/>
-                            <Pane styleClass="spark-bar-t" prefWidth="6" prefHeight="20"/>
-                            <Pane styleClass="spark-bar-t spark-bar-t-hi" prefWidth="6" prefHeight="28"/>
-                        </HBox>
-                    </VBox>
-
-                    <!-- Card 4: Error Rate -->
-                    <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS" spacing="12">
-                        <HBox alignment="CENTER_LEFT">
-                            <Label text="Error Rate" styleClass="kpi-label" HBox.hgrow="ALWAYS"/>
-                            <StackPane styleClass="kpi-icon-wrap kpi-icon-red">
-                                <Label text="!" styleClass="kpi-icon-glyph"/>
-                            </StackPane>
-                        </HBox>
-                        <Label text="0.34%" styleClass="kpi-value"/>
-                        <HBox alignment="CENTER_LEFT" spacing="6">
-                            <Label text="▼ 2.1%" styleClass="kpi-delta-neg-good"/>
-                            <Label text="vs last month" styleClass="kpi-delta-sub"/>
-                        </HBox>
-                        <HBox spacing="3" alignment="BOTTOM_LEFT" prefHeight="28">
-                            <Pane styleClass="spark-bar-r" prefWidth="6" prefHeight="22"/>
-                            <Pane styleClass="spark-bar-r" prefWidth="6" prefHeight="18"/>
-                            <Pane styleClass="spark-bar-r" prefWidth="6" prefHeight="26"/>
-                            <Pane styleClass="spark-bar-r" prefWidth="6" prefHeight="14"/>
-                            <Pane styleClass="spark-bar-r" prefWidth="6" prefHeight="10"/>
-                            <Pane styleClass="spark-bar-r" prefWidth="6" prefHeight="8"/>
-                            <Pane styleClass="spark-bar-r spark-bar-r-hi" prefWidth="6" prefHeight="6"/>
-                        </HBox>
-                    </VBox>
-
-                </HBox>
-
-                <!-- ─────────────────────────────────────────
-                     ROW 2: CHART PANEL + PIPELINE
-                ───────────────────────────────────────── -->
-                <HBox spacing="16">
-
-                    <!-- Revenue & Usage Chart Panel (wide) -->
-                    <VBox styleClass="panel" HBox.hgrow="ALWAYS" spacing="0">
-                        <!-- Panel header -->
-                        <HBox styleClass="panel-head" alignment="CENTER_LEFT" spacing="14">
-                            <Label text="Revenue &amp; Usage Overview" styleClass="panel-title" HBox.hgrow="ALWAYS"/>
-                            <!-- Period tabs -->
-                            <HBox styleClass="tab-group" spacing="0">
-                                <Label text="7D"  styleClass="tab-btn"/>
-                                <Label text="30D" styleClass="tab-btn tab-btn-active"/>
-                                <Label text="90D" styleClass="tab-btn"/>
-                                <Label text="1Y"  styleClass="tab-btn"/>
-                            </HBox>
-                            <Label text="Export ↓" styleClass="panel-action"/>
-                        </HBox>
-                        <Pane styleClass="panel-div" prefHeight="1"/>
-
-                        <!-- Chart legend -->
-                        <HBox styleClass="chart-legend" spacing="20" alignment="CENTER_LEFT">
-                            <HBox spacing="7" alignment="CENTER">
-                                <Circle radius="5" styleClass="legend-dot-p"/>
-                                <Label text="Revenue" styleClass="legend-lbl"/>
-                            </HBox>
-                            <HBox spacing="7" alignment="CENTER">
-                                <Circle radius="5" styleClass="legend-dot-b"/>
-                                <Label text="Active Users" styleClass="legend-lbl"/>
-                            </HBox>
-                            <HBox spacing="7" alignment="CENTER">
-                                <Circle radius="5" styleClass="legend-dot-t"/>
-                                <Label text="Workflows" styleClass="legend-lbl"/>
-                            </HBox>
-                        </HBox>
-
-                        <!-- Chart area (CSS bar chart simulation) -->
-                        <Pane styleClass="chart-area" prefHeight="200">
-
-                            <!-- Y-axis guide lines (horizontal) -->
-                            <Pane layoutX="0" layoutY="0"   prefWidth="9999" prefHeight="1" styleClass="chart-guide"/>
-                            <Pane layoutX="0" layoutY="50"  prefWidth="9999" prefHeight="1" styleClass="chart-guide"/>
-                            <Pane layoutX="0" layoutY="100" prefWidth="9999" prefHeight="1" styleClass="chart-guide"/>
-                            <Pane layoutX="0" layoutY="150" prefWidth="9999" prefHeight="1" styleClass="chart-guide"/>
-                            <Pane layoutX="0" layoutY="199" prefWidth="9999" prefHeight="1" styleClass="chart-guide"/>
-
-                            <!-- Y-axis labels -->
-                            <Label text="100" layoutX="4"  layoutY="0"   styleClass="chart-y-lbl"/>
-                            <Label text="75"  layoutX="4"  layoutY="46"  styleClass="chart-y-lbl"/>
-                            <Label text="50"  layoutX="4"  layoutY="96"  styleClass="chart-y-lbl"/>
-                            <Label text="25"  layoutX="4"  layoutY="146" styleClass="chart-y-lbl"/>
-                            <Label text="0"   layoutX="4"  layoutY="192" styleClass="chart-y-lbl"/>
-
-                            <!-- Bar groups: Jan–Jul, 3 bars per month -->
-                            <!-- Jan -->
-                            <Pane layoutX="38"  layoutY="110" prefWidth="10" prefHeight="90"  styleClass="cbar-p"/>
-                            <Pane layoutX="50"  layoutY="130" prefWidth="10" prefHeight="70"  styleClass="cbar-b"/>
-                            <Pane layoutX="62"  layoutY="150" prefWidth="10" prefHeight="50"  styleClass="cbar-t"/>
-                            <!-- Feb -->
-                            <Pane layoutX="110" layoutY="90"  prefWidth="10" prefHeight="110" styleClass="cbar-p"/>
-                            <Pane layoutX="122" layoutY="120" prefWidth="10" prefHeight="80"  styleClass="cbar-b"/>
-                            <Pane layoutX="134" layoutY="140" prefWidth="10" prefHeight="60"  styleClass="cbar-t"/>
-                            <!-- Mar -->
-                            <Pane layoutX="182" layoutY="70"  prefWidth="10" prefHeight="130" styleClass="cbar-p"/>
-                            <Pane layoutX="194" layoutY="100" prefWidth="10" prefHeight="100" styleClass="cbar-b"/>
-                            <Pane layoutX="206" layoutY="120" prefWidth="10" prefHeight="80"  styleClass="cbar-t"/>
-                            <!-- Apr -->
-                            <Pane layoutX="254" layoutY="50"  prefWidth="10" prefHeight="150" styleClass="cbar-p"/>
-                            <Pane layoutX="266" layoutY="80"  prefWidth="10" prefHeight="120" styleClass="cbar-b"/>
-                            <Pane layoutX="278" layoutY="110" prefWidth="10" prefHeight="90"  styleClass="cbar-t"/>
-                            <!-- May -->
-                            <Pane layoutX="326" layoutY="80"  prefWidth="10" prefHeight="120" styleClass="cbar-p"/>
-                            <Pane layoutX="338" layoutY="70"  prefWidth="10" prefHeight="130" styleClass="cbar-b"/>
-                            <Pane layoutX="350" layoutY="90"  prefWidth="10" prefHeight="110" styleClass="cbar-t"/>
-                            <!-- Jun -->
-                            <Pane layoutX="398" layoutY="40"  prefWidth="10" prefHeight="160" styleClass="cbar-p"/>
-                            <Pane layoutX="410" layoutY="60"  prefWidth="10" prefHeight="140" styleClass="cbar-b"/>
-                            <Pane layoutX="422" layoutY="80"  prefWidth="10" prefHeight="120" styleClass="cbar-t"/>
-                            <!-- Jul (current — highlighted) -->
-                            <Pane layoutX="470" layoutY="20"  prefWidth="10" prefHeight="180" styleClass="cbar-p cbar-hi"/>
-                            <Pane layoutX="482" layoutY="40"  prefWidth="10" prefHeight="160" styleClass="cbar-b cbar-hi"/>
-                            <Pane layoutX="494" layoutY="60"  prefWidth="10" prefHeight="140" styleClass="cbar-t cbar-hi"/>
-
-                            <!-- X-axis labels -->
-                            <Label text="Jan" layoutX="46"  layoutY="204" styleClass="chart-x-lbl"/>
-                            <Label text="Feb" layoutX="118" layoutY="204" styleClass="chart-x-lbl"/>
-                            <Label text="Mar" layoutX="190" layoutY="204" styleClass="chart-x-lbl"/>
-                            <Label text="Apr" layoutX="262" layoutY="204" styleClass="chart-x-lbl"/>
-                            <Label text="May" layoutX="334" layoutY="204" styleClass="chart-x-lbl"/>
-                            <Label text="Jun" layoutX="406" layoutY="204" styleClass="chart-x-lbl"/>
-                            <Label text="Jul" layoutX="478" layoutY="204" styleClass="chart-x-lbl-hi"/>
-
-                        </Pane>
-
-                        <!-- Chart footer totals -->
-                        <HBox styleClass="chart-footer" spacing="30">
-                            <VBox spacing="3">
-                                <Label text="₹ 84,32,500" styleClass="cf-value cf-value-p"/>
-                                <Label text="Revenue (Jul)" styleClass="cf-label"/>
-                            </VBox>
-                            <VBox spacing="3">
-                                <Label text="2,847" styleClass="cf-value cf-value-b"/>
-                                <Label text="Active Users" styleClass="cf-label"/>
-                            </VBox>
-                            <VBox spacing="3">
-                                <Label text="18,493" styleClass="cf-value cf-value-t"/>
-                                <Label text="Workflows" styleClass="cf-label"/>
-                            </VBox>
-                        </HBox>
-
-                    </VBox>
-
-                    <!-- Task Pipeline (narrow) -->
-                    <VBox styleClass="panel" prefWidth="300" spacing="0">
-                        <HBox styleClass="panel-head" alignment="CENTER_LEFT">
-                            <Label text="Task Pipeline" styleClass="panel-title" HBox.hgrow="ALWAYS"/>
-                            <Label text="View All →" styleClass="panel-action"/>
-                        </HBox>
-                        <Pane styleClass="panel-div" prefHeight="1"/>
-
-                        <VBox styleClass="pipeline-body" spacing="0">
-
-                            <!-- Stage header -->
-                            <HBox styleClass="pipeline-stage-head" alignment="CENTER_LEFT">
-                                <Circle radius="5" styleClass="stage-dot-todo"/>
-                                <Label text="  To Do" styleClass="pipeline-stage-lbl" HBox.hgrow="ALWAYS"/>
-                                <Label text="8" styleClass="pipeline-count"/>
-                            </HBox>
-                            <VBox styleClass="pipeline-stage-items" spacing="8">
-                                <HBox styleClass="task-card task-card-todo" alignment="CENTER_LEFT" spacing="10">
-                                    <VBox HBox.hgrow="ALWAYS" spacing="3">
-                                        <Label text="API rate-limit refactor" styleClass="task-title"/>
-                                        <Label text="Backend · High Priority" styleClass="task-meta"/>
-                                    </VBox>
-                                    <Label text="RK" styleClass="task-assignee ta-p"/>
-                                </HBox>
-                                <HBox styleClass="task-card task-card-todo" alignment="CENTER_LEFT" spacing="10">
-                                    <VBox HBox.hgrow="ALWAYS" spacing="3">
-                                        <Label text="Dashboard role guards" styleClass="task-title"/>
-                                        <Label text="Frontend · Medium" styleClass="task-meta"/>
-                                    </VBox>
-                                    <Label text="SV" styleClass="task-assignee ta-b"/>
-                                </HBox>
-                            </VBox>
-
-                            <HBox styleClass="pipeline-stage-head" alignment="CENTER_LEFT">
-                                <Circle radius="5" styleClass="stage-dot-prog"/>
-                                <Label text="  In Progress" styleClass="pipeline-stage-lbl" HBox.hgrow="ALWAYS"/>
-                                <Label text="5" styleClass="pipeline-count"/>
-                            </HBox>
-                            <VBox styleClass="pipeline-stage-items" spacing="8">
-                                <HBox styleClass="task-card task-card-prog" alignment="CENTER_LEFT" spacing="10">
-                                    <VBox HBox.hgrow="ALWAYS" spacing="3">
-                                        <Label text="Billing module v2" styleClass="task-title"/>
-                                        <Label text="Payments · Critical" styleClass="task-meta task-meta-crit"/>
-                                    </VBox>
-                                    <Label text="AR" styleClass="task-assignee ta-g"/>
-                                </HBox>
-                                <HBox styleClass="task-card task-card-prog" alignment="CENTER_LEFT" spacing="10">
-                                    <VBox HBox.hgrow="ALWAYS" spacing="3">
-                                        <Label text="SAML SSO integration" styleClass="task-title"/>
-                                        <Label text="Security · High" styleClass="task-meta"/>
-                                    </VBox>
-                                    <Label text="NK" styleClass="task-assignee ta-o"/>
-                                </HBox>
-                            </VBox>
-
-                            <HBox styleClass="pipeline-stage-head" alignment="CENTER_LEFT">
-                                <Circle radius="5" styleClass="stage-dot-done"/>
-                                <Label text="  Done" styleClass="pipeline-stage-lbl" HBox.hgrow="ALWAYS"/>
-                                <Label text="24" styleClass="pipeline-count"/>
-                            </HBox>
-                            <VBox styleClass="pipeline-stage-items" spacing="8">
-                                <HBox styleClass="task-card task-card-done" alignment="CENTER_LEFT" spacing="10">
-                                    <VBox HBox.hgrow="ALWAYS" spacing="3">
-                                        <Label text="Webhook retry logic ✓" styleClass="task-title task-done-title"/>
-                                        <Label text="Backend · Completed" styleClass="task-meta"/>
-                                    </VBox>
-                                    <Label text="PL" styleClass="task-assignee ta-p"/>
-                                </HBox>
-                            </VBox>
-
-                        </VBox>
-                    </VBox>
-
-                </HBox>
-
-                <!-- ─────────────────────────────────────────
-                     ROW 3: ACTIVITY FEED + TEAM + SYSTEM
-                ───────────────────────────────────────── -->
-                <HBox spacing="16">
-
-                    <!-- Recent Activity -->
-                    <VBox styleClass="panel" HBox.hgrow="ALWAYS" spacing="0">
-                        <HBox styleClass="panel-head" alignment="CENTER_LEFT">
-                            <Label text="Activity Feed" styleClass="panel-title" HBox.hgrow="ALWAYS"/>
-                            <Label text="All Events" styleClass="panel-action"/>
-                        </HBox>
-                        <Pane styleClass="panel-div" prefHeight="1"/>
-
-                        <VBox styleClass="activity-list" spacing="0">
-
-                            <!-- Activity items -->
-                            <HBox styleClass="activity-item" alignment="CENTER_LEFT" spacing="14">
-                                <StackPane styleClass="act-av" prefWidth="34" prefHeight="34">
-                                    <Circle radius="17" styleClass="act-av-bg-p"/>
-                                    <Label text="AR" styleClass="act-av-txt"/>
-                                </StackPane>
-                                <VBox HBox.hgrow="ALWAYS" spacing="3">
-                                    <HBox spacing="6" alignment="CENTER_LEFT">
-                                        <Label text="Arjun Reddy" styleClass="act-who"/>
-                                        <Label text="deployed" styleClass="act-verb"/>
-                                        <Label text="v3.2.1 to production" styleClass="act-what"/>
-                                    </HBox>
-                                    <Label text="2 minutes ago · Production" styleClass="act-when"/>
-                                </VBox>
-                                <Label text="DEPLOY" styleClass="act-tag act-tag-deploy"/>
-                            </HBox>
-
-                            <Pane styleClass="act-div" prefHeight="1"/>
-
-                            <HBox styleClass="activity-item" alignment="CENTER_LEFT" spacing="14">
-                                <StackPane styleClass="act-av" prefWidth="34" prefHeight="34">
-                                    <Circle radius="17" styleClass="act-av-bg-b"/>
-                                    <Label text="SV" styleClass="act-av-txt"/>
-                                </StackPane>
-                                <VBox HBox.hgrow="ALWAYS" spacing="3">
-                                    <HBox spacing="6" alignment="CENTER_LEFT">
-                                        <Label text="Sneha Verma" styleClass="act-who"/>
-                                        <Label text="updated" styleClass="act-verb"/>
-                                        <Label text="Role: Manager → Admin" styleClass="act-what"/>
-                                    </HBox>
-                                    <Label text="18 minutes ago · IAM" styleClass="act-when"/>
-                                </VBox>
-                                <Label text="IAM" styleClass="act-tag act-tag-iam"/>
-                            </HBox>
-
-                            <Pane styleClass="act-div" prefHeight="1"/>
-
-                            <HBox styleClass="activity-item" alignment="CENTER_LEFT" spacing="14">
-                                <StackPane styleClass="act-av" prefWidth="34" prefHeight="34">
-                                    <Circle radius="17" styleClass="act-av-bg-o"/>
-                                    <Label text="NK" styleClass="act-av-txt"/>
-                                </StackPane>
-                                <VBox HBox.hgrow="ALWAYS" spacing="3">
-                                    <HBox spacing="6" alignment="CENTER_LEFT">
-                                        <Label text="Nikhil Kumar" styleClass="act-who"/>
-                                        <Label text="triggered" styleClass="act-verb"/>
-                                        <Label text="Batch Workflow #WF-4482" styleClass="act-what"/>
-                                    </HBox>
-                                    <Label text="34 minutes ago · Automation" styleClass="act-when"/>
-                                </VBox>
-                                <Label text="AUTO" styleClass="act-tag act-tag-auto"/>
-                            </HBox>
-
-                            <Pane styleClass="act-div" prefHeight="1"/>
-
-                            <HBox styleClass="activity-item" alignment="CENTER_LEFT" spacing="14">
-                                <StackPane styleClass="act-av" prefWidth="34" prefHeight="34">
-                                    <Circle radius="17" styleClass="act-av-bg-r"/>
-                                    <Label text="SYS" styleClass="act-av-txt"/>
-                                </StackPane>
-                                <VBox HBox.hgrow="ALWAYS" spacing="3">
-                                    <HBox spacing="6" alignment="CENTER_LEFT">
-                                        <Label text="System Alert" styleClass="act-who-alert"/>
-                                        <Label text="detected" styleClass="act-verb"/>
-                                        <Label text="spike in API errors (404)" styleClass="act-what"/>
-                                    </HBox>
-                                    <Label text="1 hour ago · Monitoring" styleClass="act-when"/>
-                                </VBox>
-                                <Label text="ALERT" styleClass="act-tag act-tag-alert"/>
-                            </HBox>
-
-                            <Pane styleClass="act-div" prefHeight="1"/>
-
-                            <HBox styleClass="activity-item" alignment="CENTER_LEFT" spacing="14">
-                                <StackPane styleClass="act-av" prefWidth="34" prefHeight="34">
-                                    <Circle radius="17" styleClass="act-av-bg-g"/>
-                                    <Label text="PL" styleClass="act-av-txt"/>
-                                </StackPane>
-                                <VBox HBox.hgrow="ALWAYS" spacing="3">
-                                    <HBox spacing="6" alignment="CENTER_LEFT">
-                                        <Label text="Priya Lal" styleClass="act-who"/>
-                                        <Label text="merged" styleClass="act-verb"/>
-                                        <Label text="PR #312 · Webhook retry" styleClass="act-what"/>
-                                    </HBox>
-                                    <Label text="2 hours ago · GitHub" styleClass="act-when"/>
-                                </VBox>
-                                <Label text="GIT" styleClass="act-tag act-tag-git"/>
-                            </HBox>
-
-                        </VBox>
-                    </VBox>
-
-                    <!-- Team Panel -->
-                    <VBox styleClass="panel" prefWidth="280" spacing="0">
-                        <HBox styleClass="panel-head" alignment="CENTER_LEFT">
-                            <Label text="Team Status" styleClass="panel-title" HBox.hgrow="ALWAYS"/>
-                            <Label text="Manage →" styleClass="panel-action"/>
-                        </HBox>
-                        <Pane styleClass="panel-div" prefHeight="1"/>
-
-                        <VBox styleClass="team-list" spacing="0">
-
-                            <HBox styleClass="team-member" alignment="CENTER_LEFT" spacing="12">
-                                <StackPane prefWidth="36" prefHeight="36">
-                                    <Circle radius="18" styleClass="tm-av-p"/>
-                                    <Label text="AR" styleClass="tm-initials"/>
-                                    <Circle radius="5" layoutX="30" layoutY="30" styleClass="status-dot-green"/>
-                                </StackPane>
-                                <VBox HBox.hgrow="ALWAYS" spacing="2">
-                                    <Label text="Arjun Reddy"  styleClass="tm-name"/>
-                                    <Label text="System Admin" styleClass="tm-role"/>
-                                </VBox>
-                                <Label text="Online" styleClass="tm-status-online"/>
-                            </HBox>
-
-                            <HBox styleClass="team-member" alignment="CENTER_LEFT" spacing="12">
-                                <StackPane prefWidth="36" prefHeight="36">
-                                    <Circle radius="18" styleClass="tm-av-b"/>
-                                    <Label text="SV" styleClass="tm-initials"/>
-                                    <Circle radius="5" layoutX="30" layoutY="30" styleClass="status-dot-green"/>
-                                </StackPane>
-                                <VBox HBox.hgrow="ALWAYS" spacing="2">
-                                    <Label text="Sneha Verma"  styleClass="tm-name"/>
-                                    <Label text="Admin" styleClass="tm-role"/>
-                                </VBox>
-                                <Label text="Online" styleClass="tm-status-online"/>
-                            </HBox>
-
-                            <HBox styleClass="team-member" alignment="CENTER_LEFT" spacing="12">
-                                <StackPane prefWidth="36" prefHeight="36">
-                                    <Circle radius="18" styleClass="tm-av-o"/>
-                                    <Label text="NK" styleClass="tm-initials"/>
-                                    <Circle radius="5" layoutX="30" layoutY="30" styleClass="status-dot-yellow"/>
-                                </StackPane>
-                                <VBox HBox.hgrow="ALWAYS" spacing="2">
-                                    <Label text="Nikhil Kumar" styleClass="tm-name"/>
-                                    <Label text="DevOps Lead" styleClass="tm-role"/>
-                                </VBox>
-                                <Label text="Busy" styleClass="tm-status-busy"/>
-                            </HBox>
-
-                            <HBox styleClass="team-member" alignment="CENTER_LEFT" spacing="12">
-                                <StackPane prefWidth="36" prefHeight="36">
-                                    <Circle radius="18" styleClass="tm-av-g"/>
-                                    <Label text="PL" styleClass="tm-initials"/>
-                                    <Circle radius="5" layoutX="30" layoutY="30" styleClass="status-dot-green"/>
-                                </StackPane>
-                                <VBox HBox.hgrow="ALWAYS" spacing="2">
-                                    <Label text="Priya Lal"    styleClass="tm-name"/>
-                                    <Label text="Backend Eng." styleClass="tm-role"/>
-                                </VBox>
-                                <Label text="Online" styleClass="tm-status-online"/>
-                            </HBox>
-
-                            <HBox styleClass="team-member" alignment="CENTER_LEFT" spacing="12">
-                                <StackPane prefWidth="36" prefHeight="36">
-                                    <Circle radius="18" styleClass="tm-av-r"/>
-                                    <Label text="RK" styleClass="tm-initials"/>
-                                    <Circle radius="5" layoutX="30" layoutY="30" styleClass="status-dot-grey"/>
-                                </StackPane>
-                                <VBox HBox.hgrow="ALWAYS" spacing="2">
-                                    <Label text="Rohan Kapoor" styleClass="tm-name"/>
-                                    <Label text="Frontend Eng." styleClass="tm-role"/>
-                                </VBox>
-                                <Label text="Away" styleClass="tm-status-away"/>
-                            </HBox>
-
+                    <!-- KPI CARDS -->
+                    <HBox spacing="20">
+                        <VBox styleClass="kpi-card" prefWidth="200">
+                            <Label text="Total Tasks" styleClass="kpi-label"/>
+                            <Label text="124" styleClass="kpi-value"/>
                         </VBox>
 
-                        <Pane styleClass="panel-div" prefHeight="1"/>
-
-                        <!-- Quick role summary -->
-                        <VBox styleClass="role-summary" spacing="10">
-                            <Label text="Role Distribution" styleClass="rs-title"/>
-                            <HBox spacing="10">
-                                <VBox styleClass="rs-pill rs-pill-admin" HBox.hgrow="ALWAYS" alignment="CENTER" spacing="3">
-                                    <Label text="3" styleClass="rs-num"/>
-                                    <Label text="Admins" styleClass="rs-lbl"/>
-                                </VBox>
-                                <VBox styleClass="rs-pill rs-pill-mgr" HBox.hgrow="ALWAYS" alignment="CENTER" spacing="3">
-                                    <Label text="8" styleClass="rs-num"/>
-                                    <Label text="Managers" styleClass="rs-lbl"/>
-                                </VBox>
-                                <VBox styleClass="rs-pill rs-pill-dev" HBox.hgrow="ALWAYS" alignment="CENTER" spacing="3">
-                                    <Label text="24" styleClass="rs-num"/>
-                                    <Label text="Developers" styleClass="rs-lbl"/>
-                                </VBox>
-                            </HBox>
+                        <VBox styleClass="kpi-card" prefWidth="200">
+                            <Label text="Completed" styleClass="kpi-label"/>
+                            <Label text="98" styleClass="kpi-value"/>
                         </VBox>
 
-                    </VBox>
-
-                    <!-- System Health -->
-                    <VBox styleClass="panel" prefWidth="240" spacing="0">
-                        <HBox styleClass="panel-head" alignment="CENTER_LEFT">
-                            <Label text="System Health" styleClass="panel-title" HBox.hgrow="ALWAYS"/>
-                            <Label text="●" styleClass="health-live-dot"/>
-                        </HBox>
-                        <Pane styleClass="panel-div" prefHeight="1"/>
-
-                        <VBox styleClass="health-body" spacing="14">
-
-                            <!-- CPU -->
-                            <VBox spacing="7">
-                                <HBox>
-                                    <Label text="CPU Usage" styleClass="health-lbl" HBox.hgrow="ALWAYS"/>
-                                    <Label text="62%" styleClass="health-val health-val-ok"/>
-                                </HBox>
-                                <Pane styleClass="h-track" prefHeight="6">
-                                    <Pane styleClass="h-fill h-fill-p" prefHeight="6" prefWidth="135"/>
-                                </Pane>
-                            </VBox>
-
-                            <!-- Memory -->
-                            <VBox spacing="7">
-                                <HBox>
-                                    <Label text="Memory" styleClass="health-lbl" HBox.hgrow="ALWAYS"/>
-                                    <Label text="78%" styleClass="health-val health-val-warn"/>
-                                </HBox>
-                                <Pane styleClass="h-track" prefHeight="6">
-                                    <Pane styleClass="h-fill h-fill-o" prefHeight="6" prefWidth="170"/>
-                                </Pane>
-                            </VBox>
-
-                            <!-- Disk I/O -->
-                            <VBox spacing="7">
-                                <HBox>
-                                    <Label text="Disk I/O" styleClass="health-lbl" HBox.hgrow="ALWAYS"/>
-                                    <Label text="41%" styleClass="health-val health-val-ok"/>
-                                </HBox>
-                                <Pane styleClass="h-track" prefHeight="6">
-                                    <Pane styleClass="h-fill h-fill-b" prefHeight="6" prefWidth="90"/>
-                                </Pane>
-                            </VBox>
-
-                            <!-- Network -->
-                            <VBox spacing="7">
-                                <HBox>
-                                    <Label text="Network" styleClass="health-lbl" HBox.hgrow="ALWAYS"/>
-                                    <Label text="29%" styleClass="health-val health-val-ok"/>
-                                </HBox>
-                                <Pane styleClass="h-track" prefHeight="6">
-                                    <Pane styleClass="h-fill h-fill-t" prefHeight="6" prefWidth="64"/>
-                                </Pane>
-                            </VBox>
-
-                            <Pane styleClass="panel-div" prefHeight="1"/>
-
-                            <!-- Service status -->
-                            <Label text="Services" styleClass="health-lbl"/>
-                            <VBox spacing="8">
-                                <HBox alignment="CENTER_LEFT" spacing="8">
-                                    <Circle radius="4" styleClass="svc-green"/>
-                                    <Label text="API Gateway" styleClass="svc-name" HBox.hgrow="ALWAYS"/>
-                                    <Label text="99.98%" styleClass="svc-uptime"/>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT" spacing="8">
-                                    <Circle radius="4" styleClass="svc-green"/>
-                                    <Label text="Auth Service" styleClass="svc-name" HBox.hgrow="ALWAYS"/>
-                                    <Label text="100%" styleClass="svc-uptime"/>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT" spacing="8">
-                                    <Circle radius="4" styleClass="svc-green"/>
-                                    <Label text="Database" styleClass="svc-name" HBox.hgrow="ALWAYS"/>
-                                    <Label text="99.95%" styleClass="svc-uptime"/>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT" spacing="8">
-                                    <Circle radius="4" styleClass="svc-yellow"/>
-                                    <Label text="Email Workers" styleClass="svc-name" HBox.hgrow="ALWAYS"/>
-                                    <Label text="97.20%" styleClass="svc-uptime-warn"/>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT" spacing="8">
-                                    <Circle radius="4" styleClass="svc-green"/>
-                                    <Label text="CDN / Edge" styleClass="svc-name" HBox.hgrow="ALWAYS"/>
-                                    <Label text="100%" styleClass="svc-uptime"/>
-                                </HBox>
-                            </VBox>
-
+                        <VBox styleClass="kpi-card" prefWidth="200">
+                            <Label text="Pending" styleClass="kpi-label"/>
+                            <Label text="26" styleClass="kpi-value"/>
                         </VBox>
+                    </HBox>
+
+                    <!-- PANEL -->
+                    <VBox styleClass="panel" spacing="10">
+                        <Label text="Recent Activity" styleClass="panel-title"/>
+                        <Label text="No recent updates..." styleClass="page-sub"/>
                     </VBox>
 
-                </HBox>
+                </VBox>
 
-                <!-- Bottom spacer -->
-                <Region prefHeight="12"/>
+            </ScrollPane>
 
-            </VBox>
-        </ScrollPane>
+        </VBox>
 
-    </VBox>
+    </HBox>
 
-</HBox>
+</StackPane>
