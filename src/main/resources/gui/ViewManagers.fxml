@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      spacing="14"
+      styleClass="proj-root"
+      stylesheets="@../css/style.css">
+
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <VBox spacing="3" HBox.hgrow="ALWAYS">
+            <Label text="Manager Profile" styleClass="proj-title"/>
+            <Label text="Detailed visibility into manager performance and portfolio" styleClass="proj-subtitle"/>
+        </VBox>
+        <Button text="Edit Manager" styleClass="glass-btn"/>
+    </HBox>
+
+    <VBox spacing="14" styleClass="proj-card">
+        <GridPane hgap="16" vgap="12">
+            <columnConstraints>
+                <javafx.scene.layout.ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+                <javafx.scene.layout.ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+            </columnConstraints>
+
+            <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                <Label text="Manager" styleClass="field-lbl"/>
+                <Label text="Aarav Mehta" styleClass="dash-card-value"/>
+            </VBox>
+
+            <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                <Label text="Department" styleClass="field-lbl"/>
+                <Label text="Engineering" styleClass="dash-card-sub"/>
+            </VBox>
+
+            <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                <Label text="Email" styleClass="field-lbl"/>
+                <Label text="aarav.mehta@optiflow.com" styleClass="dash-card-sub"/>
+            </VBox>
+
+            <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <Label text="Status" styleClass="field-lbl"/>
+                <Label text="Active" styleClass="proj-status-badge proj-status-good"/>
+            </VBox>
+        </GridPane>
+    </VBox>
+
+    <HBox spacing="12">
+        <VBox spacing="10" styleClass="proj-card" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Label text="Workload" styleClass="field-lbl"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="68%" styleClass="proj-progress-text"/>
+            </HBox>
+            <ProgressBar progress="0.68" maxWidth="Infinity" styleClass="proj-progress"/>
+            <Label text="Balanced capacity across active projects" styleClass="dash-card-sub"/>
+        </VBox>
+
+        <VBox spacing="10" styleClass="proj-card" HBox.hgrow="ALWAYS">
+            <Label text="Portfolio" styleClass="field-lbl"/>
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Label text="Active Projects" styleClass="proj-page-text"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="5" styleClass="dash-card-sub"/>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Label text="Completed This Quarter" styleClass="proj-page-text"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="3" styleClass="dash-card-sub"/>
+            </HBox>
+        </VBox>
+    </HBox>
+
+    <VBox spacing="10" styleClass="proj-card" VBox.vgrow="ALWAYS">
+        <HBox alignment="CENTER_LEFT" spacing="8">
+            <Label text="Managed Projects" styleClass="field-lbl"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="5 total" styleClass="proj-page-text"/>
+        </HBox>
+
+        <TableView styleClass="proj-table" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn text="Project" prefWidth="260"/>
+                <TableColumn text="Status" prefWidth="150"/>
+                <TableColumn text="Progress" prefWidth="180"/>
+                <TableColumn text="Deadline" prefWidth="160"/>
+                <TableColumn text="Team Size" prefWidth="140"/>
+            </columns>
+
+            <placeholder>
+                <Label text="No projects mapped to this manager" styleClass="proj-empty"/>
+            </placeholder>
+        </TableView>
+    </VBox>
+</VBox>

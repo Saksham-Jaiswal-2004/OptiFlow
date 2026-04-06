@@ -6,6 +6,7 @@
 <?import javafx.geometry.*?>
 
 <StackPane xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.optiflow.controllers.LoginController"
            fx:id="root"
            prefWidth="1280"
            prefHeight="720"
@@ -95,12 +96,15 @@
 
                     <Button fx:id="loginBtn"
                             text="Log In"
+                            onAction="#handleLogin"
                             styleClass="glass-btn"
                             maxWidth="Infinity"/>
 
+                    <Label fx:id="LoginerrorLabel" styleClass="proj-form-error" wrapText="true"/>
+
                     <HBox alignment="CENTER" spacing="8">
                         <Label text="Don't have an account?" styleClass="reg-p"/>
-                        <Hyperlink text="Create one now" styleClass="glass-link"/>
+                        <Hyperlink text="Create one now" styleClass="glass-link" onAction="#goToRegister"/>
                     </HBox>
 
                 </VBox>

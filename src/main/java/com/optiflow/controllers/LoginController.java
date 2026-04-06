@@ -2,6 +2,7 @@ package com.optiflow.controllers;
 
 import com.optiflow.models.User;
 import com.optiflow.services.AuthService;
+import com.optiflow.utils.SessionManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -34,29 +35,40 @@ public class LoginController {
 
     // 🔐 LOGIN LOGIC
     @FXML
-    private void handleLogin(ActionEvent event) throws IOException, SQLException {
+    private void handleLogin(ActionEvent event) {
 
         String email = emailField.getText();
         String password = passwordField.getText();
 
         if (email.isEmpty() || password.isEmpty()) {
-            LoginerrorLabel.setText("Please fill all fields");
+            if (LoginerrorLabel != null) {
+                LoginerrorLabel.setText("Please fill all fields");
+            }
             return;
         }
 
-        User user = authService.login(email, password);
+        try {
+            User user = authService.login(email, password);
 
-        if (user!=null) {
-            System.out.println("Login successful");
+            if (user!=null) {
+                SessionManager.setUser(user);
 
-            // 👉 go to dashboard (change path if needed)
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/dashboard.fxml"));
+                Parent root = FXMLLoader.load(getClass().getResource("/gui/DashboardLayout.fxml"));
 
-            Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
+                Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(new Scene(root));
+                maximizeStage(stage);
+                stage.setMaximized(true);
 
-        } else {
-            LoginerrorLabel.setText("Invalid credentials");
+            } else {
+                if (LoginerrorLabel != null) {
+                    LoginerrorLabel.setText("Invalid credentials or DB not configured");
+                }
+            }
+        } catch (Exception ex) {
+            if (LoginerrorLabel != null) {
+                LoginerrorLabel.setText("Login failed. Check DB configuration.");
+            }
         }
     }
 
@@ -64,9 +76,19 @@ public class LoginController {
     @FXML
     private void goToRegister(ActionEvent event) throws IOException {
 
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/register.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/gui/Register.fxml"));
 
         Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
+        maximizeStage(stage);
+    }
+
+    private void maximizeStage(Stage stage) {
+        if (stage == null) {
+            return;
+        }
+
+        stage.setResizable(true);
+        stage.setMaximized(true);
     }
 }

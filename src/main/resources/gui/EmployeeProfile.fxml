@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      spacing="14"
+      styleClass="proj-root"
+      stylesheets="@../css/style.css">
+
+    <VBox spacing="3">
+        <Label text="Employee Profile" styleClass="proj-title"/>
+        <Label text="Detailed view of personal data, delivery metrics, and capacity trends" styleClass="proj-subtitle"/>
+    </VBox>
+
+    <GridPane hgap="12" vgap="12" VBox.vgrow="ALWAYS">
+        <columnConstraints>
+            <javafx.scene.layout.ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+            <javafx.scene.layout.ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+        </columnConstraints>
+
+        <VBox spacing="10" styleClass="proj-card" GridPane.columnIndex="0" GridPane.rowIndex="0">
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Label text="Personal Info" styleClass="field-lbl"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="Employee ID: EMP-104" styleClass="proj-page-text"/>
+            </HBox>
+
+            <GridPane hgap="16" vgap="8">
+                <columnConstraints>
+                    <javafx.scene.layout.ColumnConstraints percentWidth="35"/>
+                    <javafx.scene.layout.ColumnConstraints percentWidth="65" hgrow="ALWAYS"/>
+                </columnConstraints>
+
+                <Label text="Name" styleClass="proj-page-text" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <Label text="Neha Singh" styleClass="dash-card-sub" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                <Label text="Role" styleClass="proj-page-text" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <Label text="Frontend Engineer" styleClass="dash-card-sub" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                <Label text="Email" styleClass="proj-page-text" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <Label text="neha.singh@optiflow.com" styleClass="dash-card-sub" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                <Label text="Department" styleClass="proj-page-text" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                <Label text="Product Engineering" styleClass="dash-card-sub" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+            </GridPane>
+        </VBox>
+
+        <VBox spacing="10" styleClass="proj-card" GridPane.columnIndex="1" GridPane.rowIndex="0">
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Label text="Skills" styleClass="field-lbl"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="7 skills" styleClass="proj-page-text"/>
+            </HBox>
+
+            <HBox spacing="8" wrapText="true">
+                <Label text="JavaFX" styleClass="chip"/>
+                <Label text="UI Design" styleClass="chip"/>
+                <Label text="CSS" styleClass="chip"/>
+                <Label text="Component Architecture" styleClass="chip"/>
+            </HBox>
+
+            <HBox spacing="8" wrapText="true">
+                <Label text="REST Integration" styleClass="chip"/>
+                <Label text="Accessibility" styleClass="chip"/>
+                <Label text="Unit Testing" styleClass="chip"/>
+            </HBox>
+
+            <VBox spacing="6">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Label text="Current Workload" styleClass="proj-page-text"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label text="64%" styleClass="proj-progress-text"/>
+                </HBox>
+                <ProgressBar progress="0.64" maxWidth="Infinity" styleClass="proj-progress"/>
+            </VBox>
+        </VBox>
+
+        <VBox spacing="10" styleClass="proj-card" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.columnSpan="2" VBox.vgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Label text="Task History" styleClass="field-lbl"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="Last 30 days" styleClass="proj-page-text"/>
+            </HBox>
+
+            <TableView styleClass="proj-table" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn text="Task" prefWidth="340"/>
+                    <TableColumn text="Project" prefWidth="220"/>
+                    <TableColumn text="Status" prefWidth="150"/>
+                    <TableColumn text="Completed On" prefWidth="170"/>
+                </columns>
+
+                <placeholder>
+                    <Label text="No task history available" styleClass="proj-empty"/>
+                </placeholder>
+            </TableView>
+        </VBox>
+
+        <HBox spacing="12" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="2">
+            <VBox spacing="10" styleClass="proj-card" HBox.hgrow="ALWAYS">
+                <Label text="Performance Charts" styleClass="field-lbl"/>
+
+                <BarChart styleClass="adm-bar" prefHeight="220" animated="true" legendVisible="false">
+                    <xAxis>
+                        <CategoryAxis label="Week"/>
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis label="Completed Tasks"/>
+                    </yAxis>
+                </BarChart>
+
+                <PieChart styleClass="adm-pie" prefHeight="180"/>
+            </VBox>
+
+            <VBox spacing="10" styleClass="proj-card" prefWidth="420" HBox.hgrow="ALWAYS">
+                <Label text="Workload Graph" styleClass="field-lbl"/>
+                <LineChart styleClass="adm-line" prefHeight="410" animated="true" legendVisible="false">
+                    <xAxis>
+                        <CategoryAxis label="Week"/>
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis label="Workload %" lowerBound="0" upperBound="100" tickUnit="20"/>
+                    </yAxis>
+                </LineChart>
+            </VBox>
+        </HBox>
+    </GridPane>
+</VBox>

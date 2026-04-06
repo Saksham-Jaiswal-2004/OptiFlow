@@ -25,7 +25,7 @@ public class RegisterController {
     }
 
     @FXML
-    private TextField usernameField;
+    private TextField nameField;
 
     @FXML
     private TextField emailField;
@@ -41,33 +41,43 @@ public class RegisterController {
     @FXML
     private void handleRegister(ActionEvent event) throws SQLException, IOException {
 
-        String username = usernameField.getText();
+        String username = nameField.getText();
         String email = emailField.getText();
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
-        RegistererrorLabel.setText("");
+        if (RegistererrorLabel != null) {
+            RegistererrorLabel.setText("");
+        }
 
 
         // 🔒 Basic validation
         if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            RegistererrorLabel.setText("Please fill all fields");
+            if (RegistererrorLabel != null) {
+                RegistererrorLabel.setText("Please fill all fields");
+            }
             return;
         }
 
         if (!password.equals(confirmPassword)) {
-            RegistererrorLabel.setText("Passwords do not match");
+            if (RegistererrorLabel != null) {
+                RegistererrorLabel.setText("Passwords do not match");
+            }
             return;
         }
 
         boolean checkEmail = authService.isValidEmail(email);
         if (!checkEmail) {
-            RegistererrorLabel.setText("Invalid email format");
+            if (RegistererrorLabel != null) {
+                RegistererrorLabel.setText("Invalid email format");
+            }
             return;
         }
 
         boolean checkPass = authService.validatePassword(password);
         if (!checkPass) {
-            RegistererrorLabel.setText("Invalid password format");
+            if (RegistererrorLabel != null) {
+                RegistererrorLabel.setText("Invalid password format");
+            }
             return;
         }
 
@@ -80,11 +90,12 @@ public class RegisterController {
             System.out.println("Registration Done");
 
             // ✅ Load Login Page
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/Login.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
+            maximizeStage(stage);
         } else {
             System.out.println("Registration failed");
         }
@@ -93,11 +104,20 @@ public class RegisterController {
     // 🔁 OPTIONAL: for "Already have account? Login"
     @FXML
     private void goToLogin(ActionEvent event) throws IOException {
-        System.out.println(getClass().getResource("/fxml/login.fxml"));
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/Login.fxml"));
         Parent root = loader.load();
 
         Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
+        maximizeStage(stage);
+    }
+
+    private void maximizeStage(Stage stage) {
+        if (stage == null) {
+            return;
+        }
+
+        stage.setResizable(true);
+        stage.setMaximized(true);
     }
 }

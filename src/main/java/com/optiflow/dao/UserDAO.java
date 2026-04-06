@@ -10,10 +10,7 @@ public class UserDAO
 {
     private AuditLogService auditLogService;
 
-    public UserDAO()
-    {
-        this.auditLogService = new AuditLogService();
-    }
+    public UserDAO() {}
 
     public boolean addUser(String name, String email, String passwordHash, String role) throws SQLException
     {
@@ -35,6 +32,10 @@ public class UserDAO
                 {
                     int generatedId = rs.getInt(1);
 
+                    if (auditLogService == null)
+                    {
+                        auditLogService = new AuditLogService();
+                    }
                     auditLogService.logAction(generatedId, "REGISTER", "AUTH", generatedId, "New User Registered");
                 }
             }
@@ -78,22 +79,28 @@ public class UserDAO
 
         String sql = "SELECT * FROM Users WHERE email=?";
 
-        try(Connection conn = DBConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)){
+        try(Connection conn = DBConnection.getConnection()) {
 
-            stmt.setString(1,email);
+            if (conn == null) {
+                return null;
+            }
 
-            ResultSet rs = stmt.executeQuery();
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            if(rs.next())
-            {
-                User user = new User();
-                user.setUserId(rs.getInt("user_id"));
-                user.setName(rs.getString("name"));
-                user.setEmail(rs.getString("email"));
-                user.setPasswordHash(rs.getString("password_hash"));
-                user.setRole(rs.getString("role"));
-                return user;
+                stmt.setString(1,email);
+
+                ResultSet rs = stmt.executeQuery();
+
+                if(rs.next())
+                {
+                    User user = new User();
+                    user.setUserId(rs.getInt("user_id"));
+                    user.setName(rs.getString("name"));
+                    user.setEmail(rs.getString("email"));
+                    user.setPasswordHash(rs.getString("password_hash"));
+                    user.setRole(rs.getString("role"));
+                    return user;
+                }
             }
         }
 

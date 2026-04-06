@@ -14,12 +14,7 @@ import java.util.List;
 
 public class AuditLogDAO
 {
-    private UserDAO userDAO;
-
-    public AuditLogDAO()
-    {
-        this.userDAO = new UserDAO();
-    }
+    public AuditLogDAO() {}
 
     public boolean addLog(int user_id, String action, String entityType, int entity_id, String details)
     {
@@ -72,6 +67,7 @@ public class AuditLogDAO
     {
         LinkedList<AuditLog> auditLogs = new LinkedList<>();
         String sql = "SELECT * FROM auditlog WHERE user_id=?";
+        UserDAO userDAO = new UserDAO();
 
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -100,6 +96,7 @@ public class AuditLogDAO
     {
         LinkedList<AuditLog> auditLogs = new LinkedList<>();
         String sql = "SELECT * FROM auditlog WHERE entityType=? AND entity_id=?";
+        UserDAO userDAO = new UserDAO();
 
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {

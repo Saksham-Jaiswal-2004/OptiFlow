@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import java.lang.String?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      spacing="14"
+      styleClass="proj-root"
+      stylesheets="@../css/style.css">
+
+    <VBox spacing="3">
+        <Label text="Task Detail" styleClass="proj-title"/>
+        <Label text="Review assignment, status, collaboration, and AI recommendations" styleClass="proj-subtitle"/>
+    </VBox>
+
+    <VBox spacing="12" styleClass="proj-card" opacity="0.98">
+        <HBox alignment="CENTER_LEFT" spacing="8">
+            <Label text="Task Overview" styleClass="field-lbl"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="Due: 2026-04-22" styleClass="proj-page-text"/>
+        </HBox>
+
+        <Label text="Implement role-based sidebar filtering and optimize dashboard query rendering for large projects." styleClass="dash-card-sub" wrapText="true"/>
+    </VBox>
+
+    <HBox spacing="12" VBox.vgrow="ALWAYS">
+        <VBox spacing="12" styleClass="proj-card" HBox.hgrow="ALWAYS" opacity="0.98">
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Label text="Assigned Employees" styleClass="field-lbl"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="4 members" styleClass="proj-page-text"/>
+            </HBox>
+
+            <ListView styleClass="emp-list" VBox.vgrow="ALWAYS">
+                <items>
+                    <fx:collections fx:factory="observableArrayList">
+                        <String fx:value="Aarav Mehta - Backend"/>
+                        <String fx:value="Neha Singh - Frontend"/>
+                        <String fx:value="Rohan Patel - QA"/>
+                        <String fx:value="Ishita Verma - DevOps"/>
+                    </fx:collections>
+                </items>
+            </ListView>
+
+            <VBox spacing="6">
+                <Label text="Status" styleClass="field-lbl"/>
+                <ComboBox promptText="Update status" styleClass="glass-field proj-filter" maxWidth="Infinity">
+                    <items>
+                        <fx:collections fx:factory="observableArrayList">
+                            <String fx:value="Pending"/>
+                            <String fx:value="In Progress"/>
+                            <String fx:value="Blocked"/>
+                            <String fx:value="Completed"/>
+                        </fx:collections>
+                    </items>
+                </ComboBox>
+            </VBox>
+        </VBox>
+
+        <VBox spacing="12" styleClass="proj-card" prefWidth="360" opacity="0.98">
+            <Label text="AI Suggestion Panel" styleClass="field-lbl"/>
+
+            <VBox spacing="8" styleClass="emp-comment-row">
+                <Label text="Suggestion" styleClass="proj-page-text"/>
+                <Label text="Split this task into API optimization, UI rendering, and caching subtasks to reduce review overhead." styleClass="dash-card-sub" wrapText="true"/>
+            </VBox>
+
+            <VBox spacing="8" styleClass="emp-comment-row">
+                <Label text="Risk Alert" styleClass="proj-page-text"/>
+                <Label text="Potential delay if QA environment data is not refreshed before regression cycle." styleClass="dash-card-sub" wrapText="true"/>
+            </VBox>
+
+            <VBox spacing="8" styleClass="emp-comment-row">
+                <Label text="Recommended Next Step" styleClass="proj-page-text"/>
+                <Label text="Create a checkpoint review at 60% completion and auto-notify assigned members." styleClass="dash-card-sub" wrapText="true"/>
+            </VBox>
+
+            <Button text="Apply AI Plan" styleClass="glass-btn" maxWidth="Infinity"/>
+        </VBox>
+    </HBox>
+
+    <VBox spacing="10" styleClass="proj-card" opacity="0.98">
+        <HBox alignment="CENTER_LEFT" spacing="8">
+            <Label text="Comments" styleClass="field-lbl"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="6 messages" styleClass="proj-page-text"/>
+        </HBox>
+
+        <VBox spacing="8" styleClass="emp-list">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+
+            <VBox spacing="6" styleClass="emp-comment-row">
+                <Label text="Neha Singh" styleClass="dash-card-title"/>
+                <Label text="UI hooks are ready. Waiting for optimized endpoint response shape." styleClass="dash-card-sub" wrapText="true"/>
+            </VBox>
+
+            <VBox spacing="6" styleClass="emp-comment-row">
+                <Label text="Rohan Patel" styleClass="dash-card-title"/>
+                <Label text="Please share expected status transition rules for test scenarios." styleClass="dash-card-sub" wrapText="true"/>
+            </VBox>
+        </VBox>
+
+        <Separator styleClass="dash-separator"/>
+
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <TextArea promptText="Write a comment..." styleClass="glass-field" prefRowCount="2" HBox.hgrow="ALWAYS"/>
+            <Button text="Post" styleClass="proj-ghost-btn"/>
+        </HBox>
+    </VBox>
+</VBox>

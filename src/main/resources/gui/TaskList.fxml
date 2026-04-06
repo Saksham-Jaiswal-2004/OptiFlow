@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import java.lang.String?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      spacing="14"
+      styleClass="proj-root"
+      stylesheets="@../css/style.css">
+
+    <VBox spacing="3">
+        <Label text="Task List" styleClass="proj-title"/>
+        <Label text="Track work ownership, progress, and delivery timelines" styleClass="proj-subtitle"/>
+    </VBox>
+
+    <HBox alignment="CENTER_LEFT" spacing="10" styleClass="proj-filter-wrap">
+        <Label text="Filters" styleClass="field-lbl"/>
+
+        <ComboBox promptText="Status"
+                  styleClass="glass-field proj-filter"
+                  prefWidth="170">
+            <items>
+                <fx:collections fx:factory="observableArrayList">
+                    <String fx:value="All"/>
+                    <String fx:value="Pending"/>
+                    <String fx:value="In Progress"/>
+                    <String fx:value="Completed"/>
+                </fx:collections>
+            </items>
+        </ComboBox>
+
+        <ComboBox promptText="Employee"
+                  styleClass="glass-field proj-filter"
+                  prefWidth="200">
+            <items>
+                <fx:collections fx:factory="observableArrayList">
+                    <String fx:value="All Employees"/>
+                    <String fx:value="Aarav Mehta"/>
+                    <String fx:value="Neha Singh"/>
+                    <String fx:value="Rohan Patel"/>
+                    <String fx:value="Ishita Verma"/>
+                </fx:collections>
+            </items>
+        </ComboBox>
+
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label text="12 tasks" styleClass="proj-page-text"/>
+    </HBox>
+
+    <VBox spacing="10" styleClass="proj-card" VBox.vgrow="ALWAYS">
+        <TableView styleClass="proj-table" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn text="Task" prefWidth="260"/>
+                <TableColumn text="Assigned To" prefWidth="170"/>
+                <TableColumn text="Status" prefWidth="140"/>
+                <TableColumn text="Deadline" prefWidth="140"/>
+                <TableColumn text="Comments" prefWidth="260"/>
+            </columns>
+
+            <placeholder>
+                <Label text="No tasks available" styleClass="proj-empty"/>
+            </placeholder>
+        </TableView>
+
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="Status Badge Guide" styleClass="field-lbl"/>
+            <Label text="Completed" styleClass="proj-status-badge proj-status-good"/>
+            <Label text="In Progress" styleClass="proj-status-badge proj-status-warn"/>
+            <Label text="Pending" styleClass="proj-status-badge proj-status-bad"/>
+        </HBox>
+    </VBox>
+</VBox>

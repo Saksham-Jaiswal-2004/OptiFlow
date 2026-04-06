@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.optiflow.controllers.ManagerDashboardController"
+      spacing="18"
+      styleClass="mgr-root"
+      stylesheets="@../css/style.css">
+
+    <VBox spacing="4">
+        <Label text="Team Dashboard" styleClass="mgr-title"/>
+        <Label text="Overview of team performance and tasks" styleClass="mgr-subtitle"/>
+    </VBox>
+
+    <GridPane hgap="16" vgap="16">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+            <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+        </columnConstraints>
+
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2" spacing="12" styleClass="mgr-card">
+            <Label text="Team Overview" styleClass="mgr-card-title"/>
+            <TableView fx:id="teamTable" styleClass="mgr-table" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="memberNameColumn" text="Name" prefWidth="180"/>
+                    <TableColumn fx:id="memberRoleColumn" text="Role" prefWidth="160"/>
+                    <TableColumn fx:id="tasksAssignedColumn" text="Tasks Assigned" prefWidth="130"/>
+                    <TableColumn fx:id="tasksCompletedColumn" text="Completed" prefWidth="120"/>
+                    <TableColumn fx:id="workloadColumn" text="Workload" prefWidth="230"/>
+                </columns>
+            </TableView>
+        </VBox>
+
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="1" spacing="12" styleClass="mgr-card">
+            <Label text="Task Tracking" styleClass="mgr-card-title"/>
+            <TableView fx:id="taskTable" styleClass="mgr-table" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="taskNameColumn" text="Task" prefWidth="220"/>
+                    <TableColumn fx:id="taskAssignedToColumn" text="Assigned To" prefWidth="150"/>
+                    <TableColumn fx:id="taskStatusColumn" text="Status" prefWidth="120"/>
+                    <TableColumn fx:id="taskDeadlineColumn" text="Deadline" prefWidth="140"/>
+                </columns>
+            </TableView>
+        </VBox>
+
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="1" spacing="12" styleClass="mgr-card">
+            <Label text="Weekly Gantt" styleClass="mgr-card-title"/>
+            <VBox fx:id="ganttContainer" spacing="8" VBox.vgrow="ALWAYS" styleClass="mgr-gantt-wrap"/>
+        </VBox>
+
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="2" spacing="12" styleClass="mgr-card">
+            <Label text="Performance Analytics" styleClass="mgr-card-title"/>
+            <BarChart fx:id="performanceBarChart" prefHeight="220" styleClass="mgr-bar-chart">
+                <xAxis>
+                    <CategoryAxis/>
+                </xAxis>
+                <yAxis>
+                    <NumberAxis/>
+                </yAxis>
+            </BarChart>
+            <PieChart fx:id="completionPieChart" labelsVisible="false" legendVisible="true" prefHeight="180" styleClass="mgr-pie-chart"/>
+        </VBox>
+
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="2" spacing="12" styleClass="mgr-card">
+            <Label text="Alerts" styleClass="mgr-card-title"/>
+            <VBox fx:id="alertsList" spacing="8" VBox.vgrow="ALWAYS"/>
+        </VBox>
+    </GridPane>
+</VBox>

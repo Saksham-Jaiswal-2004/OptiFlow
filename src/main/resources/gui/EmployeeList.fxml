@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      spacing="14"
+      styleClass="proj-root"
+      stylesheets="@../css/style.css">
+
+    <VBox spacing="3">
+        <Label text="Employee List" styleClass="proj-title"/>
+        <Label text="Overview of team capacity, expertise, and performance" styleClass="proj-subtitle"/>
+    </VBox>
+
+    <VBox spacing="10" styleClass="proj-card" VBox.vgrow="ALWAYS">
+        <TableView styleClass="proj-table" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn text="Name" prefWidth="180"/>
+                <TableColumn text="Role" prefWidth="150"/>
+                <TableColumn text="Skills" prefWidth="280"/>
+                <TableColumn text="Workload" prefWidth="150"/>
+                <TableColumn text="Performance" prefWidth="170"/>
+            </columns>
+
+            <placeholder>
+                <Label text="No employee records available" styleClass="proj-empty"/>
+            </placeholder>
+        </TableView>
+    </VBox>
+</VBox>

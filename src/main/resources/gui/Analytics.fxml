@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import java.lang.String?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      spacing="14"
+      styleClass="proj-root"
+      stylesheets="@../css/style.css">
+
+    <VBox spacing="3">
+        <Label text="Analytics Dashboard" styleClass="proj-title"/>
+        <Label text="Measure project velocity, task distribution, and team performance" styleClass="proj-subtitle"/>
+    </VBox>
+
+    <HBox alignment="CENTER_LEFT" spacing="10" styleClass="proj-filter-wrap">
+        <Label text="Filters" styleClass="field-lbl"/>
+
+        <ComboBox promptText="Time Range" styleClass="glass-field proj-filter" prefWidth="170">
+            <items>
+                <fx:collections fx:factory="observableArrayList">
+                    <String fx:value="Last 7 Days"/>
+                    <String fx:value="Last 30 Days"/>
+                    <String fx:value="Last Quarter"/>
+                </fx:collections>
+            </items>
+        </ComboBox>
+
+        <ComboBox promptText="Project" styleClass="glass-field proj-filter" prefWidth="180">
+            <items>
+                <fx:collections fx:factory="observableArrayList">
+                    <String fx:value="All Projects"/>
+                    <String fx:value="CRM Migration"/>
+                    <String fx:value="HR Portal Revamp"/>
+                    <String fx:value="Ops Automation"/>
+                </fx:collections>
+            </items>
+        </ComboBox>
+
+        <ComboBox promptText="Team" styleClass="glass-field proj-filter" prefWidth="160">
+            <items>
+                <fx:collections fx:factory="observableArrayList">
+                    <String fx:value="All Teams"/>
+                    <String fx:value="Engineering"/>
+                    <String fx:value="Design"/>
+                    <String fx:value="QA"/>
+                </fx:collections>
+            </items>
+        </ComboBox>
+
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label text="Updated just now" styleClass="proj-page-text"/>
+    </HBox>
+
+    <GridPane hgap="12" vgap="12" VBox.vgrow="ALWAYS">
+        <columnConstraints>
+            <javafx.scene.layout.ColumnConstraints percentWidth="65" hgrow="ALWAYS"/>
+            <javafx.scene.layout.ColumnConstraints percentWidth="35" hgrow="ALWAYS"/>
+        </columnConstraints>
+
+        <VBox spacing="10" styleClass="proj-card" GridPane.columnIndex="0" GridPane.rowIndex="0">
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Label text="Progress Trends" styleClass="field-lbl"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="LineChart" styleClass="proj-page-text"/>
+            </HBox>
+
+            <LineChart styleClass="adm-line" animated="true" legendVisible="false" prefHeight="300" VBox.vgrow="ALWAYS">
+                <xAxis>
+                    <CategoryAxis label="Week"/>
+                </xAxis>
+                <yAxis>
+                    <NumberAxis label="Completion %" lowerBound="0" upperBound="100" tickUnit="20"/>
+                </yAxis>
+            </LineChart>
+        </VBox>
+
+        <VBox spacing="10" styleClass="proj-card" GridPane.columnIndex="1" GridPane.rowIndex="0">
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Label text="Task Distribution" styleClass="field-lbl"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="PieChart" styleClass="proj-page-text"/>
+            </HBox>
+
+            <PieChart styleClass="adm-pie" animated="true" labelsVisible="true" prefHeight="300" VBox.vgrow="ALWAYS"/>
+        </VBox>
+
+        <VBox spacing="10" styleClass="proj-card" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.columnSpan="2" VBox.vgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Label text="Performance Overview" styleClass="field-lbl"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="BarChart" styleClass="proj-page-text"/>
+            </HBox>
+
+            <BarChart styleClass="adm-bar" animated="true" legendVisible="false" prefHeight="290" VBox.vgrow="ALWAYS">
+                <xAxis>
+                    <CategoryAxis label="Teams"/>
+                </xAxis>
+                <yAxis>
+                    <NumberAxis label="Performance Score" lowerBound="0" upperBound="100" tickUnit="20"/>
+                </yAxis>
+            </BarChart>
+        </VBox>
+    </GridPane>
+</VBox>

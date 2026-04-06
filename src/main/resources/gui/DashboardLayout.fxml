@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/21"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.optiflow.controllers.DashboardController"
+           fx:id="root"
+           prefWidth="1360"
+           prefHeight="860"
+           styleClass="bg-base"
+           stylesheets="@../css/style.css">
+
+    <Pane styleClass="bg-base" prefWidth="1360" prefHeight="860" mouseTransparent="true"/>
+    <Pane styleClass="grid-overlay" prefWidth="1360" prefHeight="860" mouseTransparent="true"/>
+
+    <Circle managed="false" radius="280" layoutX="180" layoutY="180" styleClass="aurora-violet" mouseTransparent="true"/>
+    <Circle managed="false" radius="220" layoutX="1120" layoutY="160" styleClass="aurora-indigo" mouseTransparent="true"/>
+    <Circle managed="false" radius="190" layoutX="700" layoutY="760" styleClass="aurora-cyan" mouseTransparent="true"/>
+
+    <BorderPane prefWidth="1320"
+                prefHeight="820"
+                maxWidth="1320"
+                maxHeight="820"
+                styleClass="dash-layout-shell">
+
+        <top>
+            <HBox alignment="CENTER_LEFT" spacing="14" styleClass="dash-topbar" BorderPane.alignment="CENTER">
+                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                    <Label text="OptiFlow | SME Resource Management" styleClass="dash-title"/>
+                    <Label fx:id="welcomeLabel" text="Welcome back, Team Member" styleClass="dash-subtitle"/>
+                </VBox>
+
+                <Label fx:id="roleBadge" text="USER VIEW" styleClass="dash-role-badge"/>
+                <TextField promptText="Search employees, projects, skills" styleClass="dash-search"/>
+            </HBox>
+        </top>
+
+        <left>
+            <fx:include fx:id="sidebarComponent" source="Sidebar.fxml"/>
+        </left>
+
+        <center>
+            <VBox spacing="12" styleClass="dash-center-shell">
+                <Label fx:id="sectionTitle" text="Overview" styleClass="dash-section-title"/>
+                <StackPane fx:id="centerContainer" styleClass="dash-center-container" VBox.vgrow="ALWAYS"/>
+            </VBox>
+        </center>
+    </BorderPane>
+</StackPane>
