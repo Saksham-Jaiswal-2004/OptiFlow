@@ -9,17 +9,19 @@ public class Projects
     private String description;
     private Date start_date;
     private Date end_date;
+    private Date deadline;
     private int manager_id;
     private String status;
 
     public Projects()
     {}
 
-    public Projects(String name, String description, Date start_date, int manager_id)
+    public Projects(String name, String description, Date start_date, Date deadline, int manager_id)
     {
         this.name = name;
         this.description = description;
         this.start_date = start_date;
+        this.deadline = deadline;
         this.manager_id = manager_id;
     }
 
@@ -46,6 +48,11 @@ public class Projects
     public Date getEnd_date()
     {
         return end_date;
+    }
+
+    public Date getDeadline()
+    {
+        return deadline;
     }
 
     public int getManager_id()
@@ -81,6 +88,11 @@ public class Projects
     public void setEnd_date(Date end_date)
     {
         this.end_date = end_date;
+    }
+
+    public void setDeadline(Date deadline)
+    {
+        this.deadline = deadline;
     }
 
     public void setManager_id(int client_id)

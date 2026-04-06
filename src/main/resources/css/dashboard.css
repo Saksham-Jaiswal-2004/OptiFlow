@@ -89,6 +89,7 @@
     -fx-cursor: hand;
 }
 
+
 .nav-item:hover {
     -fx-background-color: rgba(124,58,237,0.12);
 }
@@ -203,8 +204,6 @@
 
 .content-scroll {
     -fx-background-color: transparent;
-    -fx-background: transparent;
-    -fx-border-color: transparent;
 }
 
 .content-scroll .viewport {
@@ -230,6 +229,7 @@
     -fx-font-weight: 600;
 }
 
+
 .kpi-value {
     -fx-text-fill: #ffffff;
     -fx-font-size: 25px;
@@ -252,6 +252,7 @@
 .panel-head {
     -fx-padding: 14 16;
 }
+
 
 .panel-title {
     -fx-text-fill: #ffffff;

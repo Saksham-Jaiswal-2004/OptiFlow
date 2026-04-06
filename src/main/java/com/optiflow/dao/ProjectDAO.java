@@ -4,6 +4,7 @@ import com.optiflow.database.DBConnection;
 import com.optiflow.models.Projects;
 import com.optiflow.models.Tasks;
 import com.optiflow.services.AuditLogService;
+import com.optiflow.utils.DBUtility;
 import com.optiflow.utils.SessionManager;
 
 import java.sql.*;
@@ -13,26 +14,29 @@ import java.util.List;
 public class ProjectDAO
 {
     private AuditLogService auditLogService;
+    private DBUtility dbUtility;
 
     public  ProjectDAO()
     {
         this.auditLogService = new AuditLogService();
+        this.dbUtility = new DBUtility();
     }
 
-    public boolean createProject(String name, String description, Date start_date, Date end_date, int client_id, String status) throws SQLException
+    public boolean createProject(String name, String description, Date start_date, Date deadline, int manager_id, String status) throws SQLException
     {
-        String sql = "INSERT INTO projects (name, description, start_date, end_date, manager_id, status) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO projects (name, description, start_date, end_date, deadline, manager_id, status) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, name);
             stmt.setString(2, description);
             stmt.setDate(3, Date.valueOf(start_date.toLocalDate()));
-            stmt.setDate(4, Date.valueOf(end_date.toLocalDate()));
-            if(client_id == 0)
-                stmt.setNull(5, java.sql.Types.INTEGER);
+            stmt.setDate(4, null);
+            stmt.setDate(5, Date.valueOf(deadline.toLocalDate()));
+            if(manager_id == 0)
+                stmt.setNull(6, java.sql.Types.INTEGER);
             else
-                stmt.setInt(5, client_id);
-            stmt.setString(6, status);
+                stmt.setInt(6, manager_id);
+            stmt.setString(7, status);
 
             int rows = stmt.executeUpdate();
 
@@ -72,6 +76,7 @@ public class ProjectDAO
                 pro.setDescription(rs.getString("description"));
                 pro.setStart_date(rs.getDate("start_date"));
                 pro.setEnd_date(rs.getDate("end_date"));
+                pro.setEnd_date(rs.getDate("deadline"));
                 pro.setManager_id(rs.getInt("manager_id"));
                 pro.setStatus(rs.getString("status"));
                 return pro;
@@ -99,6 +104,7 @@ public class ProjectDAO
                 pro.setDescription(rs.getString("description"));
                 pro.setStart_date(rs.getDate("start_date"));
                 pro.setEnd_date(rs.getDate("end_date"));
+                pro.setEnd_date(rs.getDate("deadline"));
                 pro.setManager_id(rs.getInt("manager_id"));
                 pro.setStatus(rs.getString("status"));
 
@@ -127,6 +133,7 @@ public class ProjectDAO
                 pro.setDescription(rs.getString("description"));
                 pro.setStart_date(rs.getDate("start_date"));
                 pro.setEnd_date(rs.getDate("end_date"));
+                pro.setEnd_date(rs.getDate("deadline"));
                 pro.setManager_id(rs.getInt("manager_id"));
                 pro.setStatus(rs.getString("status"));
 
@@ -134,6 +141,44 @@ public class ProjectDAO
             }
         }
         return proList;
+    }
+
+    public double getProjectCompletionRate(int managerId) throws SQLException
+    {
+        String totalQuery = "SELECT COUNT(*) FROM projects WHERE manager_id = ?";
+        String completedQuery = "SELECT COUNT(*) FROM projects WHERE manager_id = ? AND status = 'COMPLETED'";
+
+        int total = dbUtility.getCount(totalQuery, managerId);
+        int completed = dbUtility.getCount(completedQuery, managerId);
+
+        if (total == 0) return 0;
+
+        return (double) completed / total;
+    }
+
+    public double getOnTimeDeliveryRate(int managerId) throws SQLException
+    {
+        String query = """
+        SELECT COUNT(*) 
+        FROM projects 
+        WHERE manager_id = ? 
+        AND status = 'COMPLETED'
+        AND actual_end_date <= deadline
+    """;
+
+        String totalCompletedQuery = """
+        SELECT COUNT(*) 
+        FROM projects 
+        WHERE manager_id = ? 
+        AND status = 'COMPLETED'
+    """;
+
+        int onTime = dbUtility.getCount(query, managerId);
+        int totalCompleted = dbUtility.getCount(totalCompletedQuery, managerId);
+
+        if (totalCompleted == 0) return 0;
+
+        return (double) onTime / totalCompleted;
     }
 
     public List<Projects> getProjectsByManager(int manager_id) throws SQLException
@@ -155,6 +200,7 @@ public class ProjectDAO
                 pro.setDescription(rs.getString("description"));
                 pro.setStart_date(rs.getDate("start_date"));
                 pro.setEnd_date(rs.getDate("end_date"));
+                pro.setEnd_date(rs.getDate("deadline"));
                 pro.setManager_id(rs.getInt("manager_id"));
                 pro.setStatus(rs.getString("status"));
 
@@ -177,6 +223,19 @@ public class ProjectDAO
             return rs.getString("status");
         }
     }
+
+//    private double getProjectCompletionRate(int managerId) throws SQLException
+//    {
+//        String totalQuery = "SELECT COUNT(*) FROM projects WHERE manager_id = ?";
+//        String completedQuery = "SELECT COUNT(*) FROM projects WHERE manager_id = ? AND status = 'COMPLETED'";
+//
+//        int total = getCount(totalQuery, managerId);
+//        int completed = getCount(completedQuery, managerId);
+//
+//        if (total == 0) return 0;
+//
+//        return (double) completed / total;
+//    }
 
     public int updateName(int project_id, String name) throws SQLException
     {
@@ -245,6 +304,23 @@ public class ProjectDAO
 
             rs = stmt.executeUpdate();
             System.out.println("Result: "+rs);
+        }
+
+        return rs;
+    }
+
+    public int updateDeadline(int project_id, Date deadline) throws SQLException
+    {
+        String sql = "UPDATE projects SET deadline=? WHERE project_id=?";
+        int rs;
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);)
+        {
+            stmt.setDate(1, Date.valueOf(deadline.toLocalDate()));
+            stmt.setInt(2, project_id);
+
+            rs = stmt.executeUpdate();
         }
 
         return rs;

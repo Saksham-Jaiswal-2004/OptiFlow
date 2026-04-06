@@ -30,6 +30,7 @@ public class TaskService
     private WorkloadService workloadService;
     private TaskSkillService taskSkillService;
     private AuditLogService auditLogService;
+    private ProjectService projectService;
 
      public TaskService()
     {
@@ -39,6 +40,7 @@ public class TaskService
         this.workloadService = new WorkloadService();
         this.taskSkillService = new TaskSkillService();
         this.auditLogService = new AuditLogService();
+        this.projectService = new ProjectService();
     }
 
     public boolean createTask(Tasks task) throws SQLException
@@ -135,7 +137,7 @@ public class TaskService
 
         AutoAssignEngine engine = new AutoAssignEngine();
 
-        Employee bestEmp = engine.getBestEmployeeForTask(task.getTask_id());
+        Employee bestEmp = engine.getBestEmployeeForTask(task.getTask_id(), projectService.getProjectById(task.getProject_id()).getManager_id());
 
         if(bestEmp == null)
             return false;

@@ -5,8 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.optiflow.dao.ProjectDAO;
 import com.optiflow.dao.TaskDAO;
 import com.optiflow.dto.TaskDTO;
-import com.optiflow.models.Projects;
-import com.optiflow.models.Tasks;
+import com.optiflow.models.*;
 import com.optiflow.utils.SessionManager;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -27,6 +26,8 @@ public class ProjectService
     private TaskDAO taskDAO;
     private AIService aiService;
     private AuditLogService auditLogService;
+    private ProjectSkillService projectSkillService;
+    private EmployeeService employeeService;
 
     public ProjectService()
     {
@@ -34,12 +35,16 @@ public class ProjectService
         this.taskDAO = new TaskDAO();
         this.aiService = new AIService();
         this.auditLogService = new AuditLogService();
+        this.projectSkillService = new ProjectSkillService();
+        this.employeeService = new EmployeeService();
     }
 
     public boolean createProject(Projects project) throws SQLException
     {
         if(project == null)
             return false;
+
+        project.setManager_id(getBestManagerForProject(project.getProject_id()).getEmp_id());
 
         return projectDAO.createProject(project.getName(), project.getDescription(), project.getStart_date(), project.getEnd_date(), project.getManager_id(), project.getStatus());
     }
@@ -132,6 +137,7 @@ public class ProjectService
             projectDAO.updateDescription(project.getProject_id(), project.getDescription());
             projectDAO.updateStartDate(project.getProject_id(), project.getStart_date());
             projectDAO.updateEndDate(project.getProject_id(), project.getEnd_date());
+            projectDAO.updateDeadline(project.getProject_id(), project.getDeadline());
             projectDAO.updateStatus(project.getProject_id(), project.getStatus());
 
             auditLogService.logAction(SessionManager.getUser().getUserId(), "UPDATE_PROJECT", "PROJECT", project.getProject_id(), SessionManager.getUser().getName()+" updated the project "+project.getName());
@@ -140,6 +146,29 @@ public class ProjectService
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public Employee getBestManagerForProject(int projectId) throws SQLException
+    {
+        List<ProjectSkill> requiredSkills = projectSkillService.getSkillsForProject(projectId);
+
+        List<Employee> managers = employeeService.getAllManagers();
+
+        Employee bestManager = null;
+        double bestScore = -1;
+
+        for (Employee manager : managers)
+        {
+            double score = employeeService.calculateManagerScore(manager, requiredSkills);
+
+            if (score > bestScore)
+            {
+                bestScore = score;
+                bestManager = manager;
+            }
+        }
+
+        return bestManager;
     }
 
     public boolean deleteProject(int project_id) throws SQLException

@@ -9,6 +9,13 @@ import com.optiflow.models.User;
 
 public class EmployeeDAO
 {
+    private ProjectDAO projectDAO;
+
+    public EmployeeDAO()
+    {
+        this.projectDAO = new ProjectDAO();
+    }
+
     public boolean addEmployee(int user_id, String name, String designation, String department, int manager_id, String status, int weeklyCapacity) throws SQLException
     {
         String sql = "INSERT INTO Employees (user_id, name, designation, department, manager_id, status, weekly_capacity) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -239,6 +246,36 @@ public class EmployeeDAO
         return empList;
     }
 
+    public double getTeamUtilization(int managerId) throws SQLException
+    {
+        List<Employee> team = getEmployeesByManager(managerId);
+
+        if (team.isEmpty()) return 0;
+
+        double totalUtilization = 0;
+
+        for (Employee emp : team)
+        {
+            int allocated = getAllocatedHours(emp.getEmp_id());
+            int capacity = getWeeklyCapacity(emp.getEmp_id());
+
+            if (capacity == 0) continue;
+
+            totalUtilization += (double) allocated / capacity;
+        }
+
+        return totalUtilization / team.size();
+    }
+
+    public double getManagerPerformance(int managerId) throws SQLException
+    {
+        double completionRate = projectDAO.getProjectCompletionRate(managerId);
+        double onTimeRate = projectDAO.getOnTimeDeliveryRate(managerId);
+        double teamUtilization = getTeamUtilization(managerId);
+
+        return (0.43 * completionRate) + (0.33 * onTimeRate) + (0.24 * teamUtilization);
+    }
+
     public int getWeeklyCapacity(int emp_id)
     {
         if(emp_id <= 0)
@@ -274,10 +311,10 @@ public class EmployeeDAO
     }
 
 //  Skills Needed
-    public int updateSkill(int emp_id, String name) throws SQLException
-    {
-        return -1;
-    }
+//    public int updateSkill(int emp_id, String name) throws SQLException
+//    {
+//        return -1;
+//    }
 
     public int updateDesignation(int emp_id, String designation) throws SQLException
     {
