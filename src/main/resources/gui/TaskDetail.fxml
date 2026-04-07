@@ -11,10 +11,12 @@
 <?import javafx.scene.layout.Priority?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
 
 <VBox xmlns="http://javafx.com/javafx/21"
       xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.optiflow.controllers.TaskDetailPanelController"
       spacing="14"
       styleClass="proj-root"
       stylesheets="@../css/style.css">
@@ -44,12 +46,12 @@
 
             <ListView styleClass="emp-list" VBox.vgrow="ALWAYS">
                 <items>
-                    <fx:collections fx:factory="observableArrayList">
+                    <FXCollections fx:factory="observableArrayList">
                         <String fx:value="Aarav Mehta - Backend"/>
                         <String fx:value="Neha Singh - Frontend"/>
                         <String fx:value="Rohan Patel - QA"/>
                         <String fx:value="Ishita Verma - DevOps"/>
-                    </fx:collections>
+                    </FXCollections>
                 </items>
             </ListView>
 
@@ -57,12 +59,12 @@
                 <Label text="Status" styleClass="field-lbl"/>
                 <ComboBox promptText="Update status" styleClass="glass-field proj-filter" maxWidth="Infinity">
                     <items>
-                        <fx:collections fx:factory="observableArrayList">
+                        <FXCollections fx:factory="observableArrayList">
                             <String fx:value="Pending"/>
                             <String fx:value="In Progress"/>
                             <String fx:value="Blocked"/>
                             <String fx:value="Completed"/>
-                        </fx:collections>
+                        </FXCollections>
                     </items>
                 </ComboBox>
             </VBox>

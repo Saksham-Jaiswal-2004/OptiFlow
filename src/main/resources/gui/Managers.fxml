@@ -10,10 +10,12 @@
 <?import javafx.scene.layout.Priority?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
 
 <VBox xmlns="http://javafx.com/javafx/21"
       xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.optiflow.controllers.ManagersPanelController"
       spacing="14"
       styleClass="proj-root"
       stylesheets="@../css/style.css">
@@ -24,41 +26,41 @@
     </VBox>
 
     <HBox alignment="CENTER_LEFT" spacing="10" styleClass="proj-filter-wrap">
-        <TextField promptText="Search by manager name..." styleClass="glass-field proj-search" HBox.hgrow="ALWAYS"/>
+        <TextField fx:id="searchField" promptText="Search by manager name..." styleClass="glass-field proj-search" HBox.hgrow="ALWAYS"/>
 
-        <ComboBox promptText="Department" styleClass="glass-field proj-filter" prefWidth="170">
+        <ComboBox fx:id="departmentFilter" promptText="Department" styleClass="glass-field proj-filter" prefWidth="170">
             <items>
-                <fx:collections fx:factory="observableArrayList">
+                <FXCollections fx:factory="observableArrayList">
                     <String fx:value="All"/>
                     <String fx:value="Engineering"/>
                     <String fx:value="Product"/>
                     <String fx:value="Operations"/>
-                </fx:collections>
+                </FXCollections>
             </items>
         </ComboBox>
 
-        <ComboBox promptText="Status" styleClass="glass-field proj-filter" prefWidth="150">
+        <ComboBox fx:id="statusFilter" promptText="Status" styleClass="glass-field proj-filter" prefWidth="150">
             <items>
-                <fx:collections fx:factory="observableArrayList">
+                <FXCollections fx:factory="observableArrayList">
                     <String fx:value="All"/>
                     <String fx:value="Active"/>
                     <String fx:value="On Leave"/>
-                </fx:collections>
+                </FXCollections>
             </items>
         </ComboBox>
 
-        <Button text="Add Manager" styleClass="glass-btn"/>
+        <Button fx:id="addManagerBtn" text="Add Manager" styleClass="glass-btn"/>
     </HBox>
 
     <VBox spacing="10" styleClass="proj-card" VBox.vgrow="ALWAYS">
-        <TableView styleClass="proj-table" VBox.vgrow="ALWAYS">
+        <TableView fx:id="managerTable" styleClass="proj-table" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn text="Manager" prefWidth="220"/>
-                <TableColumn text="Department" prefWidth="160"/>
-                <TableColumn text="Projects" prefWidth="130"/>
-                <TableColumn text="Team Size" prefWidth="130"/>
-                <TableColumn text="Health Score" prefWidth="150"/>
-                <TableColumn text="Status" prefWidth="130"/>
+                <TableColumn fx:id="managerNameColumn" text="Manager" prefWidth="220"/>
+                <TableColumn fx:id="departmentColumn" text="Department" prefWidth="160"/>
+                <TableColumn fx:id="projectsColumn" text="Projects" prefWidth="130"/>
+                <TableColumn fx:id="teamSizeColumn" text="Team Size" prefWidth="130"/>
+                <TableColumn fx:id="healthScoreColumn" text="Health Score" prefWidth="150"/>
+                <TableColumn fx:id="managerStatusColumn" text="Status" prefWidth="130"/>
             </columns>
             <placeholder>
                 <Label text="No manager records available" styleClass="proj-empty"/>
@@ -66,9 +68,9 @@
         </TableView>
 
         <HBox alignment="CENTER_LEFT" spacing="10">
-            <Label text="Showing 0 managers" styleClass="proj-page-text"/>
+            <Label fx:id="managerCountLabel" text="Showing 0 managers" styleClass="proj-page-text"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Button text="View Selected" styleClass="proj-ghost-btn"/>
+            <Button fx:id="viewSelectedBtn" text="View Selected" styleClass="proj-ghost-btn"/>
         </HBox>
     </VBox>
 </VBox>

@@ -8,13 +8,17 @@ import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.HashMap;
@@ -43,9 +47,16 @@ public class DashboardController {
     private SidebarController sidebarComponentController;
 
     @FXML
+    private StackPane notificationButton;
+
+    @FXML
+    private Label notificationBadgeLabel;
+
+    @FXML
     public void initialize() {
         applyCurrentUserMeta();
         wireSidebar();
+        configureNotificationBell();
     }
 
     public void setCenterContent(Node node) {
@@ -92,9 +103,59 @@ public class DashboardController {
     }
 
     private void handleNavigation(String pageKey, String title) {
+        if ("logout".equals(pageKey)) {
+            performLogout();
+            return;
+        }
+
         Node page = pageCache.computeIfAbsent(pageKey, this::buildPageContent);
         sectionTitle.setText(title);
         setCenterContent(page);
+    }
+
+    private void configureNotificationBell() {
+        if (notificationBadgeLabel == null) {
+            return;
+        }
+
+        notificationBadgeLabel.setVisible(true);
+        notificationBadgeLabel.setManaged(true);
+    }
+
+    @FXML
+    private void handleNotificationHoverIn() {
+        if (notificationButton != null) {
+            notificationButton.setScaleX(1.08);
+            notificationButton.setScaleY(1.08);
+        }
+    }
+
+    @FXML
+    private void handleNotificationHoverOut() {
+        if (notificationButton != null) {
+            notificationButton.setScaleX(1.0);
+            notificationButton.setScaleY(1.0);
+        }
+    }
+
+    @FXML
+    private void handleNotificationClick() {
+        if (notificationBadgeLabel != null) {
+            notificationBadgeLabel.setText("0");
+        }
+        handleNavigation("notifications", "Notifications");
+    }
+
+    private void performLogout() {
+        try {
+            SessionManager.setUser(null);
+            Parent loginRoot = FXMLLoader.load(getClass().getResource("/gui/Login.fxml"));
+            Stage stage = (Stage) centerContainer.getScene().getWindow();
+            stage.setScene(new Scene(loginRoot));
+            stage.setResizable(true);
+            stage.setMaximized(true);
+        } catch (Exception ignored) {
+        }
     }
 
     private Node buildPageContent(String key) {
@@ -153,7 +214,7 @@ public class DashboardController {
             case "reports":
                 return loadView("ManagerDashboard.fxml");
             case "comments":
-                return loadView("CommentsPanel.fxml");
+                return loadView("TaskDetail.fxml");
             case "add_worklogs":
             case "worklogs":
                 return loadView("WorklogsPanel.fxml");
@@ -211,9 +272,18 @@ public class DashboardController {
 
             return scrollPane;
         } catch (Exception ex) {
+            System.err.println("Failed to load FXML: " + fxmlFile);
+            ex.printStackTrace();
+            Throwable cause = ex.getCause();
+            String causeMsg = (cause != null && cause.getMessage() != null) ? cause.getMessage() : null;
+            String errorMessage = ex.getMessage() == null ? "Unknown error" : ex.getMessage();
+            if (causeMsg != null && !causeMsg.isBlank()) {
+                errorMessage = errorMessage + " | Cause: " + causeMsg;
+            }
+
             return buildCardGrid(
                     createMetricCard("Unable to load page", fxmlFile, "Please check FXML/controller configuration"),
-                    createMetricCard("Error", ex.getClass().getSimpleName(), ex.getMessage() == null ? "Unknown error" : ex.getMessage()),
+                    createMetricCard("Error", ex.getClass().getSimpleName(), errorMessage),
                     createMetricCard("Fallback", "Static dashboard view", "App remains functional")
             );
         }

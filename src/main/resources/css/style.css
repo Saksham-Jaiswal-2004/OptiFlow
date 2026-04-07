@@ -597,6 +597,26 @@
     -fx-font-weight: 600;
 }
 
+.sidebar-menu-logout {
+    -fx-background-color: rgba(239,68,68,0.08);
+    -fx-border-color: rgba(239,68,68,0.22);
+    -fx-border-width: 1;
+}
+
+.sidebar-menu-logout .sidebar-item-icon,
+.sidebar-menu-logout .sidebar-item-text {
+    -fx-text-fill: #fca5a5;
+}
+
+.sidebar-menu-logout:hover {
+    -fx-background-color: rgba(239,68,68,0.16);
+}
+
+.sidebar-menu-logout.sidebar-menu-active {
+    -fx-background-color: rgba(239,68,68,0.24);
+    -fx-border-color: rgba(252,165,165,0.42);
+}
+
 .sidebar-collapse-btn {
     -fx-background-color: rgba(255,255,255,0.08);
     -fx-border-color: rgba(255,255,255,0.14);
@@ -698,6 +718,8 @@
 .emp-table .column-header .label {
     -fx-text-fill: rgba(255,255,255,0.82);
     -fx-font-weight: 700;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
 }
 
 .emp-table .table-row-cell {
@@ -713,6 +735,8 @@
 .emp-table .table-cell {
     -fx-text-fill: rgba(255,255,255,0.82);
     -fx-border-color: transparent;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
 }
 
 .emp-status-badge {
@@ -840,6 +864,8 @@
 .mgr-table .column-header .label {
     -fx-text-fill: rgba(255,255,255,0.82);
     -fx-font-weight: 700;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
 }
 
 .mgr-table .table-row-cell {
@@ -854,6 +880,8 @@
 .mgr-table .table-cell {
     -fx-text-fill: rgba(255,255,255,0.82);
     -fx-border-color: transparent;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
 }
 
 .mgr-status-badge {
@@ -1106,6 +1134,8 @@
 .adm-table .column-header .label {
     -fx-text-fill: rgba(255,255,255,0.82);
     -fx-font-weight: 700;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
 }
 
 .adm-table .table-row-cell {
@@ -1120,6 +1150,8 @@
 .adm-table .table-cell {
     -fx-text-fill: rgba(255,255,255,0.82);
     -fx-border-color: transparent;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
 }
 
 .adm-progress {
@@ -1307,6 +1339,8 @@
 .proj-table .column-header .label {
     -fx-text-fill: rgba(255,255,255,0.82);
     -fx-font-weight: 700;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
 }
 
 .proj-table .table-row-cell {
@@ -1321,6 +1355,8 @@
 .proj-table .table-cell {
     -fx-text-fill: rgba(255,255,255,0.82);
     -fx-border-color: transparent;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
 }
 
 .proj-empty {
@@ -1378,13 +1414,13 @@
 
 .worklog-dialog-root {
     -fx-background-color: radial-gradient(center 50% 50%, radius 80%, #1a0f2c, #0b0617);
-    -fx-padding: 24;
+    -fx-padding: 30;
 }
 
 .worklog-dialog-root .proj-form-card {
     -fx-background-color: rgba(12, 8, 30, 0.56);
     -fx-border-color: rgba(255,255,255,0.12);
-    -fx-padding: 24;
+    -fx-padding: 28;
 }
 
 .worklog-dialog-root .glass-field {
@@ -1400,6 +1436,15 @@
 
 .worklog-dialog-root .text-area .content {
     -fx-background-color: #120d2b;
+}
+
+.worklog-dialog-root .text-area .viewport {
+    -fx-background-color: #120d2b;
+}
+
+.worklog-dialog-root .text-area:focused {
+    -fx-border-color: #7c3aed;
+    -fx-background-color: #0e0925;
 }
 
 .proj-form-card {
@@ -1504,4 +1549,35 @@
 .wl-tab-active {
     -fx-padding: 6 12;
     -fx-font-size: 11.5px;
+}
+
+/* Worklogs timeline scrollbar: dark + thin */
+.worklogs-root-dark .proj-table .scroll-bar:vertical {
+    -fx-pref-width: 8;
+    -fx-padding: 1;
+    -fx-background-color: transparent;
+}
+
+.worklogs-root-dark .proj-table .scroll-bar:vertical .track {
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-background-radius: 999;
+}
+
+.worklogs-root-dark .proj-table .scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(124,58,237,0.60);
+    -fx-background-radius: 999;
+}
+
+.worklogs-root-dark .proj-table .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: rgba(139,92,246,0.78);
+}
+
+.worklogs-root-dark .proj-table .scroll-bar:vertical .increment-button,
+.worklogs-root-dark .proj-table .scroll-bar:vertical .decrement-button,
+.worklogs-root-dark .proj-table .scroll-bar:vertical .increment-arrow,
+.worklogs-root-dark .proj-table .scroll-bar:vertical .decrement-arrow {
+    -fx-padding: 0;
+    -fx-background-insets: 0;
+    -fx-background-color: transparent;
+    -fx-shape: "";
 }

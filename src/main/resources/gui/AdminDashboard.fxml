@@ -8,7 +8,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx/21"
+<VBox fx:id="root"
+    xmlns="http://javafx.com/javafx/21"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.optiflow.controllers.AdminDashboardController"
       spacing="18"
@@ -26,42 +27,68 @@
         </columnConstraints>
 
         <VBox GridPane.columnIndex="0" styleClass="adm-kpi-card" spacing="8">
-            <Label text="[]" styleClass="adm-kpi-icon"/>
+            <Label text="◻" styleClass="adm-kpi-icon"/>
             <Label fx:id="projectsValue" text="0" styleClass="adm-kpi-value"/>
             <Label text="Total Projects" styleClass="adm-kpi-label"/>
             <Label text="+8.3% vs last month" styleClass="adm-kpi-trend good"/>
         </VBox>
 
         <VBox GridPane.columnIndex="1" styleClass="adm-kpi-card" spacing="8">
-            <Label text="[]" styleClass="adm-kpi-icon"/>
+            <Label text="◉" styleClass="adm-kpi-icon"/>
             <Label fx:id="employeesValue" text="0" styleClass="adm-kpi-value"/>
             <Label text="Total Employees" styleClass="adm-kpi-label"/>
             <Label text="+4.1% vs last month" styleClass="adm-kpi-trend good"/>
         </VBox>
 
         <VBox GridPane.columnIndex="2" styleClass="adm-kpi-card" spacing="8">
-            <Label text="[]" styleClass="adm-kpi-icon"/>
+            <Label text="◍" styleClass="adm-kpi-icon"/>
             <Label fx:id="managersValue" text="0" styleClass="adm-kpi-value"/>
-            <Label text="Total Managers" styleClass="adm-kpi-label"/>
+            <Label text="Managers / Teams" styleClass="adm-kpi-label"/>
             <Label text="Stable this period" styleClass="adm-kpi-trend"/>
         </VBox>
 
         <VBox GridPane.columnIndex="3" styleClass="adm-kpi-card" spacing="8">
-            <Label text="[]" styleClass="adm-kpi-icon"/>
+            <Label text="☑" styleClass="adm-kpi-icon"/>
             <Label fx:id="tasksValue" text="0" styleClass="adm-kpi-value"/>
             <Label text="Total Tasks" styleClass="adm-kpi-label"/>
             <Label text="+12.5% throughput" styleClass="adm-kpi-trend good"/>
         </VBox>
     </GridPane>
 
-    <GridPane hgap="16" vgap="16">
+    <VBox spacing="12" styleClass="adm-card" VBox.vgrow="ALWAYS">
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="Audit Logs" styleClass="adm-card-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="Latest first" styleClass="proj-page-text"/>
+        </HBox>
+
+        <TableView fx:id="auditLogTable" styleClass="adm-table" prefHeight="260" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="auditDateColumn" text="Date" prefWidth="130"/>
+                <TableColumn fx:id="auditUserColumn" text="User ID" prefWidth="100"/>
+                <TableColumn fx:id="auditRoleColumn" text="Role" prefWidth="120"/>
+                <TableColumn fx:id="auditActionColumn" text="Action" prefWidth="150"/>
+                <TableColumn fx:id="auditEntityColumn" text="Entity" prefWidth="130"/>
+                <TableColumn fx:id="auditDetailsColumn" text="Details" prefWidth="420"/>
+            </columns>
+            <placeholder>
+                <Label text="No audit logs found" styleClass="proj-empty"/>
+            </placeholder>
+        </TableView>
+    </VBox>
+
+    <GridPane hgap="16" vgap="16" VBox.vgrow="ALWAYS">
         <columnConstraints>
             <ColumnConstraints percentWidth="60" hgrow="ALWAYS"/>
             <ColumnConstraints percentWidth="40" hgrow="ALWAYS"/>
         </columnConstraints>
 
         <VBox GridPane.columnIndex="0" spacing="12" styleClass="adm-card">
-            <Label text="Project Overview" styleClass="adm-card-title"/>
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Project Overview" styleClass="adm-card-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="addProjectBtn" text="Add Project" styleClass="glass-btn" onAction="#handleAddProject"/>
+            </HBox>
             <TableView fx:id="projectTable" styleClass="adm-table" VBox.vgrow="ALWAYS">
                 <columns>
                     <TableColumn fx:id="projectNameColumn" text="Project" prefWidth="220"/>
@@ -95,11 +122,6 @@
                     <NumberAxis/>
                 </yAxis>
             </BarChart>
-        </VBox>
-
-        <VBox GridPane.columnIndex="1" spacing="12" styleClass="adm-card">
-            <Label text="Activity Feed" styleClass="adm-card-title"/>
-            <VBox fx:id="activityFeed" spacing="10" VBox.vgrow="ALWAYS"/>
         </VBox>
     </GridPane>
 </VBox>

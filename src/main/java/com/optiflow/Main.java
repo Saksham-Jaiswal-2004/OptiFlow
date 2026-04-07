@@ -30,7 +30,7 @@ public class Main extends Application
 
         stage.setTitle("OptiFlow");
         stage.setScene(scene);
-//        stage.setMaximized(true);
+       stage.setMaximized(true);
 //        stage.setResizable(false);
         stage.show();
 

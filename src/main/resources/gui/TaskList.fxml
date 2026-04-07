@@ -8,10 +8,12 @@
 <?import javafx.scene.layout.Priority?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
 
 <VBox xmlns="http://javafx.com/javafx/21"
       xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.optiflow.controllers.TaskListController"
       spacing="14"
       styleClass="proj-root"
       stylesheets="@../css/style.css">
@@ -28,12 +30,12 @@
                   styleClass="glass-field proj-filter"
                   prefWidth="170">
             <items>
-                <fx:collections fx:factory="observableArrayList">
+                <FXCollections fx:factory="observableArrayList">
                     <String fx:value="All"/>
                     <String fx:value="Pending"/>
                     <String fx:value="In Progress"/>
                     <String fx:value="Completed"/>
-                </fx:collections>
+                </FXCollections>
             </items>
         </ComboBox>
 
@@ -41,13 +43,13 @@
                   styleClass="glass-field proj-filter"
                   prefWidth="200">
             <items>
-                <fx:collections fx:factory="observableArrayList">
+                <FXCollections fx:factory="observableArrayList">
                     <String fx:value="All Employees"/>
                     <String fx:value="Aarav Mehta"/>
                     <String fx:value="Neha Singh"/>
                     <String fx:value="Rohan Patel"/>
                     <String fx:value="Ishita Verma"/>
-                </fx:collections>
+                </FXCollections>
             </items>
         </ComboBox>
 
@@ -56,13 +58,13 @@
     </HBox>
 
     <VBox spacing="10" styleClass="proj-card" VBox.vgrow="ALWAYS">
-        <TableView styleClass="proj-table" VBox.vgrow="ALWAYS">
+        <TableView fx:id="taskTable" styleClass="proj-table" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn text="Task" prefWidth="260"/>
-                <TableColumn text="Assigned To" prefWidth="170"/>
-                <TableColumn text="Status" prefWidth="140"/>
-                <TableColumn text="Deadline" prefWidth="140"/>
-                <TableColumn text="Comments" prefWidth="260"/>
+                <TableColumn fx:id="taskColumn" text="Task" prefWidth="260"/>
+                <TableColumn fx:id="assignedToColumn" text="Assigned To" prefWidth="170"/>
+                <TableColumn fx:id="statusColumn" text="Status" prefWidth="140"/>
+                <TableColumn fx:id="deadlineColumn" text="Deadline" prefWidth="140"/>
+                <TableColumn fx:id="commentsColumn" text="Comments" prefWidth="260"/>
             </columns>
 
             <placeholder>

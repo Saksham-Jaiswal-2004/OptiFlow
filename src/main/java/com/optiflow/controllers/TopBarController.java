@@ -1,17 +1,22 @@
 package com.optiflow.controllers;
 
+import com.optiflow.utils.SessionManager;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class TopBarController {
@@ -64,7 +69,7 @@ public class TopBarController {
 
     @FXML
     private void handleNotificationClick(MouseEvent event) {
-        System.out.println("Notification panel hook");
+        notificationBadgeLabel.setText("0");
     }
 
     @FXML
@@ -88,19 +93,25 @@ public class TopBarController {
 
     @FXML
     private void handleProfileAction() {
-        System.out.println("Profile action hook");
         closeDropdown();
     }
 
     @FXML
     private void handleSettingsAction() {
-        System.out.println("Settings action hook");
         closeDropdown();
     }
 
     @FXML
     private void handleLogoutAction() {
-        System.out.println("Logout action hook");
+        SessionManager.setUser(null);
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/gui/Login.fxml"));
+            Stage stage = (Stage) profileTrigger.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setResizable(true);
+            stage.setMaximized(true);
+        } catch (Exception ignored) {
+        }
         closeDropdown();
     }
 

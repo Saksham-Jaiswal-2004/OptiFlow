@@ -39,15 +39,15 @@
             <VBox spacing="6">
                 <Label text="OVERVIEW" styleClass="nav-group"/>
                 <HBox alignment="CENTER_LEFT" spacing="10" styleClass="nav-item nav-item-active">
-                    <Label text="[]" styleClass="nav-icon"/>
+                    <Label text="⌂" styleClass="nav-icon"/>
                     <Label text="Dashboard" styleClass="nav-text"/>
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="10" styleClass="nav-item">
-                    <Label text="[]" styleClass="nav-icon"/>
+                    <Label text="⇄" styleClass="nav-icon"/>
                     <Label text="Allocation Board" styleClass="nav-text"/>
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="10" styleClass="nav-item">
-                    <Label text="[]" styleClass="nav-icon"/>
+                    <Label text="◌" styleClass="nav-icon"/>
                     <Label text="Bench Monitor" styleClass="nav-text"/>
                 </HBox>
             </VBox>
@@ -55,15 +55,15 @@
             <VBox spacing="6">
                 <Label text="PEOPLE" styleClass="nav-group"/>
                 <HBox alignment="CENTER_LEFT" spacing="10" styleClass="nav-item">
-                    <Label text="[]" styleClass="nav-icon"/>
+                    <Label text="◉" styleClass="nav-icon"/>
                     <Label text="Employees" styleClass="nav-text"/>
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="10" styleClass="nav-item">
-                    <Label text="[]" styleClass="nav-icon"/>
+                    <Label text="✦" styleClass="nav-icon"/>
                     <Label text="Skills Matrix" styleClass="nav-text"/>
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="10" styleClass="nav-item">
-                    <Label text="[]" styleClass="nav-icon"/>
+                    <Label text="🗒" styleClass="nav-icon"/>
                     <Label text="Work Logs" styleClass="nav-text"/>
                 </HBox>
             </VBox>
@@ -71,15 +71,15 @@
             <VBox spacing="6">
                 <Label text="DELIVERY" styleClass="nav-group"/>
                 <HBox alignment="CENTER_LEFT" spacing="10" styleClass="nav-item">
-                    <Label text="[]" styleClass="nav-icon"/>
+                    <Label text="◻" styleClass="nav-icon"/>
                     <Label text="Projects" styleClass="nav-text"/>
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="10" styleClass="nav-item">
-                    <Label text="[]" styleClass="nav-icon"/>
+                    <Label text="☑" styleClass="nav-icon"/>
                     <Label text="Tasks" styleClass="nav-text"/>
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="10" styleClass="nav-item">
-                    <Label text="[]" styleClass="nav-icon"/>
+                    <Label text="⌕" styleClass="nav-icon"/>
                     <Label text="Audit Trail" styleClass="nav-text"/>
                 </HBox>
             </VBox>
@@ -107,6 +107,19 @@
                     <Label text="Saturday, 4 April 2026  |  Snapshot updated 3 min ago" styleClass="page-sub"/>
                 </VBox>
 
+                <StackPane fx:id="notificationButton"
+                           prefWidth="36"
+                           prefHeight="36"
+                           styleClass="topbar-icon-btn"
+                           onMouseEntered="#handleNotificationHoverIn"
+                           onMouseExited="#handleNotificationHoverOut"
+                           onMouseClicked="#handleNotificationClick">
+                    <Label text="🔔" styleClass="topbar-icon-glyph"/>
+                    <StackPane prefWidth="14" prefHeight="14" translateX="10" translateY="-10" styleClass="topbar-badge-wrap">
+                        <Circle radius="7" styleClass="topbar-badge-dot"/>
+                        <Label fx:id="notificationBadgeLabel" text="3" styleClass="topbar-badge-text"/>
+                    </StackPane>
+                </StackPane>
                 <HBox alignment="CENTER_LEFT" spacing="8" styleClass="search-shell">
                     <Label text="Search people, projects, skills" styleClass="search-text"/>
                 </HBox>

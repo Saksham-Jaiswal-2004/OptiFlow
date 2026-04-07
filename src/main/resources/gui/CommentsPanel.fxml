@@ -12,6 +12,7 @@
 
 <VBox xmlns="http://javafx.com/javafx/21"
     xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.optiflow.controllers.CommentsPanelController"
     spacing="12"
     styleClass="proj-root"
     stylesheets="@../css/style.css">

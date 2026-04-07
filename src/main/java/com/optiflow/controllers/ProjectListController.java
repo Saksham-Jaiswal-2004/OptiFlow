@@ -6,8 +6,13 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -84,7 +89,21 @@ public class ProjectListController {
         if (currentUser != null && currentUser.isManager()) {
             return;
         }
-        System.out.println("Add Project clicked");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ProjectForm.fxml"));
+            Parent root = loader.load();
+
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Create Project");
+            dialogStage.setScene(new Scene(root, 760, 640));
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+
+            Stage owner = (Stage) addProjectBtn.getScene().getWindow();
+            dialogStage.initOwner(owner);
+            dialogStage.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -217,7 +236,21 @@ public class ProjectListController {
     }
 
     private void openProjectDetail(ProjectRow row) {
-        System.out.println("Open Project Detail: " + row.getName());
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ProjectDetail.fxml"));
+            Parent root = loader.load();
+
+            Stage detailStage = new Stage();
+            detailStage.setTitle("Project Detail - " + row.getName());
+            detailStage.setScene(new Scene(root, 900, 650));
+            detailStage.initModality(Modality.APPLICATION_MODAL);
+
+            Stage owner = (Stage) projectTable.getScene().getWindow();
+            detailStage.initOwner(owner);
+            detailStage.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void seedData() {

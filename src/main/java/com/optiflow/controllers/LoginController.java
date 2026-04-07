@@ -57,7 +57,7 @@ public class LoginController {
 
                 Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
                 stage.setScene(new Scene(root));
-                maximizeStage(stage);
+                // maximizeStage(stage);
                 stage.setMaximized(true);
 
             } else {
@@ -80,7 +80,8 @@ public class LoginController {
 
         Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
-        maximizeStage(stage);
+        // maximizeStage(stage);
+        stage.setMaximized(true);
     }
 
     private void maximizeStage(Stage stage) {

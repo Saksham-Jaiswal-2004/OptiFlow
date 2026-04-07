@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -125,7 +126,11 @@ public class ManagerController {
 
         // 👉 You can later navigate to manager detail page
         viewBtn.setOnAction(e -> {
-            System.out.println("View Manager " + manager.getName());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText(null);
+            alert.setTitle("Manager Details");
+            alert.setContentText("Selected Manager: " + manager.getName());
+            alert.showAndWait();
         });
 
         card.getChildren().addAll(top, details, viewBtn);

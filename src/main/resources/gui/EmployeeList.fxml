@@ -7,6 +7,7 @@
 
 <VBox xmlns="http://javafx.com/javafx/21"
       xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.optiflow.controllers.EmployeeListController"
       spacing="14"
       styleClass="proj-root"
       stylesheets="@../css/style.css">
@@ -17,13 +18,13 @@
     </VBox>
 
     <VBox spacing="10" styleClass="proj-card" VBox.vgrow="ALWAYS">
-        <TableView styleClass="proj-table" VBox.vgrow="ALWAYS">
+        <TableView fx:id="employeeTable" styleClass="proj-table" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn text="Name" prefWidth="180"/>
-                <TableColumn text="Role" prefWidth="150"/>
-                <TableColumn text="Skills" prefWidth="280"/>
-                <TableColumn text="Workload" prefWidth="150"/>
-                <TableColumn text="Performance" prefWidth="170"/>
+                <TableColumn fx:id="nameColumn" text="Name" prefWidth="180"/>
+                <TableColumn fx:id="roleColumn" text="Role" prefWidth="150"/>
+                <TableColumn fx:id="skillsColumn" text="Skills" prefWidth="280"/>
+                <TableColumn fx:id="workloadColumn" text="Workload" prefWidth="150"/>
+                <TableColumn fx:id="performanceColumn" text="Performance" prefWidth="170"/>
             </columns>
 
             <placeholder>

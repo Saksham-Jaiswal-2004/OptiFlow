@@ -1,24 +1,60 @@
 package com.optiflow.controllers;
 
+import com.optiflow.models.AuditLog;
+import com.optiflow.services.AuditLogService;
+
+import java.sql.Date;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class AuditLogController
 {
-    public Object getAllLogs()
-    {
-        return true;
+    private final AuditLogService auditLogService;
+
+    public AuditLogController() {
+        this.auditLogService = new AuditLogService();
     }
 
-    public Object getLogsByUser(int userId)
+    public List<AuditLog> getAllLogs()
     {
-        return true;
+        try {
+            List<AuditLog> logs = auditLogService.getAllLogs();
+            return logs == null ? Collections.emptyList() : logs;
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
     }
 
-    public Object getLogsByEntity(String entityType, int entityId)
+    public List<AuditLog> getLogsByUser(int userId)
     {
-        return true;
+        try {
+            List<AuditLog> logs = auditLogService.getLogsByUser(userId);
+            return logs == null ? Collections.emptyList() : logs;
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
     }
 
-    public Object getLogsByDateRange(java.sql.Timestamp start, java.sql.Timestamp end)
+    public List<AuditLog> getLogsByEntity(String entityType, int entityId)
     {
-        return true;
+        try {
+            List<AuditLog> logs = auditLogService.getLogsByEntity(entityType, entityId);
+            return logs == null ? Collections.emptyList() : logs;
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
+    }
+
+    public List<AuditLog> getLogsByDateRange(Date start, Date end)
+    {
+        if (start == null || end == null || start.after(end)) {
+            return Collections.emptyList();
+        }
+
+        return getAllLogs().stream()
+            .filter(log -> log.getDate() != null)
+            .filter(log -> !log.getDate().before(start) && !log.getDate().after(end))
+                .collect(Collectors.toList());
     }
 }

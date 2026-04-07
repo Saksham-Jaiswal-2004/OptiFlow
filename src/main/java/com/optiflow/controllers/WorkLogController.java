@@ -29,7 +29,7 @@ public class WorkLogController {
             // Create a new stage for the dialog
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Add Worklog Entry");
-            Scene scene = new Scene(root, 500, 650);
+            Scene scene = new Scene(root, 620, 760);
             scene.setFill(Color.web("#05020a"));
             dialogStage.setScene(scene);
             

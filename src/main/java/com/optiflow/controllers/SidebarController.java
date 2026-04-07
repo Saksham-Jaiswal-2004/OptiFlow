@@ -109,6 +109,9 @@ public class SidebarController {
 
         HBox item = new HBox(10, icon, text, spacer);
         item.getStyleClass().add("sidebar-menu-item");
+        if ("logout".equalsIgnoreCase(config.key)) {
+            item.getStyleClass().add("sidebar-menu-logout");
+        }
 
         item.setOnMouseClicked(event -> {
             setActiveKey(config.key);
@@ -148,35 +151,27 @@ public class SidebarController {
 
         if (user != null && user.isAdmin()) {
             configs.add(new MenuItemConfig("dashboard", "Dashboard", "⌂"));
-            configs.add(new MenuItemConfig("managers", "Managers", "◍"));
             configs.add(new MenuItemConfig("projects", "Projects", "◻"));
-            configs.add(new MenuItemConfig("project_form", "Create Project", "＋"));
-            configs.add(new MenuItemConfig("project_detail", "Project Detail", "▣"));
             configs.add(new MenuItemConfig("tasks", "Tasks", "☑"));
-            configs.add(new MenuItemConfig("task_detail", "Task Detail", "◧"));
-            configs.add(new MenuItemConfig("assignment", "Task Assignment", "⇄"));
+            configs.add(new MenuItemConfig("managers", "Managers", "◍"));
             configs.add(new MenuItemConfig("employees", "Employees", "◉"));
-            configs.add(new MenuItemConfig("employee_profile", "Employee Profile", "◎"));
-            configs.add(new MenuItemConfig("analytics", "Analytics", "◈"));
             configs.add(new MenuItemConfig("worklogs", "Worklogs", "🗒"));
-            configs.add(new MenuItemConfig("comments", "Comments", "☰"));
-            configs.add(new MenuItemConfig("notifications", "Notifications", "🔔"));
+            configs.add(new MenuItemConfig("analytics", "Analytics", "◈"));
             configs.add(new MenuItemConfig("reports", "Reports", "⬙"));
             configs.add(new MenuItemConfig("settings", "Settings", "⚙"));
+            configs.add(new MenuItemConfig("logout", "Logout", "⎋"));
             return configs;
         }
 
         if (user != null && user.isManager()) {
             configs.add(new MenuItemConfig("dashboard", "Dashboard", "⌂"));
             configs.add(new MenuItemConfig("team", "Team", "◑"));
-            configs.add(new MenuItemConfig("employees", "Employees", "◉"));
             configs.add(new MenuItemConfig("tasks", "Tasks", "☑"));
             configs.add(new MenuItemConfig("assignment", "Task Assignment", "⇄"));
             configs.add(new MenuItemConfig("projects", "Projects", "◻"));
             configs.add(new MenuItemConfig("analytics", "Analytics", "◈"));
             configs.add(new MenuItemConfig("worklogs", "Worklogs", "🗒"));
-            configs.add(new MenuItemConfig("comments", "Comments", "☰"));
-            configs.add(new MenuItemConfig("notifications", "Notifications", "🔔"));
+            configs.add(new MenuItemConfig("logout", "Logout", "⎋"));
             return configs;
         }
 
@@ -185,7 +180,7 @@ public class SidebarController {
         configs.add(new MenuItemConfig("task_detail", "Task Detail", "◧"));
         configs.add(new MenuItemConfig("worklogs", "Worklogs", "🗒"));
         configs.add(new MenuItemConfig("performance", "Performance", "⬡"));
-        configs.add(new MenuItemConfig("notifications", "Notifications", "🔔"));
+        configs.add(new MenuItemConfig("logout", "Logout", "⎋"));
         return configs;
     }
 

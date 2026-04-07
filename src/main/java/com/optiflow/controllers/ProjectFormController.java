@@ -1,5 +1,8 @@
 package com.optiflow.controllers;
 
+import com.optiflow.models.Projects;
+import com.optiflow.models.Tasks;
+import com.optiflow.services.ProjectService;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -9,8 +12,12 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 import java.time.LocalDate;
+import java.sql.Date;
+import java.util.List;
 
 public class ProjectFormController {
+
+    private final ProjectService projectService = new ProjectService();
 
     @FXML
     private TextField projectNameField;
@@ -52,12 +59,33 @@ public class ProjectFormController {
 
     @FXML
     private void handleGenerateTasks() {
-        System.out.println("AI Generate Tasks clicked");
+        hideMessages();
+        if (isBlank(projectNameField.getText()) || isBlank(descriptionField.getText())) {
+            showError(projectNameError, "Project name is required before task generation");
+            showError(descriptionError, "Description is required before task generation");
+            return;
+        }
+
+        List<Tasks> generated = projectService.generateTasksForProjects(
+                projectNameField.getText().trim(),
+                descriptionField.getText().trim()
+        );
+
+        if (generated == null || generated.isEmpty()) {
+            showError(formSuccessMessage, "Could not generate tasks at the moment.");
+            return;
+        }
+
+        formSuccessMessage.setText("Generated " + generated.size() + " tasks from AI.");
+        formSuccessMessage.setVisible(true);
+        formSuccessMessage.setManaged(true);
     }
 
     @FXML
     private void handleAddTaskManually() {
-        System.out.println("Add Task Manually clicked");
+        formSuccessMessage.setText("Manual task mode is available in the Tasks section.");
+        formSuccessMessage.setVisible(true);
+        formSuccessMessage.setManaged(true);
     }
 
     @FXML
@@ -69,9 +97,28 @@ public class ProjectFormController {
             return;
         }
 
-        formSuccessMessage.setVisible(true);
-        formSuccessMessage.setManaged(true);
-        System.out.println("Project saved successfully");
+        try {
+            Projects project = new Projects();
+            project.setName(projectNameField.getText().trim());
+            project.setDescription(descriptionField.getText().trim());
+            project.setStart_date(Date.valueOf(startDatePicker.getValue()));
+            project.setEnd_date(Date.valueOf(endDatePicker.getValue()));
+            project.setDeadline(Date.valueOf(endDatePicker.getValue()));
+            project.setStatus("Active");
+            project.setManager_id(1);
+
+            boolean saved = projectService.createProject(project);
+            if (!saved) {
+                showError(formSuccessMessage, "Unable to save project. Check required data.");
+                return;
+            }
+
+            formSuccessMessage.setText("Project saved successfully.");
+            formSuccessMessage.setVisible(true);
+            formSuccessMessage.setManaged(true);
+        } catch (Exception e) {
+            showError(formSuccessMessage, "Failed to save project.");
+        }
     }
 
     private boolean validateForm() {

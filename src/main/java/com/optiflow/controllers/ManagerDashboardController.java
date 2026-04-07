@@ -1,5 +1,12 @@
 package com.optiflow.controllers;
 
+import com.optiflow.models.Employee;
+import com.optiflow.models.Tasks;
+import com.optiflow.models.User;
+import com.optiflow.services.EmployeeService;
+import com.optiflow.services.ProjectService;
+import com.optiflow.services.TaskService;
+import com.optiflow.utils.SessionManager;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
@@ -7,6 +14,7 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.PieChart;
@@ -25,7 +33,9 @@ import javafx.util.Duration;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class ManagerDashboardController {
 
@@ -79,10 +89,14 @@ public class ManagerDashboardController {
 
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
 
+    private final EmployeeService employeeService = new EmployeeService();
+    private final ProjectService projectService = new ProjectService();
+    private final TaskService taskService = new TaskService();
+
     @FXML
     public void initialize() {
-        ObservableList<TeamRow> teamRows = mockTeamRows();
-        ObservableList<TaskRow> taskRows = mockTaskRows();
+        ObservableList<TeamRow> teamRows = loadTeamRows();
+        ObservableList<TaskRow> taskRows = loadTaskRows();
 
         configureTeamOverviewTable(teamRows);
         configureTaskTrackingTable(taskRows);
@@ -94,24 +108,107 @@ public class ManagerDashboardController {
         animateChartsOnLoad();
     }
 
-    private ObservableList<TeamRow> mockTeamRows() {
-        return FXCollections.observableArrayList(
-                new TeamRow("Aditi Sharma", "Backend Engineer", 8, 6, 78),
-                new TeamRow("Rahul Sinha", "QA Engineer", 10, 7, 86),
-                new TeamRow("Neha Kapoor", "UI/UX", 5, 4, 62),
-                new TeamRow("Imran Khan", "Data Engineer", 9, 5, 92),
-                new TeamRow("Priya Menon", "Frontend Engineer", 7, 5, 73)
-        );
+    private ObservableList<TeamRow> loadTeamRows() {
+        ObservableList<TeamRow> rows = FXCollections.observableArrayList();
+
+        try {
+            User user = SessionManager.getUser();
+            if (user == null) {
+                return rows;
+            }
+
+            Employee manager = employeeService.getEmployeeByUserId(user.getUserId());
+            if (manager == null) {
+                return rows;
+            }
+
+            List<Employee> team = employeeService.getEmployeesByManager(manager.getEmp_id());
+            List<Tasks> tasks = loadTasksByManager(manager.getEmp_id());
+
+            for (Employee member : team) {
+                long assigned = tasks.stream().filter(t -> t.getAssigned_to() == member.getEmp_id()).count();
+                long completed = tasks.stream()
+                        .filter(t -> t.getAssigned_to() == member.getEmp_id())
+                        .filter(t -> "completed".equalsIgnoreCase(t.getStatus()))
+                        .count();
+
+                int capacity = Math.max(1, member.getWeeklyCapacity());
+                int workloadPct = Math.min(100, (int) Math.round(member.getAllocated_hours() * 100.0 / capacity));
+
+                rows.add(new TeamRow(
+                        member.getName(),
+                        member.getDesignation(),
+                        (int) assigned,
+                        (int) completed,
+                        workloadPct
+                ));
+            }
+        } catch (Exception ignored) {
+        }
+
+        return rows;
     }
 
-    private ObservableList<TaskRow> mockTaskRows() {
-        return FXCollections.observableArrayList(
-                new TaskRow("Sprint API hardening", "Aditi Sharma", "In Progress", LocalDate.now().plusDays(1)),
-                new TaskRow("Regression round 2", "Rahul Sinha", "Pending", LocalDate.now().minusDays(1)),
-                new TaskRow("Refine task board UX", "Neha Kapoor", "Completed", LocalDate.now().minusDays(2)),
-                new TaskRow("Sales forecast ETL", "Imran Khan", "In Progress", LocalDate.now().plusDays(2)),
-                new TaskRow("Notification center", "Priya Menon", "Pending", LocalDate.now().plusDays(4))
-        );
+    private ObservableList<TaskRow> loadTaskRows() {
+        ObservableList<TaskRow> rows = FXCollections.observableArrayList();
+
+        try {
+            User user = SessionManager.getUser();
+            if (user == null) {
+                return rows;
+            }
+
+            Employee manager = employeeService.getEmployeeByUserId(user.getUserId());
+            if (manager == null) {
+                return rows;
+            }
+
+            List<Employee> team = employeeService.getEmployeesByManager(manager.getEmp_id());
+            List<Tasks> tasks = loadTasksByManager(manager.getEmp_id());
+
+            for (Tasks task : tasks) {
+                String assignedName = team.stream()
+                        .filter(e -> e.getEmp_id() == task.getAssigned_to())
+                        .map(Employee::getName)
+                        .findFirst()
+                        .orElse("Unassigned");
+
+                LocalDate deadline = task.getEnd_date() == null ? LocalDate.now().plusDays(7) : task.getEnd_date().toLocalDate();
+                rows.add(new TaskRow(task.getTitle(), assignedName, normalizeStatus(task.getStatus()), deadline));
+            }
+        } catch (Exception ignored) {
+        }
+
+        return rows;
+    }
+
+    private List<Tasks> loadTasksByManager(int managerEmpId) {
+        List<Tasks> tasks = new ArrayList<>();
+        try {
+            int projectId = projectService.getProjectByManager(managerEmpId);
+            if (projectId > 0) {
+                List<Tasks> fetched = taskService.getTaskByProject(projectId);
+                if (fetched != null) {
+                    tasks.addAll(fetched);
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        return tasks;
+    }
+
+    private String normalizeStatus(String status) {
+        if (status == null) {
+            return "Pending";
+        }
+        String s = status.toLowerCase(Locale.ROOT);
+        if ("completed".equals(s)) {
+            return "Completed";
+        }
+        if ("in progress".equals(s) || "active".equals(s)) {
+            return "In Progress";
+        }
+        return "Pending";
     }
 
     private void configureTeamOverviewTable(ObservableList<TeamRow> rows) {
@@ -120,6 +217,12 @@ public class ManagerDashboardController {
         tasksAssignedColumn.setCellValueFactory(data -> data.getValue().tasksAssignedProperty());
         tasksCompletedColumn.setCellValueFactory(data -> data.getValue().tasksCompletedProperty());
         workloadColumn.setCellValueFactory(data -> data.getValue().workloadProperty());
+
+        memberNameColumn.setStyle("-fx-alignment: CENTER;");
+        memberRoleColumn.setStyle("-fx-alignment: CENTER;");
+        tasksAssignedColumn.setStyle("-fx-alignment: CENTER;");
+        tasksCompletedColumn.setStyle("-fx-alignment: CENTER;");
+        workloadColumn.setStyle("-fx-alignment: CENTER;");
 
         workloadColumn.setCellFactory(col -> new TableCell<>() {
             @Override
@@ -148,6 +251,7 @@ public class ManagerDashboardController {
 
                 StackPane bar = new StackPane(track, fill);
                 HBox row = new HBox(8, bar, pct);
+                row.setAlignment(Pos.CENTER);
                 setGraphic(row);
                 setText(null);
             }
@@ -270,7 +374,7 @@ public class ManagerDashboardController {
         performanceBarChart.getData().setAll(series);
 
         long completed = taskRows.stream().filter(t -> "Completed".equalsIgnoreCase(t.getStatus())).count();
-        long pending = taskRows.size() - completed;
+        long pending = Math.max(0, taskRows.size() - completed);
 
         completionPieChart.setData(FXCollections.observableArrayList(
                 new PieChart.Data("Completed", completed),
@@ -301,6 +405,10 @@ public class ManagerDashboardController {
     }
 
     private void animateCardsOnLoad() {
+        if (root == null) {
+            return;
+        }
+
         int i = 0;
         for (Node node : root.lookupAll(".mgr-card")) {
             node.setOpacity(0);
