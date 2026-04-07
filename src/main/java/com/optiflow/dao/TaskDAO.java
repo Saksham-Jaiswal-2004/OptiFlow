@@ -27,7 +27,7 @@ public class TaskDAO
     {
         String sql = "INSERT INTO tasks (project_id, assigned_to, title, description, status, priority, estimated_hours, actual_hours, start_date, end_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setInt(1, project_id);
             if(assigned_to == 0)
                 stmt.setNull(2, java.sql.Types.INTEGER);
@@ -68,7 +68,7 @@ public class TaskDAO
         String sql = "SELECT * FROM tasks";
 
         try(Connection conn = DBConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ResultSet rs = stmt.executeQuery();
 
