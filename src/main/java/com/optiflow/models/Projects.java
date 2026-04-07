@@ -16,13 +16,14 @@ public class Projects
     public Projects()
     {}
 
-    public Projects(String name, String description, Date start_date, Date deadline, int manager_id)
+    public Projects(String name, String description, Date start_date, Date deadline, int manager_id, String status)
     {
         this.name = name;
         this.description = description;
         this.start_date = start_date;
         this.deadline = deadline;
         this.manager_id = manager_id;
+        this.status = status;
     }
 
     public int getProject_id()

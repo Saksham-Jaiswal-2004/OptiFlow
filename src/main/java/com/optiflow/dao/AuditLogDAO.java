@@ -14,7 +14,8 @@ import java.util.List;
 
 public class AuditLogDAO
 {
-    public AuditLogDAO() {}
+    public AuditLogDAO()
+    {}
 
     public boolean addLog(int user_id, String action, String entityType, int entity_id, String details)
     {

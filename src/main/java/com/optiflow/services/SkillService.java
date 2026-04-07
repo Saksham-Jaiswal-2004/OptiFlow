@@ -14,7 +14,7 @@ public class SkillService
     private SkillsDAO skillsDAO;
     private AuditLogService auditLogService;
 
-    SkillService()
+    public SkillService()
     {
         this.skillsDAO = new SkillsDAO();
         this.auditLogService = new AuditLogService();

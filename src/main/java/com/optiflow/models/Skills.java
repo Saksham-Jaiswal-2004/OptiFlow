@@ -30,6 +30,11 @@ public class Skills
         return description;
     }
 
+    public void setSkill_id(int skill_id)
+    {
+        this.skill_id = skill_id;
+    }
+
     public void setName(String name)
     {
         this.name = name;
