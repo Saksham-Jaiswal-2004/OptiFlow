@@ -54,17 +54,20 @@ public class SkillsDAO
             PreparedStatement stmt = conn.prepareStatement(sql)) {
             ResultSet rs = stmt.executeQuery();
 
-            if (rs.next()) {
+            while(rs.next())
+            {
                 Skills skill = new Skills();
+                skill.setSkill_id(rs.getInt("skill_id"));
                 skill.setName(rs.getString("name"));
                 skill.setDescription(rs.getString("description"));
 
                 skillList.add(skill);
-                return skillList;
             }
+                return skillList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
-
-        return null;
     }
 
     public Skills getSkillById(int skill_id) throws SQLException
