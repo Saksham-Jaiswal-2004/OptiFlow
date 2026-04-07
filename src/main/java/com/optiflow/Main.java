@@ -15,8 +15,10 @@ public class Main extends Application
     @Override
     public void start(Stage stage) throws Exception
     {
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/DashboardBase.fxml"));
+        // FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
+    //    FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/DashboardBase.fxml"));
+    //    FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/Login.fxml"));
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/Login.fxml"));
         if (loader.getLocation() == null)
         {
             throw new RuntimeException("FXML file not found!");
@@ -28,8 +30,8 @@ public class Main extends Application
 
         stage.setTitle("OptiFlow");
         stage.setScene(scene);
-        stage.setMaximized(true);
-        stage.setResizable(false);
+//        stage.setMaximized(true);
+//        stage.setResizable(false);
         stage.show();
 
         if(AppContext.getSocketClient() != null)

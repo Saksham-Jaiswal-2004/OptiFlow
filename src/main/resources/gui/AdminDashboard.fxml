@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.optiflow.controllers.AdminDashboardController"
+      spacing="18"
+      styleClass="adm-root"
+      stylesheets="@../css/style.css">
+
+    <Label text="System Overview" styleClass="adm-title"/>
+
+    <GridPane hgap="14" vgap="14" styleClass="adm-kpi-grid">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="25" hgrow="ALWAYS"/>
+            <ColumnConstraints percentWidth="25" hgrow="ALWAYS"/>
+            <ColumnConstraints percentWidth="25" hgrow="ALWAYS"/>
+            <ColumnConstraints percentWidth="25" hgrow="ALWAYS"/>
+        </columnConstraints>
+
+        <VBox GridPane.columnIndex="0" styleClass="adm-kpi-card" spacing="8">
+            <Label text="[]" styleClass="adm-kpi-icon"/>
+            <Label fx:id="projectsValue" text="0" styleClass="adm-kpi-value"/>
+            <Label text="Total Projects" styleClass="adm-kpi-label"/>
+            <Label text="+8.3% vs last month" styleClass="adm-kpi-trend good"/>
+        </VBox>
+
+        <VBox GridPane.columnIndex="1" styleClass="adm-kpi-card" spacing="8">
+            <Label text="[]" styleClass="adm-kpi-icon"/>
+            <Label fx:id="employeesValue" text="0" styleClass="adm-kpi-value"/>
+            <Label text="Total Employees" styleClass="adm-kpi-label"/>
+            <Label text="+4.1% vs last month" styleClass="adm-kpi-trend good"/>
+        </VBox>
+
+        <VBox GridPane.columnIndex="2" styleClass="adm-kpi-card" spacing="8">
+            <Label text="[]" styleClass="adm-kpi-icon"/>
+            <Label fx:id="managersValue" text="0" styleClass="adm-kpi-value"/>
+            <Label text="Total Managers" styleClass="adm-kpi-label"/>
+            <Label text="Stable this period" styleClass="adm-kpi-trend"/>
+        </VBox>
+
+        <VBox GridPane.columnIndex="3" styleClass="adm-kpi-card" spacing="8">
+            <Label text="[]" styleClass="adm-kpi-icon"/>
+            <Label fx:id="tasksValue" text="0" styleClass="adm-kpi-value"/>
+            <Label text="Total Tasks" styleClass="adm-kpi-label"/>
+            <Label text="+12.5% throughput" styleClass="adm-kpi-trend good"/>
+        </VBox>
+    </GridPane>
+
+    <GridPane hgap="16" vgap="16">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="60" hgrow="ALWAYS"/>
+            <ColumnConstraints percentWidth="40" hgrow="ALWAYS"/>
+        </columnConstraints>
+
+        <VBox GridPane.columnIndex="0" spacing="12" styleClass="adm-card">
+            <Label text="Project Overview" styleClass="adm-card-title"/>
+            <TableView fx:id="projectTable" styleClass="adm-table" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="projectNameColumn" text="Project" prefWidth="220"/>
+                    <TableColumn fx:id="managerColumn" text="Manager" prefWidth="170"/>
+                    <TableColumn fx:id="progressColumn" text="Progress" prefWidth="190"/>
+                    <TableColumn fx:id="statusColumn" text="Status" prefWidth="130"/>
+                </columns>
+            </TableView>
+        </VBox>
+
+        <VBox GridPane.columnIndex="1" spacing="12" styleClass="adm-card">
+            <Label text="Resource Utilization" styleClass="adm-card-title"/>
+            <PieChart fx:id="utilizationChart" prefHeight="280" labelsVisible="false" legendVisible="true" styleClass="adm-pie"/>
+        </VBox>
+
+        <VBox GridPane.columnIndex="0" spacing="12" styleClass="adm-card">
+            <Label text="Analytics" styleClass="adm-card-title"/>
+            <LineChart fx:id="completionLineChart" prefHeight="210" styleClass="adm-line">
+                <xAxis>
+                    <CategoryAxis/>
+                </xAxis>
+                <yAxis>
+                    <NumberAxis/>
+                </yAxis>
+            </LineChart>
+            <BarChart fx:id="performanceBarChart" prefHeight="210" styleClass="adm-bar">
+                <xAxis>
+                    <CategoryAxis/>
+                </xAxis>
+                <yAxis>
+                    <NumberAxis/>
+                </yAxis>
+            </BarChart>
+        </VBox>
+
+        <VBox GridPane.columnIndex="1" spacing="12" styleClass="adm-card">
+            <Label text="Activity Feed" styleClass="adm-card-title"/>
+            <VBox fx:id="activityFeed" spacing="10" VBox.vgrow="ALWAYS"/>
+        </VBox>
+    </GridPane>
+</VBox>

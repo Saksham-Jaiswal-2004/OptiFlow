@@ -1,64 +1,52 @@
 package com.optiflow.controllers;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.Button;
+import javafx.scene.paint.Color;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class WorkLogController {
 
     @FXML
-    private TextField employeeIdField;
+    private Button addEntryBtn;
 
     @FXML
-    private TextField taskNameField;
-
-    @FXML
-    private TextField hoursField;
-
-    @FXML
-    private TextArea descriptionArea;
-
-    @FXML
-    private void handleSubmitWorklog() {
-
-        String empId = employeeIdField.getText();
-        String taskName = taskNameField.getText();
-        String hoursText = hoursField.getText();
-        String description = descriptionArea.getText();
-
-
-        if (empId.isEmpty() || taskName.isEmpty() || hoursText.isEmpty()) {
-            showAlert("Error", "Please fill all required fields!");
-            return;
-        }
-
-        double hours;
-
-        try {
-            hours = Double.parseDouble(hoursText);
-        } catch (NumberFormatException e) {
-            showAlert("Error", "Hours must be a number!");
-            return;
-        }
-
-
-        System.out.println("Worklog Added:");
-        System.out.println("Employee ID: " + empId);
-        System.out.println("Task: " + taskName);
-        System.out.println("Hours: " + hours);
-        System.out.println("Description: " + description);
-
-        showAlert("Success", "Worklog submitted successfully!");
-
-        clearFields();
+    public void initialize() {
+        addEntryBtn.setOnAction(e -> handleAddEntry());
     }
 
-    private void clearFields() {
-        employeeIdField.clear();
-        taskNameField.clear();
-        hoursField.clear();
-        descriptionArea.clear();
+    private void handleAddEntry() {
+        try {
+            // Load the AddWorklog.fxml dialog
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/AddWorklog.fxml"));
+            Parent root = loader.load();
+
+            // Create a new stage for the dialog
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Add Worklog Entry");
+            Scene scene = new Scene(root, 500, 650);
+            scene.setFill(Color.web("#05020a"));
+            dialogStage.setScene(scene);
+            
+            // Make it a modal dialog
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+            
+            // Set owner to the main window if available
+            Stage mainStage = (Stage) addEntryBtn.getScene().getWindow();
+            dialogStage.initOwner(mainStage);
+
+            // Show the dialog
+            dialogStage.showAndWait();
+
+        } catch (Exception e) {
+            showAlert("Error", "Failed to open add worklog dialog: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void showAlert(String title, String message) {

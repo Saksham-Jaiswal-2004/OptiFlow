@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.optiflow.controllers.SidebarController"
+      fx:id="root"
+      prefWidth="220"
+      minWidth="220"
+      maxWidth="220"
+      spacing="10"
+      styleClass="sidebar-shell"
+      stylesheets="@../css/style.css">
+
+    <HBox alignment="CENTER_LEFT" spacing="10" styleClass="sidebar-top-wrap">
+        <StackPane prefWidth="28" prefHeight="28" styleClass="sidebar-logo-wrap">
+            <Circle radius="6" styleClass="sidebar-logo-dot"/>
+        </StackPane>
+        <Label fx:id="logoLabel" text="OptiFlow" styleClass="sidebar-logo-text"/>
+    </HBox>
+
+    <Separator styleClass="sidebar-separator"/>
+
+    <VBox fx:id="menuContainer" spacing="6" VBox.vgrow="ALWAYS"/>
+
+    <Button fx:id="collapseBtn"
+            text="Collapse"
+            onAction="#toggleCollapse"
+            styleClass="sidebar-collapse-btn"
+            maxWidth="Infinity"/>
+</VBox>

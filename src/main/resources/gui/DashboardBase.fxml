@@ -1,93 +1,341 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.shape.*?>
 
-<StackPane xmlns:fx="http://javafx.com/fxml/1"
-           prefWidth="1280"
-           prefHeight="720"
-           styleClass="root-shell"
-           stylesheets="@../css/dashboard.css, @../css/style.css">
+<StackPane xmlns="http://javafx.com/javafx/21"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:id="root"
+           prefWidth="1360"
+           prefHeight="860"
+           styleClass="bg-base"
+           stylesheets="@../css/dashboard.css">
 
-    <!-- AURORA BACKGROUND -->
-    <Circle radius="320" layoutX="200" layoutY="200" styleClass="aurora-violet" mouseTransparent="true"/>
-    <Circle radius="260" layoutX="1050" layoutY="120" styleClass="aurora-indigo" mouseTransparent="true"/>
-    <Circle radius="220" layoutX="700" layoutY="620" styleClass="aurora-cyan" mouseTransparent="true"/>
+    <Pane styleClass="bg-base" prefWidth="1360" prefHeight="860" mouseTransparent="true"/>
+    <Pane styleClass="grid-overlay" prefWidth="1360" prefHeight="860" mouseTransparent="true"/>
 
-    <HBox>
+    <Circle managed="false" radius="280" layoutX="180" layoutY="180" styleClass="aurora-violet" mouseTransparent="true"/>
+    <Circle managed="false" radius="220" layoutX="1120" layoutY="160" styleClass="aurora-indigo" mouseTransparent="true"/>
+    <Circle managed="false" radius="190" layoutX="700" layoutY="760" styleClass="aurora-cyan" mouseTransparent="true"/>
 
-        <!-- SIDEBAR -->
-        <VBox styleClass="sidebar" spacing="10">
+    <HBox prefWidth="1320" prefHeight="820" maxWidth="1320" maxHeight="820" spacing="18" styleClass="dash-shell">
 
-            <Label text="OptiFlow" styleClass="logo-name" />
-
-            <VBox spacing="8">
-                <HBox styleClass="nav-item nav-active">
-                    <Label text="Dashboard" styleClass="nav-label"/>
+        <VBox prefWidth="260" maxWidth="260" minWidth="260" styleClass="sidebar" spacing="18">
+            <VBox spacing="8" styleClass="brand-wrap">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <StackPane prefWidth="34" prefHeight="34" styleClass="logo-dot">
+                        <Circle radius="8" styleClass="logo-core"/>
+                    </StackPane>
+                    <VBox spacing="0">
+                        <Label text="OptiFlow" styleClass="brand-name"/>
+                        <Label text="SME Resource Suite" styleClass="brand-sub"/>
+                    </VBox>
                 </HBox>
+                <Label text="ROLE: RESOURCE MANAGER" styleClass="role-badge"/>
+            </VBox>
 
-                <HBox styleClass="nav-item">
-                    <Label text="Tasks" styleClass="nav-label"/>
+            <VBox spacing="6">
+                <Label text="OVERVIEW" styleClass="nav-group"/>
+                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="nav-item nav-item-active">
+                    <Label text="[]" styleClass="nav-icon"/>
+                    <Label text="Dashboard" styleClass="nav-text"/>
                 </HBox>
-
-                <HBox styleClass="nav-item">
-                    <Label text="Analytics" styleClass="nav-label"/>
+                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="nav-item">
+                    <Label text="[]" styleClass="nav-icon"/>
+                    <Label text="Allocation Board" styleClass="nav-text"/>
                 </HBox>
-
-                <HBox styleClass="nav-item">
-                    <Label text="Settings" styleClass="nav-label"/>
+                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="nav-item">
+                    <Label text="[]" styleClass="nav-icon"/>
+                    <Label text="Bench Monitor" styleClass="nav-text"/>
                 </HBox>
             </VBox>
 
+            <VBox spacing="6">
+                <Label text="PEOPLE" styleClass="nav-group"/>
+                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="nav-item">
+                    <Label text="[]" styleClass="nav-icon"/>
+                    <Label text="Employees" styleClass="nav-text"/>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="nav-item">
+                    <Label text="[]" styleClass="nav-icon"/>
+                    <Label text="Skills Matrix" styleClass="nav-text"/>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="nav-item">
+                    <Label text="[]" styleClass="nav-icon"/>
+                    <Label text="Work Logs" styleClass="nav-text"/>
+                </HBox>
+            </VBox>
+
+            <VBox spacing="6">
+                <Label text="DELIVERY" styleClass="nav-group"/>
+                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="nav-item">
+                    <Label text="[]" styleClass="nav-icon"/>
+                    <Label text="Projects" styleClass="nav-text"/>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="nav-item">
+                    <Label text="[]" styleClass="nav-icon"/>
+                    <Label text="Tasks" styleClass="nav-text"/>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="nav-item">
+                    <Label text="[]" styleClass="nav-icon"/>
+                    <Label text="Audit Trail" styleClass="nav-text"/>
+                </HBox>
+            </VBox>
+
+            <Pane VBox.vgrow="ALWAYS"/>
+
+            <VBox spacing="8" styleClass="side-foot">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <StackPane prefWidth="34" prefHeight="34" styleClass="avatar-wrap">
+                        <Circle radius="17" styleClass="avatar-bg"/>
+                        <Label text="RM" styleClass="avatar-txt"/>
+                    </StackPane>
+                    <VBox spacing="2">
+                        <Label text="Ritika Mehra" styleClass="profile-name"/>
+                        <Label text="Resource Manager" styleClass="profile-role"/>
+                    </VBox>
+                </HBox>
+            </VBox>
         </VBox>
 
-        <!-- MAIN AREA -->
-        <VBox styleClass="main-area" VBox.vgrow="ALWAYS">
-
-            <!-- TOP HEADER -->
-            <HBox styleClass="top-header" alignment="CENTER_LEFT" spacing="20">
-                <VBox>
-                    <Label text="Dashboard" styleClass="page-title"/>
-                    <Label text="Welcome back 👋" styleClass="page-sub"/>
+        <VBox HBox.hgrow="ALWAYS" spacing="16" styleClass="main-area">
+            <HBox alignment="CENTER_LEFT" styleClass="topbar" spacing="14">
+                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                    <Label text="SME Resource Management Dashboard" styleClass="page-title"/>
+                    <Label text="Saturday, 4 April 2026  |  Snapshot updated 3 min ago" styleClass="page-sub"/>
                 </VBox>
+
+                <HBox alignment="CENTER_LEFT" spacing="8" styleClass="search-shell">
+                    <Label text="Search people, projects, skills" styleClass="search-text"/>
+                </HBox>
+
+                <Button text="Export" styleClass="ghost-btn"/>
+                <Button text="Create Allocation" styleClass="prime-btn"/>
             </HBox>
 
-            <!-- CONTENT -->
-            <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="content-scroll" VBox.vgrow="ALWAYS">
+            <ScrollPane VBox.vgrow="ALWAYS" fitToWidth="true" styleClass="content-scroll">
+                <VBox spacing="16" styleClass="content-wrap">
 
-                <VBox styleClass="content-body" spacing="20">
-
-                    <!-- KPI CARDS -->
-                    <HBox spacing="20">
-                        <VBox styleClass="kpi-card" prefWidth="200">
-                            <Label text="Total Tasks" styleClass="kpi-label"/>
-                            <Label text="124" styleClass="kpi-value"/>
+                    <HBox spacing="14">
+                        <VBox HBox.hgrow="ALWAYS" spacing="8" styleClass="kpi-card">
+                            <Label text="Resource Utilization" styleClass="kpi-label"/>
+                            <Label text="84%" styleClass="kpi-value"/>
+                            <Label text="+3.2% vs last week" styleClass="kpi-meta good"/>
                         </VBox>
 
-                        <VBox styleClass="kpi-card" prefWidth="200">
-                            <Label text="Completed" styleClass="kpi-label"/>
-                            <Label text="98" styleClass="kpi-value"/>
+                        <VBox HBox.hgrow="ALWAYS" spacing="8" styleClass="kpi-card">
+                            <Label text="Bench Capacity" styleClass="kpi-label"/>
+                            <Label text="18 Employees" styleClass="kpi-value"/>
+                            <Label text="6 available this week" styleClass="kpi-meta"/>
                         </VBox>
 
-                        <VBox styleClass="kpi-card" prefWidth="200">
-                            <Label text="Pending" styleClass="kpi-label"/>
-                            <Label text="26" styleClass="kpi-value"/>
+                        <VBox HBox.hgrow="ALWAYS" spacing="8" styleClass="kpi-card">
+                            <Label text="Billable Hours" styleClass="kpi-label"/>
+                            <Label text="1,246 hrs" styleClass="kpi-value"/>
+                            <Label text="Target attainment 91%" styleClass="kpi-meta"/>
+                        </VBox>
+
+                        <VBox HBox.hgrow="ALWAYS" spacing="8" styleClass="kpi-card">
+                            <Label text="Open Resource Requests" styleClass="kpi-label"/>
+                            <Label text="12" styleClass="kpi-value"/>
+                            <Label text="4 urgent, 8 normal" styleClass="kpi-meta warn"/>
                         </VBox>
                     </HBox>
 
-                    <!-- PANEL -->
-                    <VBox styleClass="panel" spacing="10">
-                        <Label text="Recent Activity" styleClass="panel-title"/>
-                        <Label text="No recent updates..." styleClass="page-sub"/>
-                    </VBox>
+                    <HBox spacing="14">
+                        <VBox HBox.hgrow="ALWAYS" styleClass="panel" spacing="0">
+                            <HBox alignment="CENTER_LEFT" styleClass="panel-head">
+                                <Label text="Allocation Overview" styleClass="panel-title" HBox.hgrow="ALWAYS"/>
+                                <Label text="Current Week" styleClass="chip"/>
+                            </HBox>
+                            <Pane styleClass="panel-divider" prefHeight="1"/>
 
+                            <VBox styleClass="chart-wrap" spacing="14">
+                                <HBox alignment="CENTER_LEFT" spacing="16">
+                                    <HBox alignment="CENTER_LEFT" spacing="6">
+                                        <Pane prefWidth="10" prefHeight="10" styleClass="legend-dot billable"/>
+                                        <Label text="Billable" styleClass="legend-txt"/>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" spacing="6">
+                                        <Pane prefWidth="10" prefHeight="10" styleClass="legend-dot internal"/>
+                                        <Label text="Internal" styleClass="legend-txt"/>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" spacing="6">
+                                        <Pane prefWidth="10" prefHeight="10" styleClass="legend-dot bench"/>
+                                        <Label text="Bench" styleClass="legend-txt"/>
+                                    </HBox>
+                                </HBox>
+
+                                <HBox spacing="12" alignment="BOTTOM_LEFT" styleClass="bars-row">
+                                    <VBox alignment="BOTTOM_CENTER" spacing="8" HBox.hgrow="ALWAYS">
+                                        <HBox alignment="BOTTOM_CENTER" spacing="4">
+                                            <Pane prefWidth="16" prefHeight="72" styleClass="bar billable"/>
+                                            <Pane prefWidth="16" prefHeight="34" styleClass="bar internal"/>
+                                            <Pane prefWidth="16" prefHeight="20" styleClass="bar bench"/>
+                                        </HBox>
+                                        <Label text="Mon" styleClass="bar-day"/>
+                                    </VBox>
+
+                                    <VBox alignment="BOTTOM_CENTER" spacing="8" HBox.hgrow="ALWAYS">
+                                        <HBox alignment="BOTTOM_CENTER" spacing="4">
+                                            <Pane prefWidth="16" prefHeight="84" styleClass="bar billable"/>
+                                            <Pane prefWidth="16" prefHeight="28" styleClass="bar internal"/>
+                                            <Pane prefWidth="16" prefHeight="18" styleClass="bar bench"/>
+                                        </HBox>
+                                        <Label text="Tue" styleClass="bar-day"/>
+                                    </VBox>
+
+                                    <VBox alignment="BOTTOM_CENTER" spacing="8" HBox.hgrow="ALWAYS">
+                                        <HBox alignment="BOTTOM_CENTER" spacing="4">
+                                            <Pane prefWidth="16" prefHeight="79" styleClass="bar billable"/>
+                                            <Pane prefWidth="16" prefHeight="36" styleClass="bar internal"/>
+                                            <Pane prefWidth="16" prefHeight="22" styleClass="bar bench"/>
+                                        </HBox>
+                                        <Label text="Wed" styleClass="bar-day"/>
+                                    </VBox>
+
+                                    <VBox alignment="BOTTOM_CENTER" spacing="8" HBox.hgrow="ALWAYS">
+                                        <HBox alignment="BOTTOM_CENTER" spacing="4">
+                                            <Pane prefWidth="16" prefHeight="86" styleClass="bar billable"/>
+                                            <Pane prefWidth="16" prefHeight="30" styleClass="bar internal"/>
+                                            <Pane prefWidth="16" prefHeight="16" styleClass="bar bench"/>
+                                        </HBox>
+                                        <Label text="Thu" styleClass="bar-day"/>
+                                    </VBox>
+
+                                    <VBox alignment="BOTTOM_CENTER" spacing="8" HBox.hgrow="ALWAYS">
+                                        <HBox alignment="BOTTOM_CENTER" spacing="4">
+                                            <Pane prefWidth="16" prefHeight="90" styleClass="bar billable"/>
+                                            <Pane prefWidth="16" prefHeight="26" styleClass="bar internal"/>
+                                            <Pane prefWidth="16" prefHeight="15" styleClass="bar bench"/>
+                                        </HBox>
+                                        <Label text="Fri" styleClass="bar-day"/>
+                                    </VBox>
+                                </HBox>
+                            </VBox>
+                        </VBox>
+
+                        <VBox prefWidth="310" maxWidth="310" styleClass="panel" spacing="0">
+                            <HBox alignment="CENTER_LEFT" styleClass="panel-head">
+                                <Label text="Role Queue" styleClass="panel-title" HBox.hgrow="ALWAYS"/>
+                                <Label text="Today" styleClass="chip"/>
+                            </HBox>
+                            <Pane styleClass="panel-divider" prefHeight="1"/>
+
+                            <VBox styleClass="queue-wrap" spacing="10">
+                                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="queue-item">
+                                    <Label text="Admin" styleClass="queue-role" HBox.hgrow="ALWAYS"/>
+                                    <Label text="4 approvals" styleClass="queue-count"/>
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="queue-item">
+                                    <Label text="Manager" styleClass="queue-role" HBox.hgrow="ALWAYS"/>
+                                    <Label text="6 assignments" styleClass="queue-count"/>
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="queue-item">
+                                    <Label text="Project Lead" styleClass="queue-role" HBox.hgrow="ALWAYS"/>
+                                    <Label text="3 escalations" styleClass="queue-count"/>
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="queue-item">
+                                    <Label text="HR" styleClass="queue-role" HBox.hgrow="ALWAYS"/>
+                                    <Label text="2 onboarding" styleClass="queue-count"/>
+                                </HBox>
+                            </VBox>
+                        </VBox>
+                    </HBox>
+
+                    <HBox spacing="14">
+                        <VBox HBox.hgrow="ALWAYS" styleClass="panel" spacing="0">
+                            <HBox alignment="CENTER_LEFT" styleClass="panel-head">
+                                <Label text="Team Availability" styleClass="panel-title" HBox.hgrow="ALWAYS"/>
+                                <Label text="View all" styleClass="panel-link"/>
+                            </HBox>
+                            <Pane styleClass="panel-divider" prefHeight="1"/>
+
+                            <VBox styleClass="table-wrap" spacing="8">
+                                <HBox alignment="CENTER_LEFT" styleClass="table-row table-header">
+                                    <Label text="Employee" styleClass="th" HBox.hgrow="ALWAYS"/>
+                                    <Label text="Skill" styleClass="th" prefWidth="120"/>
+                                    <Label text="Allocation" styleClass="th" prefWidth="110"/>
+                                    <Label text="Status" styleClass="th" prefWidth="90"/>
+                                </HBox>
+
+                                <HBox alignment="CENTER_LEFT" styleClass="table-row">
+                                    <Label text="Aditi Sharma" styleClass="td" HBox.hgrow="ALWAYS"/>
+                                    <Label text="Java, Spring" styleClass="td" prefWidth="120"/>
+                                    <Label text="92%" styleClass="td" prefWidth="110"/>
+                                    <Label text="Allocated" styleClass="tag good" prefWidth="90"/>
+                                </HBox>
+
+                                <HBox alignment="CENTER_LEFT" styleClass="table-row">
+                                    <Label text="Rahul Sinha" styleClass="td" HBox.hgrow="ALWAYS"/>
+                                    <Label text="QA Automation" styleClass="td" prefWidth="120"/>
+                                    <Label text="64%" styleClass="td" prefWidth="110"/>
+                                    <Label text="Partial" styleClass="tag warn" prefWidth="90"/>
+                                </HBox>
+
+                                <HBox alignment="CENTER_LEFT" styleClass="table-row">
+                                    <Label text="Neha Kapoor" styleClass="td" HBox.hgrow="ALWAYS"/>
+                                    <Label text="UI/UX" styleClass="td" prefWidth="120"/>
+                                    <Label text="22%" styleClass="td" prefWidth="110"/>
+                                    <Label text="Available" styleClass="tag neutral" prefWidth="90"/>
+                                </HBox>
+
+                                <HBox alignment="CENTER_LEFT" styleClass="table-row">
+                                    <Label text="Imran Khan" styleClass="td" HBox.hgrow="ALWAYS"/>
+                                    <Label text="Data Analytics" styleClass="td" prefWidth="120"/>
+                                    <Label text="100%" styleClass="td" prefWidth="110"/>
+                                    <Label text="At Capacity" styleClass="tag bad" prefWidth="90"/>
+                                </HBox>
+                            </VBox>
+                        </VBox>
+
+                        <VBox prefWidth="320" maxWidth="320" styleClass="panel" spacing="0">
+                            <HBox alignment="CENTER_LEFT" styleClass="panel-head">
+                                <Label text="Project Health" styleClass="panel-title" HBox.hgrow="ALWAYS"/>
+                            </HBox>
+                            <Pane styleClass="panel-divider" prefHeight="1"/>
+
+                            <VBox styleClass="health-wrap" spacing="12">
+                                <VBox spacing="6">
+                                    <HBox alignment="CENTER_LEFT">
+                                        <Label text="Atlas Migration" styleClass="health-name" HBox.hgrow="ALWAYS"/>
+                                        <Label text="On Track" styleClass="good"/>
+                                    </HBox>
+                                    <Pane styleClass="track"><Pane prefHeight="6" prefWidth="205" styleClass="fill good-fill"/></Pane>
+                                </VBox>
+
+                                <VBox spacing="6">
+                                    <HBox alignment="CENTER_LEFT">
+                                        <Label text="Retail BI Rollout" styleClass="health-name" HBox.hgrow="ALWAYS"/>
+                                        <Label text="Watch" styleClass="warn"/>
+                                    </HBox>
+                                    <Pane styleClass="track"><Pane prefHeight="6" prefWidth="160" styleClass="fill warn-fill"/></Pane>
+                                </VBox>
+
+                                <VBox spacing="6">
+                                    <HBox alignment="CENTER_LEFT">
+                                        <Label text="HRMS Upgrade" styleClass="health-name" HBox.hgrow="ALWAYS"/>
+                                        <Label text="At Risk" styleClass="bad"/>
+                                    </HBox>
+                                    <Pane styleClass="track"><Pane prefHeight="6" prefWidth="118" styleClass="fill bad-fill"/></Pane>
+                                </VBox>
+                            </VBox>
+                        </VBox>
+                    </HBox>
+
+                    <HBox spacing="14" styleClass="panel action-strip" alignment="CENTER_LEFT">
+                        <Label text="Upcoming Actions" styleClass="panel-title"/>
+                        <Pane HBox.hgrow="ALWAYS"/>
+                        <Label text="4 approvals pending" styleClass="action-pill"/>
+                        <Label text="2 schedules to confirm" styleClass="action-pill"/>
+                        <Label text="1 escalation unresolved" styleClass="action-pill alert"/>
+                    </HBox>
                 </VBox>
-
             </ScrollPane>
-
         </VBox>
-
     </HBox>
+</StackPane>
 
 </StackPane>

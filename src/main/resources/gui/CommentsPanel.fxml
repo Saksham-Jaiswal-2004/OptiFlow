@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1"
+    spacing="12"
+    styleClass="proj-root"
+    stylesheets="@../css/style.css">
+
+    <HBox alignment="CENTER_LEFT" spacing="8" styleClass="panel-head">
+        <Label text="Comments" styleClass="proj-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label text="Threaded discussion" styleClass="proj-page-text"/>
+        <Label text="Live" styleClass="proj-status-badge proj-status-good"/>
+    </HBox>
+
+    <VBox spacing="10" styleClass="panel proj-card" VBox.vgrow="ALWAYS">
+        <HBox alignment="CENTER_LEFT" spacing="8" styleClass="proj-filter-wrap">
+            <Label text="General" styleClass="proj-status-badge proj-status-good"/>
+            <Label text="Risks" styleClass="proj-status-badge proj-status-warn"/>
+            <Label text="Blockers" styleClass="proj-status-badge proj-status-bad"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="14 unread" styleClass="proj-page-text"/>
+        </HBox>
+
+        <ScrollPane fitToWidth="true" fitToHeight="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="proj-table" VBox.vgrow="ALWAYS">
+            <content>
+                <VBox spacing="10" styleClass="proj-root">
+                    <VBox spacing="6" styleClass="panel-thread-parent">
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <Label text="Aarav Mehta" styleClass="dash-card-title"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="2 min ago" styleClass="proj-page-text"/>
+                        </HBox>
+                        <Label text="Please confirm if we should split migration tasks by module ownership." styleClass="dash-card-sub" wrapText="true"/>
+
+                        <VBox spacing="6" styleClass="panel-thread-child-wrap">
+                            <padding>
+                                <Insets top="8" right="8" bottom="8" left="8"/>
+                            </padding>
+                            <VBox spacing="5" styleClass="panel-thread-child">
+                                <HBox alignment="CENTER_LEFT" spacing="8">
+                                    <Label text="Neha Singh" styleClass="dash-card-title"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Label text="Just now" styleClass="proj-page-text"/>
+                                </HBox>
+                                <Label text="Yes, module-wise split will improve sprint clarity." styleClass="dash-card-sub" wrapText="true"/>
+                            </VBox>
+                        </VBox>
+                    </VBox>
+
+                    <VBox spacing="6" styleClass="panel-thread-parent">
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <Label text="Rohan Patel" styleClass="dash-card-title"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="15 min ago" styleClass="proj-page-text"/>
+                        </HBox>
+                        <Label text="QA needs endpoint contract freeze before we finalize test matrix." styleClass="dash-card-sub" wrapText="true"/>
+
+                        <VBox spacing="6" styleClass="panel-thread-child-wrap">
+                            <padding>
+                                <Insets top="8" right="8" bottom="8" left="8"/>
+                            </padding>
+                            <VBox spacing="5" styleClass="panel-thread-child">
+                                <HBox alignment="CENTER_LEFT" spacing="8">
+                                    <Label text="Ishita Verma" styleClass="dash-card-title"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Label text="8 min ago" styleClass="proj-page-text"/>
+                                </HBox>
+                                <Label text="Infra sandbox refresh is planned tonight, that should unblock QA setup." styleClass="dash-card-sub" wrapText="true"/>
+                            </VBox>
+                        </VBox>
+                    </VBox>
+                </VBox>
+            </content>
+        </ScrollPane>
+
+        <VBox spacing="8" styleClass="proj-filter-wrap">
+            <Label text="Add Comment" styleClass="field-lbl"/>
+            <TextArea promptText="Write your comment..." prefRowCount="3" styleClass="glass-field"/>
+
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Button text="Attach" styleClass="proj-ghost-btn"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Post Comment" styleClass="glass-btn"/>
+            </HBox>
+        </VBox>
+    </VBox>
+</VBox>

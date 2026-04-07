@@ -195,3 +195,1313 @@
     -fx-text-fill: rgba(255,255,255,0.9);
     -fx-font-weight: 600;
 }
+
+/* ── DASHBOARD LAYOUT (EXTENDS REGISTER THEME) ────────────────── */
+.dash-layout-shell {
+    -fx-background-color: rgba(12, 8, 30, 0.34);
+    -fx-background-radius: 20;
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-radius: 20;
+    -fx-padding: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.72), 36, 0.24, 0, 12);
+}
+
+.dash-topbar {
+    -fx-background-color: rgba(12, 8, 30, 0.50);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-radius: 12;
+    -fx-padding: 14 16;
+}
+
+.dash-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 18px;
+    -fx-font-weight: 800;
+}
+
+.dash-subtitle {
+    -fx-text-fill: rgba(255,255,255,0.66);
+    -fx-font-size: 12px;
+}
+
+.dash-role-badge {
+    -fx-text-fill: #d1c4ff;
+    -fx-background-color: rgba(124,58,237,0.16);
+    -fx-border-color: rgba(196,181,253,0.25);
+    -fx-border-radius: 999;
+    -fx-background-radius: 999;
+    -fx-padding: 4 10;
+    -fx-font-size: 10.5px;
+    -fx-font-weight: 700;
+}
+
+.dash-search {
+    -fx-background-color: #120d2b;
+    -fx-border-color: rgba(255,255,255,0.14);
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-text-fill: #ffffff;
+    -fx-prompt-text-fill: rgba(255,255,255,0.5);
+    -fx-padding: 10 14;
+    -fx-pref-width: 280;
+}
+
+.dash-search:focused {
+    -fx-border-color: #7c3aed;
+    -fx-background-color: #0e0925;
+}
+
+.dash-sidebar {
+    -fx-background-color: rgba(12, 8, 30, 0.50);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-radius: 12;
+    -fx-padding: 12;
+}
+
+.dash-collapse-btn {
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-background-radius: 8;
+    -fx-border-color: rgba(255,255,255,0.14);
+    -fx-border-radius: 8;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+    -fx-cursor: hand;
+    -fx-padding: 8 12;
+}
+
+.dash-collapse-btn:hover {
+    -fx-background-color: rgba(255,255,255,0.14);
+}
+
+.dash-separator {
+    -fx-opacity: 0.35;
+}
+
+.dash-nav-item {
+    -fx-alignment: CENTER_LEFT;
+    -fx-background-color: transparent;
+    -fx-background-radius: 8;
+    -fx-text-fill: rgba(255,255,255,0.78);
+    -fx-font-size: 12.5px;
+    -fx-font-weight: 600;
+    -fx-padding: 9 10;
+    -fx-cursor: hand;
+}
+
+.dash-nav-item:hover {
+    -fx-background-color: rgba(124,58,237,0.12);
+}
+
+.dash-nav-item-active {
+    -fx-background-color: rgba(124,58,237,0.22);
+    -fx-border-color: rgba(196,181,253,0.28);
+    -fx-border-radius: 8;
+    -fx-text-fill: #ffffff;
+}
+
+.dash-profile-wrap {
+    -fx-padding: 10 8 4 8;
+    -fx-border-color: rgba(255,255,255,0.08) transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+}
+
+.dash-profile-name {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+}
+
+.dash-profile-role {
+    -fx-text-fill: rgba(255,255,255,0.55);
+    -fx-font-size: 11px;
+}
+
+.dash-center-shell {
+    -fx-padding: 0 0 0 16;
+}
+
+.dash-section-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 18px;
+    -fx-font-weight: 800;
+    -fx-padding: 2 2 0 2;
+}
+
+.dash-center-container {
+    -fx-background-color: rgba(12, 8, 30, 0.45);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-radius: 12;
+    -fx-padding: 16;
+}
+
+.dash-center-wrap {
+    -fx-padding: 8;
+}
+
+.content-scroll-wrap {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.content-scroll-wrap > .viewport {
+    -fx-background-color: transparent;
+}
+
+.content-scroll-wrap > .corner {
+    -fx-background-color: transparent;
+}
+
+.dash-card-row {
+    -fx-fill-height: true;
+}
+
+.dash-surface-card {
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-background-radius: 10;
+    -fx-border-color: rgba(255,255,255,0.12);
+    -fx-border-radius: 10;
+    -fx-padding: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.30), 14, 0.18, 0, 4);
+}
+
+.dash-card-title {
+    -fx-text-fill: rgba(255,255,255,0.68);
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+}
+
+.dash-card-value {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 26px;
+    -fx-font-weight: 800;
+}
+
+.dash-card-sub {
+    -fx-text-fill: rgba(255,255,255,0.58);
+    -fx-font-size: 11.5px;
+}
+
+/* ── REUSABLE TOP BAR (REGISTER THEME) ────────────────────────── */
+.topbar-shell {
+    -fx-padding: 10 16;
+    -fx-background-color: rgba(12, 8, 30, 0.58);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.28), 14, 0.2, 0, 3);
+}
+
+.topbar-logo-wrap {
+    -fx-background-color: linear-gradient(to right, #7c3aed, #4f46e5);
+    -fx-background-radius: 999;
+}
+
+.topbar-logo-dot {
+    -fx-fill: rgba(255,255,255,0.9);
+}
+
+.topbar-app-name {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 22px;
+    -fx-font-weight: 900;
+}
+
+.topbar-search-wrap {
+    -fx-background-color: rgba(18,13,43,0.84);
+    -fx-border-color: rgba(255,255,255,0.14);
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 0 10;
+}
+
+.topbar-search-focused {
+    -fx-border-color: #7c3aed;
+    -fx-effect: dropshadow(gaussian, rgba(124,58,237,0.42), 10, 0.25, 0, 0);
+}
+
+.topbar-search-icon {
+    -fx-text-fill: rgba(255,255,255,0.55);
+    -fx-font-size: 14px;
+}
+
+.topbar-search-field {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-pref-height: 36;
+    -fx-padding: 6 8;
+}
+
+.topbar-search-field:focused {
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+    -fx-effect: null;
+}
+
+.topbar-icon-btn {
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-border-color: rgba(255,255,255,0.14);
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-cursor: hand;
+}
+
+.topbar-icon-btn:hover {
+    -fx-background-color: rgba(255,255,255,0.14);
+}
+
+.topbar-icon-glyph {
+    -fx-text-fill: rgba(255,255,255,0.86);
+    -fx-font-size: 15px;
+}
+
+.topbar-badge-dot {
+    -fx-fill: #ef4444;
+}
+
+.topbar-badge-text {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 9px;
+    -fx-font-weight: 700;
+}
+
+.topbar-profile-pill {
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-border-color: rgba(255,255,255,0.14);
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-padding: 4 8;
+    -fx-cursor: hand;
+}
+
+.topbar-profile-pill:hover {
+    -fx-background-color: rgba(255,255,255,0.14);
+}
+
+.topbar-avatar-bg {
+    -fx-fill: linear-gradient(from 0% 0% to 100% 100%, #7c3aed, #4338ca);
+}
+
+.topbar-avatar-txt {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 10px;
+    -fx-font-weight: 700;
+}
+
+.topbar-user-name {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+}
+
+.topbar-caret {
+    -fx-text-fill: rgba(255,255,255,0.66);
+    -fx-font-size: 10px;
+}
+
+.topbar-dropdown {
+    -fx-background-color: rgba(12, 8, 30, 0.95);
+    -fx-border-color: rgba(255,255,255,0.12);
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-padding: 6;
+    -fx-pref-width: 150;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.42), 16, 0.24, 0, 6);
+}
+
+.topbar-menu-item {
+    -fx-background-color: transparent;
+    -fx-text-fill: rgba(255,255,255,0.9);
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 8 10;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.topbar-menu-item:hover {
+    -fx-background-color: rgba(124,58,237,0.16);
+}
+
+.topbar-menu-item-danger {
+    -fx-text-fill: #fca5a5;
+}
+
+/* ── REUSABLE SIDEBAR (REGISTER THEME) ────────────────────────── */
+.sidebar-shell {
+    -fx-padding: 12;
+    -fx-background-color: rgba(12, 8, 30, 0.50);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-radius: 12;
+}
+
+.sidebar-top-wrap {
+    -fx-padding: 2 4 8 4;
+}
+
+.sidebar-logo-wrap {
+    -fx-background-color: linear-gradient(to right, #7c3aed, #4f46e5);
+    -fx-background-radius: 999;
+}
+
+.sidebar-logo-dot {
+    -fx-fill: rgba(255,255,255,0.9);
+}
+
+.sidebar-logo-text {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 19px;
+    -fx-font-weight: 800;
+}
+
+.sidebar-separator {
+    -fx-opacity: 0.35;
+}
+
+.sidebar-menu-item {
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 10 10;
+    -fx-background-color: transparent;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-cursor: hand;
+}
+
+.sidebar-menu-item:hover {
+    -fx-background-color: rgba(124,58,237,0.12);
+}
+
+.sidebar-menu-active {
+    -fx-background-color: rgba(124,58,237,0.22);
+    -fx-border-color: rgba(196,181,253,0.30);
+    -fx-border-width: 1;
+}
+
+.sidebar-item-icon {
+    -fx-text-fill: rgba(196,181,253,0.88);
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+}
+
+.sidebar-item-text {
+    -fx-text-fill: rgba(255,255,255,0.84);
+    -fx-font-size: 12.5px;
+    -fx-font-weight: 600;
+}
+
+.sidebar-collapse-btn {
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-border-color: rgba(255,255,255,0.14);
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+    -fx-padding: 8 10;
+    -fx-cursor: hand;
+}
+
+.sidebar-collapse-btn:hover {
+    -fx-background-color: rgba(255,255,255,0.14);
+}
+
+/* ── EMPLOYEE DASHBOARD (REGISTER THEME) ───────────────────────── */
+.emp-root {
+    -fx-padding: 4;
+}
+
+.emp-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 28px;
+    -fx-font-weight: 900;
+}
+
+.emp-subtitle {
+    -fx-text-fill: rgba(255,255,255,0.68);
+    -fx-font-size: 12.5px;
+}
+
+.emp-card {
+    -fx-background-color: rgba(12, 8, 30, 0.50);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-radius: 12;
+    -fx-padding: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.26), 12, 0.16, 0, 3);
+}
+
+.emp-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.42), 20, 0.22, 0, 5);
+}
+
+.emp-card-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+}
+
+.emp-muted {
+    -fx-text-fill: rgba(255,255,255,0.55);
+}
+
+.emp-notes {
+    -fx-pref-height: 90;
+}
+
+.emp-progress-label {
+    -fx-text-fill: #c4b5fd;
+    -fx-font-size: 12.5px;
+    -fx-font-weight: 700;
+}
+
+.emp-pie .chart-legend {
+    -fx-background-color: transparent;
+}
+
+.emp-pie .chart-legend-item {
+    -fx-text-fill: rgba(255,255,255,0.74);
+}
+
+.emp-pie .default-color0.chart-pie {
+    -fx-pie-color: #10b981;
+}
+
+.emp-pie .default-color1.chart-pie {
+    -fx-pie-color: #f59e0b;
+}
+
+.emp-table {
+    -fx-background-color: rgba(18,13,43,0.74);
+    -fx-background-radius: 10;
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-radius: 10;
+}
+
+.emp-table .column-header-background {
+    -fx-background-color: rgba(124,58,237,0.14);
+    -fx-background-radius: 10 10 0 0;
+}
+
+.emp-table .column-header,
+.emp-table .filler {
+    -fx-background-color: transparent;
+}
+
+.emp-table .column-header .label {
+    -fx-text-fill: rgba(255,255,255,0.82);
+    -fx-font-weight: 700;
+}
+
+.emp-table .table-row-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent rgba(255,255,255,0.06) transparent;
+    -fx-text-fill: rgba(255,255,255,0.82);
+}
+
+.emp-table .table-row-cell:hover {
+    -fx-background-color: rgba(255,255,255,0.08);
+}
+
+.emp-table .table-cell {
+    -fx-text-fill: rgba(255,255,255,0.82);
+    -fx-border-color: transparent;
+}
+
+.emp-status-badge {
+    -fx-padding: 2 8;
+    -fx-background-radius: 999;
+    -fx-font-size: 10.5px;
+    -fx-font-weight: 700;
+}
+
+.emp-status-done {
+    -fx-background-color: rgba(16,185,129,0.20);
+    -fx-text-fill: #34d399;
+}
+
+.emp-status-progress {
+    -fx-background-color: rgba(59,130,246,0.20);
+    -fx-text-fill: #93c5fd;
+}
+
+.emp-status-pending {
+    -fx-background-color: rgba(245,158,11,0.20);
+    -fx-text-fill: #fcd34d;
+}
+
+.emp-list {
+    -fx-background-color: rgba(18,13,43,0.74);
+    -fx-background-radius: 10;
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-radius: 10;
+}
+
+.emp-list .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: rgba(255,255,255,0.82);
+    -fx-padding: 10 12;
+}
+
+.emp-list .list-cell:hover {
+    -fx-background-color: rgba(255,255,255,0.08);
+}
+
+.emp-list .emp-deadline-urgent {
+    -fx-text-fill: #fca5a5;
+    -fx-font-weight: 700;
+}
+
+.emp-comment-row {
+    -fx-background-color: rgba(255,255,255,0.06);
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+}
+
+.emp-comment-avatar-wrap {
+    -fx-min-width: 26;
+    -fx-min-height: 26;
+}
+
+.emp-comment-avatar-circle {
+    -fx-fill: linear-gradient(from 0% 0% to 100% 100%, #7c3aed, #4f46e5);
+}
+
+.emp-comment-avatar-text {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 9px;
+    -fx-font-weight: 700;
+}
+
+.emp-comment-message {
+    -fx-text-fill: rgba(255,255,255,0.82);
+    -fx-font-size: 12px;
+}
+
+/* ── MANAGER DASHBOARD (REGISTER THEME) ───────────────────────── */
+.mgr-root {
+    -fx-padding: 4;
+}
+
+.mgr-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 28px;
+    -fx-font-weight: 900;
+}
+
+.mgr-subtitle {
+    -fx-text-fill: rgba(255,255,255,0.68);
+    -fx-font-size: 12.5px;
+}
+
+.mgr-card {
+    -fx-background-color: rgba(12, 8, 30, 0.50);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-radius: 12;
+    -fx-padding: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.26), 12, 0.16, 0, 3);
+}
+
+.mgr-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.42), 20, 0.22, 0, 5);
+}
+
+.mgr-card-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+}
+
+.mgr-table {
+    -fx-background-color: rgba(18,13,43,0.74);
+    -fx-background-radius: 10;
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-radius: 10;
+}
+
+.mgr-table .column-header-background {
+    -fx-background-color: rgba(124,58,237,0.14);
+    -fx-background-radius: 10 10 0 0;
+}
+
+.mgr-table .column-header,
+.mgr-table .filler {
+    -fx-background-color: transparent;
+}
+
+.mgr-table .column-header .label {
+    -fx-text-fill: rgba(255,255,255,0.82);
+    -fx-font-weight: 700;
+}
+
+.mgr-table .table-row-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent rgba(255,255,255,0.06) transparent;
+}
+
+.mgr-table .table-row-cell:hover {
+    -fx-background-color: rgba(255,255,255,0.08);
+}
+
+.mgr-table .table-cell {
+    -fx-text-fill: rgba(255,255,255,0.82);
+    -fx-border-color: transparent;
+}
+
+.mgr-status-badge {
+    -fx-padding: 2 8;
+    -fx-background-radius: 999;
+    -fx-font-size: 10.5px;
+    -fx-font-weight: 700;
+}
+
+.mgr-status-done {
+    -fx-background-color: rgba(16,185,129,0.20);
+    -fx-text-fill: #34d399;
+}
+
+.mgr-status-progress {
+    -fx-background-color: rgba(59,130,246,0.20);
+    -fx-text-fill: #93c5fd;
+}
+
+.mgr-status-pending {
+    -fx-background-color: rgba(245,158,11,0.20);
+    -fx-text-fill: #fcd34d;
+}
+
+.mgr-overdue-cell {
+    -fx-text-fill: #fca5a5;
+    -fx-font-weight: 700;
+}
+
+.mgr-task-overdue-row {
+    -fx-background-color: rgba(239,68,68,0.09);
+}
+
+.mgr-workload-track {
+    -fx-fill: rgba(255,255,255,0.14);
+    -fx-arc-width: 8;
+    -fx-arc-height: 8;
+}
+
+.mgr-workload-fill {
+    -fx-fill: #34d399;
+    -fx-arc-width: 8;
+    -fx-arc-height: 8;
+}
+
+.mgr-workload-warn {
+    -fx-fill: #fbbf24;
+}
+
+.mgr-workload-critical {
+    -fx-fill: #f87171;
+}
+
+.mgr-workload-label {
+    -fx-text-fill: rgba(255,255,255,0.74);
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+}
+
+.mgr-gantt-wrap {
+    -fx-background-color: rgba(18,13,43,0.74);
+    -fx-background-radius: 10;
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-radius: 10;
+    -fx-padding: 10;
+}
+
+.mgr-gantt-timeline {
+    -fx-padding: 0 0 6 0;
+    -fx-border-color: transparent transparent rgba(255,255,255,0.10) transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.mgr-gantt-day {
+    -fx-text-fill: rgba(255,255,255,0.68);
+    -fx-font-size: 10.5px;
+    -fx-font-weight: 700;
+}
+
+.mgr-gantt-row {
+    -fx-padding: 4 0;
+}
+
+.mgr-gantt-task {
+    -fx-text-fill: rgba(255,255,255,0.78);
+    -fx-font-size: 11.5px;
+}
+
+.mgr-gantt-bar {
+    -fx-background-radius: 999;
+}
+
+.mgr-gantt-bar-a {
+    -fx-background-color: linear-gradient(to right, #7c3aed, #4f46e5);
+}
+
+.mgr-gantt-bar-b {
+    -fx-background-color: linear-gradient(to right, #0ea5e9, #38bdf8);
+}
+
+.mgr-gantt-bar-c {
+    -fx-background-color: linear-gradient(to right, #10b981, #34d399);
+}
+
+.mgr-bar-chart,
+.mgr-pie-chart {
+    -fx-background-color: transparent;
+}
+
+.mgr-bar-chart .chart-plot-background {
+    -fx-background-color: rgba(18,13,43,0.74);
+    -fx-background-radius: 10;
+}
+
+.mgr-bar-chart .default-color0.chart-bar {
+    -fx-bar-fill: #7c3aed;
+}
+
+.mgr-bar-chart .axis-label,
+.mgr-bar-chart .axis {
+    -fx-tick-label-fill: rgba(255,255,255,0.68);
+}
+
+.mgr-pie-chart .chart-legend {
+    -fx-background-color: transparent;
+}
+
+.mgr-pie-chart .default-color0.chart-pie {
+    -fx-pie-color: #10b981;
+}
+
+.mgr-pie-chart .default-color1.chart-pie {
+    -fx-pie-color: #f59e0b;
+}
+
+.mgr-alert-item {
+    -fx-background-color: rgba(255,255,255,0.06);
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+    -fx-text-fill: rgba(255,255,255,0.82);
+    -fx-font-size: 12px;
+}
+
+.mgr-alert-warn {
+    -fx-background-color: rgba(239,68,68,0.12);
+    -fx-border-color: rgba(252,165,165,0.28);
+    -fx-border-radius: 10;
+    -fx-text-fill: #fecaca;
+}
+
+.mgr-alert-soft {
+    -fx-background-color: rgba(251,191,36,0.12);
+    -fx-border-color: rgba(252,211,77,0.26);
+    -fx-border-radius: 10;
+    -fx-text-fill: #fde68a;
+}
+
+/* ── ADMIN DASHBOARD (REGISTER THEME) ─────────────────────────── */
+.adm-root {
+    -fx-padding: 4;
+}
+
+.adm-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 28px;
+    -fx-font-weight: 900;
+}
+
+.adm-kpi-grid {
+    -fx-padding: 2 0 0 0;
+}
+
+.adm-kpi-card {
+    -fx-background-color: rgba(12, 8, 30, 0.50);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-radius: 12;
+    -fx-padding: 14;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.26), 12, 0.16, 0, 3);
+}
+
+.adm-kpi-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.44), 22, 0.24, 0, 6);
+}
+
+.adm-kpi-icon {
+    -fx-text-fill: rgba(196,181,253,0.86);
+    -fx-font-size: 15px;
+    -fx-font-weight: 700;
+}
+
+.adm-kpi-value {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 30px;
+    -fx-font-weight: 900;
+}
+
+.adm-kpi-label {
+    -fx-text-fill: rgba(255,255,255,0.66);
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+}
+
+.adm-kpi-trend {
+    -fx-text-fill: rgba(255,255,255,0.58);
+    -fx-font-size: 11px;
+}
+
+.adm-kpi-trend.good {
+    -fx-text-fill: #34d399;
+    -fx-font-weight: 700;
+}
+
+.adm-card {
+    -fx-background-color: rgba(12, 8, 30, 0.50);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-radius: 12;
+    -fx-padding: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.26), 12, 0.16, 0, 3);
+}
+
+.adm-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.42), 20, 0.22, 0, 5);
+}
+
+.adm-card-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+}
+
+.adm-table {
+    -fx-background-color: rgba(18,13,43,0.74);
+    -fx-background-radius: 10;
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-radius: 10;
+}
+
+.adm-table .column-header-background {
+    -fx-background-color: rgba(124,58,237,0.14);
+    -fx-background-radius: 10 10 0 0;
+}
+
+.adm-table .column-header,
+.adm-table .filler {
+    -fx-background-color: transparent;
+}
+
+.adm-table .column-header .label {
+    -fx-text-fill: rgba(255,255,255,0.82);
+    -fx-font-weight: 700;
+}
+
+.adm-table .table-row-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent rgba(255,255,255,0.06) transparent;
+}
+
+.adm-table .table-row-cell:hover {
+    -fx-background-color: rgba(255,255,255,0.08);
+}
+
+.adm-table .table-cell {
+    -fx-text-fill: rgba(255,255,255,0.82);
+    -fx-border-color: transparent;
+}
+
+.adm-progress {
+    -fx-accent: #7c3aed;
+}
+
+.adm-progress-text {
+    -fx-text-fill: rgba(255,255,255,0.70);
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+}
+
+.adm-status-badge {
+    -fx-padding: 2 8;
+    -fx-background-radius: 999;
+    -fx-font-size: 10.5px;
+    -fx-font-weight: 700;
+}
+
+.adm-status-good {
+    -fx-background-color: rgba(16,185,129,0.20);
+    -fx-text-fill: #34d399;
+}
+
+.adm-status-warn {
+    -fx-background-color: rgba(245,158,11,0.20);
+    -fx-text-fill: #fcd34d;
+}
+
+.adm-status-bad {
+    -fx-background-color: rgba(239,68,68,0.20);
+    -fx-text-fill: #fca5a5;
+}
+
+.adm-line,
+.adm-bar,
+.adm-pie {
+    -fx-background-color: transparent;
+}
+
+.adm-line .chart-plot-background,
+.adm-bar .chart-plot-background {
+    -fx-background-color: rgba(18,13,43,0.74);
+    -fx-background-radius: 10;
+}
+
+.adm-line .default-color0.chart-series-line {
+    -fx-stroke: #7c3aed;
+}
+
+.adm-line .default-color0.chart-line-symbol {
+    -fx-background-color: #a78bfa, #1a0f2c;
+}
+
+.adm-bar .default-color0.chart-bar {
+    -fx-bar-fill: #7c3aed;
+}
+
+.adm-line .axis,
+.adm-bar .axis {
+    -fx-tick-label-fill: rgba(255,255,255,0.68);
+}
+
+.adm-pie .default-color0.chart-pie {
+    -fx-pie-color: #10b981;
+}
+
+.adm-pie .default-color1.chart-pie {
+    -fx-pie-color: #0ea5e9;
+}
+
+.adm-pie .default-color2.chart-pie {
+    -fx-pie-color: #f59e0b;
+}
+
+.adm-feed-row {
+    -fx-background-color: rgba(255,255,255,0.06);
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+}
+
+.adm-feed-avatar-circle {
+    -fx-fill: linear-gradient(from 0% 0% to 100% 100%, #7c3aed, #4f46e5);
+}
+
+.adm-feed-avatar-text {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 9px;
+    -fx-font-weight: 700;
+}
+
+.adm-feed-message {
+    -fx-text-fill: rgba(255,255,255,0.84);
+    -fx-font-size: 12px;
+}
+
+.adm-feed-time {
+    -fx-text-fill: rgba(255,255,255,0.52);
+    -fx-font-size: 10.5px;
+}
+
+/* ── PROJECT LIST (REGISTER THEME) ────────────────────────────── */
+.proj-root {
+    -fx-padding: 6;
+}
+
+.proj-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 26px;
+    -fx-font-weight: 900;
+}
+
+.proj-subtitle {
+    -fx-text-fill: rgba(255,255,255,0.66);
+    -fx-font-size: 12px;
+}
+
+.proj-filter-wrap {
+    -fx-background-color: rgba(12, 8, 30, 0.48);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-radius: 12;
+    -fx-padding: 10;
+}
+
+.proj-search {
+    -fx-pref-height: 40;
+}
+
+.proj-filter {
+    -fx-pref-height: 40;
+    -fx-min-width: 160;
+}
+
+.proj-ghost-btn {
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-background-radius: 10;
+    -fx-border-color: rgba(255,255,255,0.14);
+    -fx-border-radius: 10;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-padding: 8 12;
+    -fx-cursor: hand;
+}
+
+.proj-ghost-btn:hover {
+    -fx-background-color: rgba(255,255,255,0.14);
+}
+
+.proj-card {
+    -fx-background-color: rgba(12, 8, 30, 0.50);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-radius: 12;
+    -fx-padding: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.26), 12, 0.16, 0, 3);
+}
+
+.proj-table {
+    -fx-background-color: rgba(18,13,43,0.74);
+    -fx-background-radius: 10;
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-radius: 10;
+}
+
+.proj-table > .viewport {
+    -fx-background-color: transparent;
+}
+
+.proj-table > .corner {
+    -fx-background-color: transparent;
+}
+
+.proj-table .column-header-background {
+    -fx-background-color: rgba(124,58,237,0.14);
+    -fx-background-radius: 10 10 0 0;
+}
+
+.proj-table .column-header,
+.proj-table .filler {
+    -fx-background-color: transparent;
+}
+
+.proj-table .column-header .label {
+    -fx-text-fill: rgba(255,255,255,0.82);
+    -fx-font-weight: 700;
+}
+
+.proj-table .table-row-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent rgba(255,255,255,0.06) transparent;
+}
+
+.proj-table .table-row-cell:hover {
+    -fx-background-color: rgba(255,255,255,0.08);
+}
+
+.proj-table .table-cell {
+    -fx-text-fill: rgba(255,255,255,0.82);
+    -fx-border-color: transparent;
+}
+
+.proj-empty {
+    -fx-text-fill: rgba(255,255,255,0.56);
+}
+
+.proj-status-badge {
+    -fx-padding: 2 8;
+    -fx-background-radius: 999;
+    -fx-font-size: 10.5px;
+    -fx-font-weight: 700;
+}
+
+.proj-status-good {
+    -fx-background-color: rgba(16,185,129,0.20);
+    -fx-text-fill: #34d399;
+}
+
+.proj-status-warn {
+    -fx-background-color: rgba(245,158,11,0.20);
+    -fx-text-fill: #fcd34d;
+}
+
+.proj-status-bad {
+    -fx-background-color: rgba(239,68,68,0.20);
+    -fx-text-fill: #fca5a5;
+}
+
+.proj-progress {
+    -fx-accent: #7c3aed;
+}
+
+.proj-progress-text {
+    -fx-text-fill: rgba(255,255,255,0.70);
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+}
+
+.proj-page-text {
+    -fx-text-fill: rgba(255,255,255,0.62);
+    -fx-font-size: 11px;
+}
+
+.proj-page-size {
+    -fx-background-color: rgba(18,13,43,0.84);
+    -fx-border-color: rgba(255,255,255,0.12);
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+
+/* ── PROJECT FORM (REGISTER THEME) ────────────────────────────── */
+.proj-form-root {
+    -fx-padding: 6;
+}
+
+.worklog-dialog-root {
+    -fx-background-color: radial-gradient(center 50% 50%, radius 80%, #1a0f2c, #0b0617);
+    -fx-padding: 24;
+}
+
+.worklog-dialog-root .proj-form-card {
+    -fx-background-color: rgba(12, 8, 30, 0.56);
+    -fx-border-color: rgba(255,255,255,0.12);
+    -fx-padding: 24;
+}
+
+.worklog-dialog-root .glass-field {
+    -fx-background-color: #120d2b;
+    -fx-border-color: rgba(255,255,255,0.16);
+}
+
+.worklog-dialog-root .text-area {
+    -fx-background-color: #120d2b;
+    -fx-text-fill: #ffffff;
+    -fx-prompt-text-fill: rgba(255,255,255,0.5);
+}
+
+.worklog-dialog-root .text-area .content {
+    -fx-background-color: #120d2b;
+}
+
+.proj-form-card {
+    -fx-background-color: rgba(12, 8, 30, 0.50);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-radius: 12;
+    -fx-padding: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.26), 12, 0.16, 0, 3);
+}
+
+.proj-form-textarea {
+    -fx-pref-height: 110;
+}
+
+.proj-form-error {
+    -fx-text-fill: #fca5a5;
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+}
+
+.proj-form-success {
+    -fx-text-fill: #34d399;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+    -fx-padding: 2 0 0 2;
+}
+
+/* ── COLLAB PANELS (WORKLOGS / COMMENTS / NOTIFICATIONS) ─────── */
+.panel-thread-parent {
+    -fx-background-color: rgba(255,255,255,0.07);
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+}
+
+.panel-thread-child-wrap {
+    -fx-background-color: rgba(18,13,43,0.76);
+    -fx-border-color: rgba(255,255,255,0.08);
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+.panel-thread-child {
+    -fx-background-color: rgba(255,255,255,0.06);
+    -fx-border-color: rgba(255,255,255,0.08);
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 8;
+}
+
+.panel-notification-card {
+    -fx-background-color: rgba(255,255,255,0.07);
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+}
+
+.panel-unread {
+    -fx-border-color: rgba(239,68,68,0.36);
+}
+
+.panel-unread-dot {
+    -fx-text-fill: #f87171;
+    -fx-font-size: 10px;
+    -fx-font-weight: 900;
+}
+
+.notif-center-wrap {
+    -fx-padding: 8;
+}
+
+.worklogs-root-dark {
+    -fx-background-color: linear-gradient(to bottom, rgba(7, 5, 20, 0.92), rgba(10, 7, 28, 0.88));
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(255,255,255,0.08);
+    -fx-border-radius: 12;
+    -fx-padding: 14;
+}
+
+.notif-root-dark {
+    -fx-background-color: linear-gradient(to bottom, rgba(6, 4, 18, 0.94), rgba(10, 7, 28, 0.90));
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(255,255,255,0.08);
+    -fx-border-radius: 12;
+}
+
+.notif-center-block {
+    -fx-background-color: rgba(12, 8, 30, 0.82);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(255,255,255,0.12);
+    -fx-border-radius: 12;
+    -fx-padding: 14;
+}
+
+.wl-tab {
+    -fx-padding: 6 12;
+}
+
+.wl-tab-active {
+    -fx-padding: 6 12;
+    -fx-font-size: 11.5px;
+}

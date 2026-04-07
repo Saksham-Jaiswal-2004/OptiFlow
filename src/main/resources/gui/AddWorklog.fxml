@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.optiflow.controllers.AddWorklogController"
+      spacing="14"
+    styleClass="proj-form-root worklog-dialog-root"
+      stylesheets="@../css/style.css">
+
+    <VBox spacing="3">
+        <Label text="Add Daily Worklog" styleClass="proj-title"/>
+        <Label text="Log your time and track daily efforts" styleClass="proj-subtitle"/>
+    </VBox>
+
+    <VBox spacing="12" styleClass="proj-form-card">
+        <VBox spacing="6">
+            <Label text="Date" styleClass="field-lbl"/>
+            <DatePicker fx:id="datePicker" styleClass="glass-field" maxWidth="Infinity"/>
+        </VBox>
+
+        <VBox spacing="6">
+            <Label text="Task" styleClass="field-lbl"/>
+            <ComboBox fx:id="taskComboBox" promptText="Select task..." styleClass="glass-field" maxWidth="Infinity"/>
+        </VBox>
+
+        <VBox spacing="6">
+            <Label text="Hours Worked" styleClass="field-lbl"/>
+            <TextField fx:id="hoursField" promptText="e.g., 2.5" styleClass="glass-field" maxWidth="Infinity"/>
+        </VBox>
+
+        <VBox spacing="6" VBox.vgrow="ALWAYS">
+            <Label text="Description" styleClass="field-lbl"/>
+            <TextArea fx:id="descriptionArea" promptText="Describe the work done..." styleClass="glass-field proj-form-textarea" wrapText="true" VBox.vgrow="ALWAYS"/>
+        </VBox>
+
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Cancel" styleClass="proj-ghost-btn" fx:id="cancelBtn" prefWidth="130" minWidth="130" prefHeight="48" minHeight="48"/>
+            <Button text="Save Entry" styleClass="glass-btn" fx:id="saveBtn" prefWidth="130" minWidth="130" prefHeight="48" minHeight="48"/>
+        </HBox>
+    </VBox>
+
+</VBox>

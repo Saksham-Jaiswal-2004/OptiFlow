@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.optiflow.controllers.ProjectListController"
+      spacing="14"
+      styleClass="proj-root"
+      stylesheets="@../css/style.css">
+
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <VBox spacing="3" HBox.hgrow="ALWAYS">
+            <Label text="Projects" styleClass="proj-title"/>
+            <Label text="Track all project delivery health in one place" styleClass="proj-subtitle"/>
+        </VBox>
+        <Button fx:id="addProjectBtn" text="Add Project" styleClass="glass-btn" onAction="#handleAddProject"/>
+    </HBox>
+
+    <HBox alignment="CENTER_LEFT" spacing="10" styleClass="proj-filter-wrap">
+        <TextField fx:id="searchField" promptText="Search by project name..." styleClass="glass-field proj-search" HBox.hgrow="ALWAYS"/>
+        <ComboBox fx:id="statusFilter" promptText="Status" styleClass="glass-field proj-filter"/>
+        <ComboBox fx:id="managerFilter" promptText="Manager" styleClass="glass-field proj-filter"/>
+        <Button text="Apply" styleClass="proj-ghost-btn" onAction="#applyFilters"/>
+        <Button text="Reset" styleClass="proj-ghost-btn" onAction="#resetFilters"/>
+    </HBox>
+
+    <VBox spacing="10" styleClass="proj-card" VBox.vgrow="ALWAYS">
+        <TableView fx:id="projectTable" styleClass="proj-table" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="nameColumn" text="Name" prefWidth="260"/>
+                <TableColumn fx:id="statusColumn" text="Status" prefWidth="140"/>
+                <TableColumn fx:id="progressColumn" text="Progress" prefWidth="210"/>
+                <TableColumn fx:id="managerColumn" text="Manager" prefWidth="190"/>
+                <TableColumn fx:id="deadlineColumn" text="Deadline" prefWidth="150"/>
+            </columns>
+            <placeholder>
+                <Label text="No projects found" styleClass="proj-empty"/>
+            </placeholder>
+        </TableView>
+
+        <HBox alignment="CENTER_RIGHT" spacing="8" padding="6 0 0 0">
+            <Label text="Rows per page" styleClass="proj-page-text"/>
+            <ComboBox fx:id="rowsPerPage" styleClass="proj-page-size" prefWidth="82"/>
+            <Pagination fx:id="pagination" pageCount="1" currentPageIndex="0" maxPageIndicatorCount="5"/>
+        </HBox>
+    </VBox>
+</VBox>

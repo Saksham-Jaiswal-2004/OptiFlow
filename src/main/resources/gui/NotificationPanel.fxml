@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+    styleClass="notif-center-wrap notif-root-dark"
+      stylesheets="@../css/style.css"
+      fx:id="notificationDrawer">
+
+    <VBox spacing="10" prefWidth="760" maxWidth="760" styleClass="panel notif-center-block">
+        <HBox alignment="CENTER_LEFT" spacing="8" styleClass="panel-head">
+            <Label text="Notifications" styleClass="proj-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="Center Block" styleClass="proj-page-text"/>
+            <Label text="6 New" styleClass="proj-status-badge proj-status-bad"/>
+        </HBox>
+
+        <Label text="Latest updates across projects and tasks" styleClass="proj-subtitle"/>
+
+        <HBox alignment="CENTER_LEFT" spacing="8" styleClass="proj-filter-wrap">
+            <Label text="All" styleClass="proj-status-badge proj-status-good"/>
+            <Label text="Mentions" styleClass="proj-status-badge proj-status-warn"/>
+            <Label text="System" styleClass="proj-status-badge proj-status-bad"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="Mark all read" styleClass="glass-link"/>
+        </HBox>
+
+        <Separator styleClass="dash-separator"/>
+
+        <ScrollPane fitToWidth="true" fitToHeight="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="proj-table" VBox.vgrow="ALWAYS">
+            <content>
+                <VBox spacing="8" styleClass="proj-root">
+                    <VBox spacing="6" styleClass="panel-notification-card panel-unread">
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <Label text="Task Updated" styleClass="dash-card-title"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="●" styleClass="panel-unread-dot"/>
+                            <Label text="2m ago" styleClass="proj-page-text"/>
+                        </HBox>
+                        <Label text="API pagination task marked In Progress by Aarav Mehta." styleClass="dash-card-sub" wrapText="true"/>
+                    </VBox>
+
+                    <VBox spacing="6" styleClass="panel-notification-card panel-unread">
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <Label text="Project Deadline" styleClass="dash-card-title"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="●" styleClass="panel-unread-dot"/>
+                            <Label text="12m ago" styleClass="proj-page-text"/>
+                        </HBox>
+                        <Label text="CRM Migration end date moved to 2026-06-30." styleClass="dash-card-sub" wrapText="true"/>
+                    </VBox>
+
+                    <VBox spacing="6" styleClass="panel-notification-card">
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <Label text="Assignment Alert" styleClass="dash-card-title"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="34m ago" styleClass="proj-page-text"/>
+                        </HBox>
+                        <Label text="Rohan Patel has reached 85% workload. Consider rebalancing." styleClass="dash-card-sub" wrapText="true"/>
+                    </VBox>
+
+                    <VBox spacing="6" styleClass="panel-notification-card">
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <Label text="Comment Reply" styleClass="dash-card-title"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="1h ago" styleClass="proj-page-text"/>
+                        </HBox>
+                        <Label text="Neha replied in Task #T-104 discussion thread." styleClass="dash-card-sub" wrapText="true"/>
+                    </VBox>
+
+                    <VBox spacing="6" styleClass="panel-notification-card">
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <Label text="AI Suggestion" styleClass="dash-card-title"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="2h ago" styleClass="proj-page-text"/>
+                        </HBox>
+                        <Label text="AI recommends splitting dashboard optimization into 3 subtasks." styleClass="dash-card-sub" wrapText="true"/>
+                    </VBox>
+                </VBox>
+            </content>
+            <padding>
+                <Insets top="2" right="2" bottom="2" left="2"/>
+            </padding>
+        </ScrollPane>
+    </VBox>
+</StackPane>

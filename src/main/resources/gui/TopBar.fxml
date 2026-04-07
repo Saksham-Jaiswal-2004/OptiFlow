@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<HBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.optiflow.controllers.TopBarController"
+      alignment="CENTER_LEFT"
+      spacing="16"
+      prefHeight="60"
+      minHeight="60"
+      maxHeight="60"
+      styleClass="topbar-shell"
+      stylesheets="@../css/style.css">
+
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <StackPane prefWidth="28" prefHeight="28" styleClass="topbar-logo-wrap">
+            <Circle radius="6" styleClass="topbar-logo-dot"/>
+        </StackPane>
+        <Label text="OptiFlow" styleClass="topbar-app-name"/>
+    </HBox>
+
+    <HBox alignment="CENTER_LEFT" spacing="8" styleClass="topbar-search-wrap" HBox.hgrow="ALWAYS" fx:id="searchContainer">
+        <Label text="⌕" styleClass="topbar-search-icon"/>
+        <TextField fx:id="searchField"
+                   promptText="Search projects, tasks, employees..."
+                   styleClass="glass-field, topbar-search-field"
+                   HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <HBox alignment="CENTER_RIGHT" spacing="12">
+        <StackPane fx:id="notificationButton"
+                   prefWidth="36"
+                   prefHeight="36"
+                   styleClass="topbar-icon-btn"
+                   onMouseEntered="#handleNotificationHoverIn"
+                   onMouseExited="#handleNotificationHoverOut"
+                   onMouseClicked="#handleNotificationClick">
+            <Label text="🔔" styleClass="topbar-icon-glyph"/>
+            <StackPane prefWidth="14" prefHeight="14" translateX="10" translateY="-10" styleClass="topbar-badge-wrap">
+                <Circle radius="7" styleClass="topbar-badge-dot"/>
+                <Label fx:id="notificationBadgeLabel" text="3" styleClass="topbar-badge-text"/>
+            </StackPane>
+        </StackPane>
+
+        <StackPane alignment="TOP_RIGHT">
+            <HBox fx:id="profileTrigger"
+                  alignment="CENTER_LEFT"
+                  spacing="8"
+                  styleClass="topbar-profile-pill"
+                  onMouseEntered="#handleProfileHoverIn"
+                  onMouseExited="#handleProfileHoverOut"
+                  onMouseClicked="#toggleProfileMenu">
+                <StackPane prefWidth="28" prefHeight="28">
+                    <Circle radius="14" styleClass="topbar-avatar-bg"/>
+                    <Label text="RM" styleClass="topbar-avatar-txt"/>
+                </StackPane>
+                <Label text="Ritika" styleClass="topbar-user-name"/>
+                <Label text="▾" styleClass="topbar-caret"/>
+            </HBox>
+
+            <VBox fx:id="profileDropdown"
+                  visible="false"
+                  managed="false"
+                  spacing="2"
+                  translateY="44"
+                  styleClass="topbar-dropdown">
+                <Button text="Profile" styleClass="topbar-menu-item" onAction="#handleProfileAction" maxWidth="Infinity"/>
+                <Button text="Settings" styleClass="topbar-menu-item" onAction="#handleSettingsAction" maxWidth="Infinity"/>
+                <Button text="Logout" styleClass="topbar-menu-item topbar-menu-item-danger" onAction="#handleLogoutAction" maxWidth="Infinity"/>
+            </VBox>
+        </StackPane>
+    </HBox>
+</HBox>

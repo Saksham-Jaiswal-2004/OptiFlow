@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.optiflow.controllers.EmployeeDashboardController"
+      spacing="16"
+      styleClass="emp-root"
+      stylesheets="@../css/style.css">
+
+    <VBox spacing="4">
+        <Label text="My Dashboard" styleClass="emp-title"/>
+        <Label text="Track tasks, log time, and stay ahead of deadlines" styleClass="emp-subtitle"/>
+    </VBox>
+
+    <GridPane hgap="16" vgap="16">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+            <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+        </columnConstraints>
+
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" spacing="12" styleClass="emp-card">
+            <Label text="My Tasks" styleClass="emp-card-title"/>
+            <TableView fx:id="tasksTable" styleClass="emp-table" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="taskNameColumn" text="Task Name" prefWidth="220"/>
+                    <TableColumn fx:id="statusColumn" text="Status" prefWidth="120"/>
+                    <TableColumn fx:id="deadlineColumn" text="Deadline" prefWidth="140"/>
+                </columns>
+                <placeholder>
+                    <Label text="No tasks available" styleClass="emp-muted"/>
+                </placeholder>
+            </TableView>
+        </VBox>
+
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="12" styleClass="emp-card">
+            <Label text="Worklog Quick Form" styleClass="emp-card-title"/>
+            <VBox spacing="10">
+                <Label text="Task" styleClass="field-lbl"/>
+                <ComboBox fx:id="worklogTaskCombo" promptText="Select task" styleClass="glass-field" maxWidth="Infinity"/>
+
+                <Label text="Hours" styleClass="field-lbl"/>
+                <TextField fx:id="hoursField" promptText="e.g. 2.5" styleClass="glass-field"/>
+
+                <Label text="Notes" styleClass="field-lbl"/>
+                <TextArea fx:id="notesArea" promptText="What did you complete today?" prefRowCount="3" styleClass="glass-field emp-notes"/>
+
+                <Button fx:id="submitWorklogBtn" text="Submit Worklog" styleClass="glass-btn" maxWidth="Infinity" onAction="#handleSubmitWorklog"/>
+            </VBox>
+        </VBox>
+
+        <HBox GridPane.columnIndex="0" GridPane.rowIndex="1" spacing="16" styleClass="emp-card" alignment="CENTER_LEFT">
+            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                <Label text="Progress Summary" styleClass="emp-card-title"/>
+                <Label fx:id="progressLabel" text="0% completed" styleClass="emp-progress-label"/>
+            </VBox>
+            <PieChart fx:id="progressChart" labelsVisible="false" legendVisible="true" prefWidth="260" prefHeight="180" styleClass="emp-pie"/>
+        </HBox>
+
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="1" spacing="12" styleClass="emp-card">
+            <Label text="Upcoming Deadlines" styleClass="emp-card-title"/>
+            <ListView fx:id="deadlinesList" VBox.vgrow="ALWAYS" styleClass="emp-list"/>
+        </VBox>
+
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="2" spacing="12" styleClass="emp-card">
+            <Label text="Recent Comments" styleClass="emp-card-title"/>
+            <VBox fx:id="commentsFeed" spacing="10"/>
+        </VBox>
+    </GridPane>
+</VBox>

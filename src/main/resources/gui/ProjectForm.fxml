@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.optiflow.controllers.ProjectFormController"
+      spacing="14"
+      styleClass="proj-form-root"
+      stylesheets="@../css/style.css">
+
+    <VBox spacing="3">
+        <Label text="Create Project" styleClass="proj-title"/>
+        <Label text="Define project scope, timeline, and task strategy" styleClass="proj-subtitle"/>
+    </VBox>
+
+    <VBox spacing="12" styleClass="proj-form-card">
+        <VBox spacing="6">
+            <Label text="Project Name" styleClass="field-lbl"/>
+            <TextField fx:id="projectNameField" promptText="Enter project name" styleClass="glass-field"/>
+            <Label fx:id="projectNameError" styleClass="proj-form-error" visible="false" managed="false" text="Project name is required"/>
+        </VBox>
+
+        <VBox spacing="6">
+            <Label text="Description" styleClass="field-lbl"/>
+            <TextArea fx:id="descriptionField" promptText="Add project description" prefRowCount="4" styleClass="glass-field proj-form-textarea"/>
+            <Label fx:id="descriptionError" styleClass="proj-form-error" visible="false" managed="false" text="Description is required"/>
+        </VBox>
+
+        <GridPane hgap="12" vgap="8">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+                <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+            </columnConstraints>
+
+            <VBox GridPane.columnIndex="0" spacing="6">
+                <Label text="Start Date" styleClass="field-lbl"/>
+                <DatePicker fx:id="startDatePicker" styleClass="glass-field" maxWidth="Infinity"/>
+                <Label fx:id="startDateError" styleClass="proj-form-error" visible="false" managed="false" text="Start date is required"/>
+            </VBox>
+
+            <VBox GridPane.columnIndex="1" spacing="6">
+                <Label text="End Date" styleClass="field-lbl"/>
+                <DatePicker fx:id="endDatePicker" styleClass="glass-field" maxWidth="Infinity"/>
+                <Label fx:id="endDateError" styleClass="proj-form-error" visible="false" managed="false" text="End date must be after start date"/>
+            </VBox>
+        </GridPane>
+
+        <VBox spacing="6">
+            <Label text="Priority" styleClass="field-lbl"/>
+            <ComboBox fx:id="priorityCombo" promptText="Select priority" styleClass="glass-field" maxWidth="Infinity"/>
+            <Label fx:id="priorityError" styleClass="proj-form-error" visible="false" managed="false" text="Please select a priority"/>
+        </VBox>
+
+        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="proj-form-actions">
+            <Button text="AI Generate Tasks" styleClass="glass-btn" onAction="#handleGenerateTasks"/>
+            <Button text="Add Task Manually" styleClass="proj-ghost-btn" onAction="#handleAddTaskManually"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Button text="Save Project" styleClass="glass-btn" onAction="#handleSaveProject"/>
+        </HBox>
+
+        <Label fx:id="formSuccessMessage" visible="false" managed="false" styleClass="proj-form-success" text="Project saved successfully."/>
+    </VBox>
+</VBox>
