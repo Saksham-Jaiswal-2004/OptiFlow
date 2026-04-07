@@ -21,7 +21,7 @@ public class Tasks
     public Tasks()
     {}
 
-    public Tasks(int project_id, int assigned_to, String title, String description, String status, String priority, int estimated_hours, Date start_date)
+    public Tasks(int project_id, int assigned_to, String title, String description, String status, String priority, int estimated_hours, int actual_hours, Date start_date, Date end_date)
     {
         this.project_id = project_id;
         this.assigned_to = assigned_to;
@@ -30,7 +30,9 @@ public class Tasks
         this.status = status;
         this.priority = priority;
         this.estimated_hours = estimated_hours;
+        this.actual_hours = actual_hours;
         this.start_date = start_date;
+        this.end_date = end_date;
     }
 
     public int getTask_id()
