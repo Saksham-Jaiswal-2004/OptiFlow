@@ -15,8 +15,9 @@ public class Employee
     public Employee()
     {}
 
-    public Employee(String name, String designation, String department, int manager_id, String status, int weeklyCapacity)
+    public Employee(int user_id, String name, String designation, String department, int manager_id, String status, int weeklyCapacity)
     {
+        this.user_id = user_id;
         this.name = name;
         this.designation = designation;
         this.department = department;

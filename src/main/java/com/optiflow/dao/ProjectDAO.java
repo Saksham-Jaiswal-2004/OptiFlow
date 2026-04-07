@@ -24,9 +24,9 @@ public class ProjectDAO
 
     public boolean createProject(String name, String description, Date start_date, Date deadline, int manager_id, String status) throws SQLException
     {
-        String sql = "INSERT INTO projects (name, description, start_date, end_date, deadline, manager_id, status) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO projects (name, description, start_date, end_date, deadline, manager_id, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, name);
             stmt.setString(2, description);
             stmt.setDate(3, Date.valueOf(start_date.toLocalDate()));

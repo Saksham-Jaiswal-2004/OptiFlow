@@ -14,7 +14,7 @@ public class ProjectSkillService
     private ProjectSkillDAO projectSkillDAO;
     private AuditLogService auditLogService;
 
-    ProjectSkillService()
+    public ProjectSkillService()
     {
         this.projectSkillDAO = new ProjectSkillDAO();
         this.auditLogService = new AuditLogService();

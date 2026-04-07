@@ -1,0 +1,71 @@
+@startuml
+class com.optiflow.controllers.ManagerDashboardController {
+- VBox root
+- TableView<TeamRow> teamTable
+- TableColumn<TeamRow,String> memberNameColumn
+- TableColumn<TeamRow,String> memberRoleColumn
+- TableColumn<TeamRow,Number> tasksAssignedColumn
+- TableColumn<TeamRow,Number> tasksCompletedColumn
+- TableColumn<TeamRow,Number> workloadColumn
+- TableView<TaskRow> taskTable
+- TableColumn<TaskRow,String> taskNameColumn
+- TableColumn<TaskRow,String> taskAssignedToColumn
+- TableColumn<TaskRow,String> taskStatusColumn
+- TableColumn<TaskRow,String> taskDeadlineColumn
+- VBox ganttContainer
+- BarChart<String,Number> performanceBarChart
+- PieChart completionPieChart
+- VBox alertsList
+- DateTimeFormatter dateFormatter
++ void initialize()
+- ObservableList<TeamRow> mockTeamRows()
+- ObservableList<TaskRow> mockTaskRows()
+- void configureTeamOverviewTable(ObservableList<TeamRow>)
+- void configureTaskTrackingTable(ObservableList<TaskRow>)
+- void buildWeeklyGantt(ObservableList<TaskRow>)
+- void configureCharts(ObservableList<TeamRow>,ObservableList<TaskRow>)
+- void buildAlerts(ObservableList<TaskRow>,ObservableList<TeamRow>)
+- void animateCardsOnLoad()
+- void animateChartsOnLoad()
+}
+
+
+class com.optiflow.controllers.ManagerDashboardController$TeamRow {
+- StringProperty name
+- StringProperty role
+- IntegerProperty tasksAssigned
+- IntegerProperty tasksCompleted
+- DoubleProperty workload
++ String getName()
++ StringProperty nameProperty()
++ StringProperty roleProperty()
++ int getTasksCompleted()
++ IntegerProperty tasksAssignedProperty()
++ IntegerProperty tasksCompletedProperty()
++ double getWorkload()
++ DoubleProperty workloadProperty()
+}
+
+
+class com.optiflow.controllers.ManagerDashboardController$TaskRow {
+- StringProperty task
+- StringProperty assignedTo
+- StringProperty status
+- ObjectProperty<LocalDate> deadline
+- StringProperty deadlineText
++ String getTask()
++ String getAssignedTo()
++ String getStatus()
++ boolean isOverdue()
++ StringProperty taskProperty()
++ StringProperty assignedToProperty()
++ StringProperty statusProperty()
++ StringProperty deadlineTextProperty()
+}
+
+
+
+
+com.optiflow.controllers.ManagerDashboardController +.. com.optiflow.controllers.ManagerDashboardController$TeamRow
+com.optiflow.controllers.ManagerDashboardController +.. com.optiflow.controllers.ManagerDashboardController$TaskRow
+@enduml

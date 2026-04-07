@@ -16,7 +16,7 @@ public class UserDAO
     {
         String sql = "INSERT INTO Users (name, email, password_hash, role) VALUES (?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, name);
             stmt.setString(2, email);
             stmt.setString(3, passwordHash);
