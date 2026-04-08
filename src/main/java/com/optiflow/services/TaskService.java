@@ -200,7 +200,12 @@ public class TaskService
 
     public String exportTasksToCSV(int project_id, String filePath) throws Exception
     {
-        List<Tasks> tasks = taskDAO.getTasksByProject(project_id);
+        List<Tasks> tasks;
+        if (project_id == -1) {
+            tasks = taskDAO.getAllTasks();
+        } else {
+            tasks = taskDAO.getTasksByProject(project_id);
+        }
 
         FileWriter writer = new FileWriter(filePath);
 
@@ -234,7 +239,7 @@ public class TaskService
         return filePath;
     }
 
-    public String exportTasksToExcel() throws Exception
+    public String exportTasksToExcel(String filePath) throws Exception
     {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Tasks");
@@ -270,13 +275,13 @@ public class TaskService
             row.createCell(10).setCellValue(t.getEnd_date());
         }
 
-        FileOutputStream fileOut = new FileOutputStream("tasks.xlsx");
+        FileOutputStream fileOut = new FileOutputStream(filePath);
         workbook.write(fileOut);
         fileOut.close();
         workbook.close();
 
         auditLogService.logAction(SessionManager.getUser().getUserId(), "EXPORT_TASK", "TASK", -1, SessionManager.getUser().getName()+" exported task details via Excel");
 
-        return "";
+        return filePath;
     }
 }

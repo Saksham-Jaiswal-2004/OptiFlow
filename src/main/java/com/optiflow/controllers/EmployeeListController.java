@@ -13,15 +13,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.io.File;
 
 public class EmployeeListController {
 
@@ -48,6 +49,9 @@ public class EmployeeListController {
 
     @FXML
     private TableColumn<EmployeeRow, String> weeklyCapacityColumn;
+
+    @FXML
+    private Button exportBtn;
 
     private final EmployeeService employeeService = new EmployeeService();
 
@@ -158,6 +162,47 @@ public class EmployeeListController {
         } catch (Exception ignored) {
             return FXCollections.observableArrayList();
         }
+    }
+
+    @FXML
+    private void handleExport() {
+        ChoiceDialog<String> dialog = new ChoiceDialog<>("CSV", "CSV", "Excel");
+        dialog.setTitle("Export Employees");
+        dialog.setHeaderText("Choose export format");
+        dialog.setContentText("Format:");
+
+        dialog.showAndWait().ifPresent(format -> {
+            try {
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Save Employees " + format);
+                fileChooser.setInitialFileName("employees_" + java.time.LocalDate.now() + "." + (format.equals("CSV") ? "csv" : "xlsx"));
+                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(format.toUpperCase() + " Files", "*." + (format.equals("CSV") ? "csv" : "xlsx")));
+
+                Stage stage = (Stage) exportBtn.getScene().getWindow();
+                File file = fileChooser.showSaveDialog(stage);
+
+                if (file != null) {
+                    String filePath = file.getAbsolutePath();
+                    String savedFile;
+                    if (format.equals("CSV")) {
+                        savedFile = employeeService.exportEmployeesToCSV(filePath);
+                    } else {
+                        savedFile = employeeService.exportEmployeesToExcel(filePath);
+                    }
+                    Alert alert = new Alert(AlertType.INFORMATION);
+                    alert.setTitle("Export Successful");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Employees exported successfully to " + savedFile);
+                    alert.showAndWait();
+                }
+            } catch (Exception e) {
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Export Failed");
+                alert.setHeaderText(null);
+                alert.setContentText("Failed to export employees: " + e.getMessage());
+                alert.showAndWait();
+            }
+        });
     }
 
     public static class EmployeeRow {
