@@ -252,13 +252,11 @@ public class ProjectService
         return total;
     }
 
-    public String exportProjectsToCSV() throws Exception
+    public String exportProjectsToCSV(String filePath) throws Exception
     {
         List<Projects> projects = projectDAO.getAllProjects();
 
-        String fileName = "projects_" + LocalDate.now() + ".csv";
-
-        FileWriter writer = new FileWriter(fileName);
+        FileWriter writer = new FileWriter(filePath);
 
         writer.append("ID,Name,Description,Start Date,End Date,Client-ID,Status\n");
 
@@ -277,10 +275,10 @@ public class ProjectService
 
         auditLogService.logAction(SessionManager.getUser().getUserId(), "EXPORT_PROJECT", "PROJECT", SessionManager.getUser().getUserId(), SessionManager.getUser().getName()+" exported project details via CSV");
 
-        return fileName;
+        return filePath;
     }
 
-    public String exportProjectsToExcel() throws Exception
+    public String exportProjectsToExcel(String filePath) throws Exception
     {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Projects");
@@ -307,14 +305,14 @@ public class ProjectService
             row.createCell(6).setCellValue(p.getStatus());
         }
 
-        FileOutputStream fileOut = new FileOutputStream("projects.xlsx");
+        FileOutputStream fileOut = new FileOutputStream(filePath);
         workbook.write(fileOut);
         fileOut.close();
         workbook.close();
 
         auditLogService.logAction(SessionManager.getUser().getUserId(), "EXPORT_PROJECT", "PROJECT", SessionManager.getUser().getUserId(), SessionManager.getUser().getName()+" exported project details via Excel");
 
-        return "";
+        return filePath;
     }
 
     public static void main(String[] args)

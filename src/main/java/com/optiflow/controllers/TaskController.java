@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -194,35 +195,39 @@ public class TaskController {
             e.printStackTrace();
         }
     }
-    // 🔹 EXPORT CSV
+    // 🔹 EXPORT CSV/Excel
 
     @FXML
     private void handleExport() {
-        try {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Save Tasks CSV");
+        ChoiceDialog<String> dialog = new ChoiceDialog<>("CSV", "CSV", "Excel");
+        dialog.setTitle("Export Tasks");
+        dialog.setHeaderText("Choose export format");
+        dialog.setContentText("Format:");
 
+        dialog.showAndWait().ifPresent(format -> {
+            try {
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Save Tasks " + format);
+                fileChooser.setInitialFileName("tasks_" + java.time.LocalDate.now() + "." + (format.equals("CSV") ? "csv" : "xlsx"));
+                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(format.toUpperCase() + " Files", "*." + (format.equals("CSV") ? "csv" : "xlsx")));
 
-            fileChooser.setInitialFileName("tasks_" + java.time.LocalDate.now() + ".csv");
-            fileChooser.getExtensionFilters().add(
-                    new FileChooser.ExtensionFilter("CSV Files", "*.csv")
-            );
+                Stage stage = (Stage) tasksContainer.getScene().getWindow();
+                File file = fileChooser.showSaveDialog(stage);
 
-            Stage stage = (Stage) tasksContainer.getScene().getWindow();
-
-            File file = fileChooser.showSaveDialog(stage);
-
-            if (file != null) {
-                String filePath = file.getAbsolutePath();
-
-                String savedFile = taskService.exportTasksToCSV(projectId, filePath);
-
-                System.out.println("Saved to: " + savedFile);
+                if (file != null) {
+                    String filePath = file.getAbsolutePath();
+                    String savedFile;
+                    if (format.equals("CSV")) {
+                        savedFile = taskService.exportTasksToCSV(projectId, filePath);
+                    } else {
+                        savedFile = taskService.exportTasksToExcel(filePath);
+                    }
+                    System.out.println("Saved to: " + savedFile);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        });
     }
 
     @FXML
