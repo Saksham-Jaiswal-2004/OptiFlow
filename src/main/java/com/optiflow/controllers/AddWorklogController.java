@@ -1,7 +1,10 @@
 package com.optiflow.controllers;
 
-import com.optiflow.dao.TaskDAO;
+import com.optiflow.models.Employee;
 import com.optiflow.models.Tasks;
+import com.optiflow.models.User;
+import com.optiflow.services.EmployeeService;
+import com.optiflow.services.TaskService;
 import com.optiflow.services.WorkLogService;
 import com.optiflow.utils.SessionManager;
 import javafx.collections.FXCollections;
@@ -35,31 +38,42 @@ public class AddWorklogController {
     private Button cancelBtn;
 
     private WorkLogService workLogService;
-    private TaskDAO taskDAO;
+    private TaskService taskService;
+    private EmployeeService employeeService;
+    private Employee currentEmployee;
     private List<Tasks> tasks;
 
     @FXML
     public void initialize() {
         this.workLogService = new WorkLogService();
-        this.taskDAO = new TaskDAO();
+        this.taskService = new TaskService();
+        this.employeeService = new EmployeeService();
 
         // Set today's date as default
         datePicker.setValue(LocalDate.now());
 
         // Load tasks for the ComboBox
         loadTasks();
-
-        // Set button handlers
-        saveBtn.setOnAction(e -> handleSave());
-        cancelBtn.setOnAction(e -> handleCancel());
     }
 
     private void loadTasks() {
         try {
-            tasks = taskDAO.getAllTasks();
+            User user = SessionManager.getUser();
+            if (user != null) {
+                currentEmployee = employeeService.getEmployeeByUserId(user.getUserId());
+            }
+
+            if (currentEmployee != null) {
+                tasks = taskService.getTaskByEmp(currentEmployee.getEmp_id());
+            } else {
+                tasks = taskService.getAllTasks();
+            }
+
             ObservableList<String> taskNames = FXCollections.observableArrayList();
-            for (Tasks task : tasks) {
-                taskNames.add("T-" + task.getTask_id() + " | " + task.getTitle());
+            if (tasks != null) {
+                for (Tasks task : tasks) {
+                    taskNames.add("T-" + task.getTask_id() + " | " + task.getTitle());
+                }
             }
             taskComboBox.setItems(taskNames);
         } catch (Exception e) {
@@ -107,7 +121,12 @@ public class AddWorklogController {
 
         // Save worklog
         try {
-            int employeeId = SessionManager.getUser().getUserId();
+            int employeeId = currentEmployee != null ? currentEmployee.getEmp_id() : resolveCurrentEmployeeId();
+            if (employeeId <= 0) {
+                showAlert("Error", "Unable to resolve the current employee.");
+                return;
+            }
+
             Date workDate = Date.valueOf(datePicker.getValue());
 
             boolean success = workLogService.logWork(employeeId, taskId, workDate, (int) hours, description);
@@ -136,5 +155,19 @@ public class AddWorklogController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    private int resolveCurrentEmployeeId() {
+        try {
+            User user = SessionManager.getUser();
+            if (user == null) {
+                return -1;
+            }
+
+            Employee employee = employeeService.getEmployeeByUserId(user.getUserId());
+            return employee == null ? -1 : employee.getEmp_id();
+        } catch (Exception ignored) {
+            return -1;
+        }
     }
 }

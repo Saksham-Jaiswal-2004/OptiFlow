@@ -32,11 +32,13 @@
     <HBox alignment="CENTER_LEFT" spacing="8" styleClass="proj-filter-wrap">
         <Button text="My Logs" styleClass="glass-btn wl-tab-active"/>
         <Button text="Team Logs" styleClass="proj-ghost-btn wl-tab"/>
-        <Button text="Pending Approval" styleClass="proj-ghost-btn wl-tab"/>
+        <!-- <Button text="Pending Approval" styleClass="proj-ghost-btn wl-tab"/> -->
         <Region HBox.hgrow="ALWAYS"/>
-        <Label text="Last synced 2 min ago" styleClass="proj-page-text"/>
+        <Label fx:id="lastSyncedLabel" text="Last synced just now" styleClass="proj-page-text"/>
     </HBox>
 
+    <!-- Filters are intentionally disabled until service-backed filter APIs are added. -->
+    <!--
     <HBox alignment="CENTER_LEFT" spacing="10" styleClass="proj-filter-wrap">
         <Label text="Filters" styleClass="field-lbl"/>
         <ComboBox promptText="Employee" styleClass="glass-field proj-filter" prefWidth="180"/>
@@ -47,6 +49,7 @@
         <Button text="Apply" styleClass="proj-ghost-btn"/>
         <Button text="Clear" styleClass="proj-ghost-btn"/>
     </HBox>
+    -->
 
     <GridPane hgap="12" vgap="12">
         <columnConstraints>
@@ -57,20 +60,20 @@
 
         <VBox spacing="6" styleClass="proj-card" GridPane.columnIndex="0" GridPane.rowIndex="0">
             <Label text="Today" styleClass="proj-page-text"/>
-            <Label text="7.4h" styleClass="dash-card-value"/>
+            <Label fx:id="todayHoursLabel" text="0h" styleClass="dash-card-value"/>
             <Label text="Logged effort" styleClass="dash-card-sub"/>
         </VBox>
 
         <VBox spacing="6" styleClass="proj-card" GridPane.columnIndex="1" GridPane.rowIndex="0">
             <Label text="Weekly" styleClass="proj-page-text"/>
-            <Label text="34.2h" styleClass="dash-card-value"/>
-            <Label text="Target: 40h" styleClass="dash-card-sub"/>
+            <Label fx:id="weeklyHoursLabel" text="0h" styleClass="dash-card-value"/>
+            <Label fx:id="weeklyTargetLabel" text="Target: --" styleClass="dash-card-sub"/>
         </VBox>
 
         <VBox spacing="6" styleClass="proj-card" GridPane.columnIndex="2" GridPane.rowIndex="0">
-            <Label text="Billable" styleClass="proj-page-text"/>
-            <Label text="91%" styleClass="dash-card-value"/>
-            <Label text="Team average" styleClass="dash-card-sub"/>
+            <Label text="Utilization" styleClass="proj-page-text"/>
+            <Label fx:id="utilizationLabel" text="0%" styleClass="dash-card-value"/>
+            <Label text="Weekly capacity" styleClass="dash-card-sub"/>
         </VBox>
     </GridPane>
 
@@ -83,7 +86,8 @@
 
         <ScrollPane fitToWidth="true" fitToHeight="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="proj-table" VBox.vgrow="ALWAYS">
             <content>
-                <VBox spacing="8" styleClass="proj-root">
+                <VBox fx:id="timelineContainer" spacing="8" styleClass="proj-root">
+                    <!--
                     <VBox spacing="5" styleClass="panel-thread-parent">
                         <HBox alignment="CENTER_LEFT" spacing="8">
                             <Label text="2026-04-04" styleClass="dash-card-title"/>
@@ -113,6 +117,7 @@
                         <Label text="Refactored dashboard center loader and cache strategy." styleClass="dash-card-sub" wrapText="true"/>
                         <Label text="1.8h" styleClass="proj-status-badge proj-status-good"/>
                     </VBox>
+                    -->
                 </VBox>
             </content>
         </ScrollPane>

@@ -3,6 +3,8 @@ package com.optiflow.controllers;
 import com.optiflow.models.Employee;
 import com.optiflow.services.EmployeeService;
 import com.optiflow.services.ProjectService;
+import com.optiflow.services.UserService;
+import com.optiflow.utils.SessionManager;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -13,6 +15,8 @@ import javafx.scene.control.*;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 public class ManagersPanelController {
@@ -50,8 +54,12 @@ public class ManagersPanelController {
     @FXML
     private Label managerCountLabel;
 
+    @FXML
+    private Button addManagerBtn;
+
     private final EmployeeService employeeService = new EmployeeService();
     private final ProjectService projectService = new ProjectService();
+    private final UserService userService = new UserService();
 
     private final ObservableList<ManagerRow> allRows = FXCollections.observableArrayList();
 
@@ -68,7 +76,88 @@ public class ManagersPanelController {
         statusFilter.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> applyFilters());
         searchField.textProperty().addListener((obs, o, n) -> applyFilters());
 
+        if (addManagerBtn != null) {
+            addManagerBtn.setOnAction(e -> handleAddManager());
+            boolean isAdmin = SessionManager.getUser() != null && SessionManager.getUser().isAdmin();
+            addManagerBtn.setDisable(!isAdmin);
+            if (!isAdmin) {
+                addManagerBtn.setText("Admin Only");
+            }
+        }
+
         loadManagers();
+    }
+
+    private void handleAddManager() {
+        if (SessionManager.getUser() == null || !SessionManager.getUser().isAdmin()) {
+            showInfo("Permission", "Only admins can assign manager roles.");
+            return;
+        }
+
+        try {
+            List<Employee> employees = employeeService.getAllEmployees();
+            if (employees == null || employees.isEmpty()) {
+                showInfo("Add Manager", "No employees are available.");
+                return;
+            }
+
+            List<Employee> eligible = employees.stream()
+                    .filter(emp -> emp != null)
+                    .filter(emp -> emp.getDesignation() == null || !"manager".equalsIgnoreCase(emp.getDesignation()))
+                    .collect(Collectors.toList());
+
+            if (eligible.isEmpty()) {
+                showInfo("Add Manager", "All employees are already managers.");
+                return;
+            }
+
+            Map<String, Employee> byLabel = new HashMap<>();
+            for (Employee employee : eligible) {
+                String label = employee.getName() + " (#" + employee.getEmp_id() + ") - " + employee.getDepartment();
+                byLabel.put(label, employee);
+            }
+
+            ChoiceDialog<String> dialog = new ChoiceDialog<>(byLabel.keySet().iterator().next(), byLabel.keySet());
+            dialog.setTitle("Assign Manager Role");
+            dialog.setHeaderText("Promote an employee to manager");
+            dialog.setContentText("Employee:");
+
+            String selected = dialog.showAndWait().orElse(null);
+            if (selected == null) {
+                return;
+            }
+
+            Employee target = byLabel.get(selected);
+            if (target == null) {
+                return;
+            }
+
+            target.setDesignation("Manager");
+            if (target.getStatus() == null || target.getStatus().isBlank()) {
+                target.setStatus("Active");
+            }
+
+            boolean employeeUpdated = employeeService.updateEmployee(target);
+            boolean userUpdated = userService.updateRole(target.getUser_id(), "Manager");
+
+            if (!employeeUpdated || !userUpdated) {
+                showInfo("Add Manager", "Could not assign manager role. Please try again.");
+                return;
+            }
+
+            showInfo("Add Manager", target.getName() + " is now a manager.");
+            loadManagers();
+        } catch (Exception ex) {
+            showInfo("Add Manager", "Error assigning manager: " + ex.getMessage());
+        }
+    }
+
+    private void showInfo(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     private void loadManagers() {

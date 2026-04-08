@@ -158,7 +158,6 @@ public class SidebarController {
             configs.add(new MenuItemConfig("worklogs", "Worklogs", "🗒"));
             configs.add(new MenuItemConfig("analytics", "Analytics", "◈"));
             configs.add(new MenuItemConfig("reports", "Reports", "⬙"));
-            configs.add(new MenuItemConfig("settings", "Settings", "⚙"));
             configs.add(new MenuItemConfig("logout", "Logout", "⎋"));
             return configs;
         }

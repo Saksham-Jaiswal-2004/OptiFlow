@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -11,115 +10,79 @@
 <?import javafx.scene.layout.Priority?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
 
-<VBox xmlns="http://javafx.com/javafx/21"
+<VBox fx:id="root"
+      xmlns="http://javafx.com/javafx/21"
       xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="com.optiflow.controllers.TaskDetailPanelController"
+      fx:controller="com.optiflow.controllers.TaskDetailPanelController"
       spacing="14"
-      styleClass="proj-root"
+      styleClass="mgr-root"
+      prefWidth="1120"
+      prefHeight="780"
       stylesheets="@../css/style.css">
 
     <VBox spacing="3">
-        <Label text="Task Detail" styleClass="proj-title"/>
-        <Label text="Review assignment, status, collaboration, and AI recommendations" styleClass="proj-subtitle"/>
+        <Label fx:id="pageTitleLabel" text="Task Detail" styleClass="mgr-title"/>
+        <Label text="Review assignment, status, and collaboration updates" styleClass="mgr-subtitle"/>
     </VBox>
 
-    <VBox spacing="12" styleClass="proj-card" opacity="0.98">
+    <VBox spacing="12" styleClass="mgr-card" opacity="0.98">
         <HBox alignment="CENTER_LEFT" spacing="8">
-            <Label text="Task Overview" styleClass="field-lbl"/>
+            <Label text="Task Overview" styleClass="mgr-card-title"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Label text="Due: 2026-04-22" styleClass="proj-page-text"/>
+            <Label fx:id="dueDateLabel" text="Due: --" styleClass="proj-page-text"/>
         </HBox>
 
-        <Label text="Implement role-based sidebar filtering and optimize dashboard query rendering for large projects." styleClass="dash-card-sub" wrapText="true"/>
+        <Label fx:id="taskDescriptionLabel" text="No task selected." styleClass="dash-card-sub" wrapText="true"/>
     </VBox>
 
     <HBox spacing="12" VBox.vgrow="ALWAYS">
-        <VBox spacing="12" styleClass="proj-card" HBox.hgrow="ALWAYS" opacity="0.98">
+        <VBox spacing="12" styleClass="mgr-card" HBox.hgrow="ALWAYS" opacity="0.98">
             <HBox alignment="CENTER_LEFT" spacing="8">
-                <Label text="Assigned Employees" styleClass="field-lbl"/>
+                <Label text="Assigned Employees" styleClass="mgr-card-title"/>
                 <Region HBox.hgrow="ALWAYS"/>
-                <Label text="4 members" styleClass="proj-page-text"/>
+                <Label fx:id="memberCountLabel" text="0 members" styleClass="proj-page-text"/>
             </HBox>
 
-            <ListView styleClass="emp-list" VBox.vgrow="ALWAYS">
-                <items>
-                    <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="Aarav Mehta - Backend"/>
-                        <String fx:value="Neha Singh - Frontend"/>
-                        <String fx:value="Rohan Patel - QA"/>
-                        <String fx:value="Ishita Verma - DevOps"/>
-                    </FXCollections>
-                </items>
-            </ListView>
+            <ListView fx:id="assignedEmployeesList" styleClass="emp-list" VBox.vgrow="ALWAYS" prefHeight="280"/>
 
             <VBox spacing="6">
                 <Label text="Status" styleClass="field-lbl"/>
-                <ComboBox promptText="Update status" styleClass="glass-field proj-filter" maxWidth="Infinity">
-                    <items>
-                        <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="Pending"/>
-                            <String fx:value="In Progress"/>
-                            <String fx:value="Blocked"/>
-                            <String fx:value="Completed"/>
-                        </FXCollections>
-                    </items>
-                </ComboBox>
+                <ComboBox fx:id="statusComboBox" promptText="Update status" styleClass="glass-field proj-filter" maxWidth="Infinity"/>
             </VBox>
         </VBox>
 
-        <VBox spacing="12" styleClass="proj-card" prefWidth="360" opacity="0.98">
-            <Label text="AI Suggestion Panel" styleClass="field-lbl"/>
+        <VBox spacing="12" styleClass="mgr-card" prefWidth="360" opacity="0.98">
+            <Label text="Task Actions" styleClass="mgr-card-title"/>
 
             <VBox spacing="8" styleClass="emp-comment-row">
-                <Label text="Suggestion" styleClass="proj-page-text"/>
-                <Label text="Split this task into API optimization, UI rendering, and caching subtasks to reduce review overhead." styleClass="dash-card-sub" wrapText="true"/>
+                <Label text="Execution Note" styleClass="proj-page-text"/>
+                <Label text="Break this work into deliverables and close each milestone with a short status update." styleClass="dash-card-sub" wrapText="true"/>
             </VBox>
 
             <VBox spacing="8" styleClass="emp-comment-row">
-                <Label text="Risk Alert" styleClass="proj-page-text"/>
-                <Label text="Potential delay if QA environment data is not refreshed before regression cycle." styleClass="dash-card-sub" wrapText="true"/>
+                <Label text="Coordination" styleClass="proj-page-text"/>
+                <Label text="Use comments below to track blockers and share dependency updates between members." styleClass="dash-card-sub" wrapText="true"/>
             </VBox>
 
-            <VBox spacing="8" styleClass="emp-comment-row">
-                <Label text="Recommended Next Step" styleClass="proj-page-text"/>
-                <Label text="Create a checkpoint review at 60% completion and auto-notify assigned members." styleClass="dash-card-sub" wrapText="true"/>
-            </VBox>
-
-            <Button text="Apply AI Plan" styleClass="glass-btn" maxWidth="Infinity"/>
+            <Button text="Save Changes" styleClass="glass-btn" maxWidth="Infinity" onAction="#handleSaveChanges"/>
         </VBox>
     </HBox>
 
-    <VBox spacing="10" styleClass="proj-card" opacity="0.98">
+    <VBox spacing="10" styleClass="mgr-card" opacity="0.98" VBox.vgrow="ALWAYS">
         <HBox alignment="CENTER_LEFT" spacing="8">
-            <Label text="Comments" styleClass="field-lbl"/>
+            <Label text="Comments" styleClass="mgr-card-title"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Label text="6 messages" styleClass="proj-page-text"/>
+            <Label fx:id="commentCountLabel" text="0 messages" styleClass="proj-page-text"/>
         </HBox>
 
-        <VBox spacing="8" styleClass="emp-list">
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
-            </padding>
-
-            <VBox spacing="6" styleClass="emp-comment-row">
-                <Label text="Neha Singh" styleClass="dash-card-title"/>
-                <Label text="UI hooks are ready. Waiting for optimized endpoint response shape." styleClass="dash-card-sub" wrapText="true"/>
-            </VBox>
-
-            <VBox spacing="6" styleClass="emp-comment-row">
-                <Label text="Rohan Patel" styleClass="dash-card-title"/>
-                <Label text="Please share expected status transition rules for test scenarios." styleClass="dash-card-sub" wrapText="true"/>
-            </VBox>
-        </VBox>
+        <ListView fx:id="commentsListView" styleClass="emp-list" VBox.vgrow="ALWAYS" prefHeight="300"/>
 
         <Separator styleClass="dash-separator"/>
 
         <HBox spacing="10" alignment="CENTER_LEFT">
-            <TextArea promptText="Write a comment..." styleClass="glass-field" prefRowCount="2" HBox.hgrow="ALWAYS"/>
-            <Button text="Post" styleClass="proj-ghost-btn"/>
+            <TextArea fx:id="commentInputArea" promptText="Write a comment..." styleClass="glass-field" prefRowCount="2" HBox.hgrow="ALWAYS"/>
+            <Button text="Post" styleClass="proj-ghost-btn" onAction="#handlePostComment"/>
         </HBox>
     </VBox>
 </VBox>

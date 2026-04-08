@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #F5F7FA;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #F5F7FA;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.optiflow.controllers.ViewManagersController">
 
 
     <top>
@@ -24,7 +24,7 @@
                         <Insets bottom="2" left="10" right="10" top="2" />
                     </padding>
                 </Label>
-    <Button fx:id="closeButton" layoutX="855.0" layoutY="20.0" prefHeight="27.0" prefWidth="23.0" style="-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 8px; -fx-font-weight: bold;" text="✕" />
+    <Button fx:id="closeButton" layoutX="855.0" layoutY="20.0" prefHeight="27.0" prefWidth="23.0" style="-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 8px; -fx-font-weight: bold;" text="✕" onAction="#handleClose" />
             </children>
         </AnchorPane>
     </top>

@@ -13,6 +13,7 @@
 
 <VBox xmlns="http://javafx.com/javafx/21"
       xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.optiflow.controllers.ManagerDetailController"
       spacing="14"
       styleClass="proj-root"
       stylesheets="@../css/style.css">
@@ -22,7 +23,7 @@
             <Label text="Manager Profile" styleClass="proj-title"/>
             <Label text="Detailed visibility into manager performance and portfolio" styleClass="proj-subtitle"/>
         </VBox>
-        <Button text="Edit Manager" styleClass="glass-btn"/>
+        <Button fx:id="editManagerBtn" text="Edit Manager" styleClass="glass-btn" onAction="#handleEditManager"/>
     </HBox>
 
     <VBox spacing="14" styleClass="proj-card">
@@ -34,22 +35,22 @@
 
             <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="0">
                 <Label text="Manager" styleClass="field-lbl"/>
-                <Label text="Aarav Mehta" styleClass="dash-card-value"/>
+                <Label fx:id="managerNameLabel" text="Aarav Mehta" styleClass="dash-card-value"/>
             </VBox>
 
             <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="0">
                 <Label text="Department" styleClass="field-lbl"/>
-                <Label text="Engineering" styleClass="dash-card-sub"/>
+                <Label fx:id="departmentLabel" text="Engineering" styleClass="dash-card-sub"/>
             </VBox>
 
             <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="1">
                 <Label text="Email" styleClass="field-lbl"/>
-                <Label text="aarav.mehta@optiflow.com" styleClass="dash-card-sub"/>
+                <Label fx:id="emailLabel" text="aarav.mehta@optiflow.com" styleClass="dash-card-sub"/>
             </VBox>
 
             <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="1">
                 <Label text="Status" styleClass="field-lbl"/>
-                <Label text="Active" styleClass="proj-status-badge proj-status-good"/>
+                <Label fx:id="statusLabel" text="Active" styleClass="proj-status-badge proj-status-good"/>
             </VBox>
         </GridPane>
     </VBox>
@@ -59,9 +60,9 @@
             <HBox alignment="CENTER_LEFT" spacing="8">
                 <Label text="Workload" styleClass="field-lbl"/>
                 <Region HBox.hgrow="ALWAYS"/>
-                <Label text="68%" styleClass="proj-progress-text"/>
+                <Label fx:id="workloadLabel" text="68%" styleClass="proj-progress-text"/>
             </HBox>
-            <ProgressBar progress="0.68" maxWidth="Infinity" styleClass="proj-progress"/>
+            <ProgressBar fx:id="workloadProgressBar" progress="0.68" maxWidth="Infinity" styleClass="proj-progress"/>
             <Label text="Balanced capacity across active projects" styleClass="dash-card-sub"/>
         </VBox>
 
@@ -70,12 +71,12 @@
             <HBox alignment="CENTER_LEFT" spacing="8">
                 <Label text="Active Projects" styleClass="proj-page-text"/>
                 <Region HBox.hgrow="ALWAYS"/>
-                <Label text="5" styleClass="dash-card-sub"/>
+                <Label fx:id="activeProjectsLabel" text="5" styleClass="dash-card-sub"/>
             </HBox>
             <HBox alignment="CENTER_LEFT" spacing="8">
                 <Label text="Completed This Quarter" styleClass="proj-page-text"/>
                 <Region HBox.hgrow="ALWAYS"/>
-                <Label text="3" styleClass="dash-card-sub"/>
+                <Label fx:id="completedProjectsLabel" text="3" styleClass="dash-card-sub"/>
             </HBox>
         </VBox>
     </HBox>
@@ -84,16 +85,16 @@
         <HBox alignment="CENTER_LEFT" spacing="8">
             <Label text="Managed Projects" styleClass="field-lbl"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Label text="5 total" styleClass="proj-page-text"/>
+            <Label fx:id="totalProjectsLabel" text="5 total" styleClass="proj-page-text"/>
         </HBox>
 
-        <TableView styleClass="proj-table" VBox.vgrow="ALWAYS">
+        <TableView fx:id="projectTable" styleClass="proj-table" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn text="Project" prefWidth="260"/>
-                <TableColumn text="Status" prefWidth="150"/>
-                <TableColumn text="Progress" prefWidth="180"/>
-                <TableColumn text="Deadline" prefWidth="160"/>
-                <TableColumn text="Team Size" prefWidth="140"/>
+                <TableColumn fx:id="projectNameColumn" text="Project" prefWidth="260"/>
+                <TableColumn fx:id="projectStatusColumn" text="Status" prefWidth="150"/>
+                <TableColumn fx:id="projectProgressColumn" text="Progress" prefWidth="180"/>
+                <TableColumn fx:id="projectDeadlineColumn" text="Deadline" prefWidth="160"/>
+                <TableColumn fx:id="projectTeamSizeColumn" text="Team Size" prefWidth="140"/>
             </columns>
 
             <placeholder>

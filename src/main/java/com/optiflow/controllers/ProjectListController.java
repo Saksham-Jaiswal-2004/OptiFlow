@@ -1,6 +1,10 @@
 package com.optiflow.controllers;
 
+import com.optiflow.models.Employee;
+import com.optiflow.models.Projects;
 import com.optiflow.models.User;
+import com.optiflow.services.EmployeeService;
+import com.optiflow.services.ProjectService;
 import com.optiflow.utils.SessionManager;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -21,6 +25,9 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class ProjectListController {
+
+    private final ProjectService projectService = new ProjectService();
+    private final EmployeeService employeeService = new EmployeeService();
 
     @FXML
     private TextField searchField;
@@ -65,7 +72,7 @@ public class ProjectListController {
     @FXML
     public void initialize() {
         currentUser = SessionManager.getUser();
-        seedData();
+        loadProjectsFromServices();
         configureColumns();
         configureFilters();
         configurePagination();
@@ -181,10 +188,24 @@ public class ProjectListController {
     }
 
     private void configureFilters() {
-        statusFilter.setItems(FXCollections.observableArrayList("All", "On Track", "At Risk", "Delayed"));
+        statusFilter.setItems(FXCollections.observableArrayList("All", "On Track", "At Risk", "Delayed", "Completed"));
         statusFilter.getSelectionModel().selectFirst();
 
-        managerFilter.setItems(FXCollections.observableArrayList("All", "Ritika Mehra", "Arjun Reddy", "Nikhil Kumar", "Priya Menon"));
+        ObservableList<String> managers = FXCollections.observableArrayList("All");
+        try {
+            List<Projects> projects = projectService.getAllProjects();
+            if (projects != null) {
+                for (Projects project : projects) {
+                    Employee manager = employeeService.getEmployeeById(project.getManager_id());
+                    if (manager != null && manager.getName() != null && !managers.contains(manager.getName())) {
+                        managers.add(manager.getName());
+                    }
+                }
+            }
+        } catch (Exception ignored) {
+        }
+
+        managerFilter.setItems(managers);
         managerFilter.getSelectionModel().selectFirst();
 
         rowsPerPage.setItems(FXCollections.observableArrayList(5, 10, 20));
@@ -253,22 +274,52 @@ public class ProjectListController {
         }
     }
 
-    private void seedData() {
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd MMM yyyy");
-        allRows.setAll(
-                new ProjectRow("OptiFlow Core", "On Track", 86, "Ritika Mehra", LocalDate.now().plusDays(8).format(fmt)),
-                new ProjectRow("Retail BI", "At Risk", 61, "Arjun Reddy", LocalDate.now().plusDays(3).format(fmt)),
-                new ProjectRow("HRMS Upgrade", "On Track", 73, "Nikhil Kumar", LocalDate.now().plusDays(14).format(fmt)),
-                new ProjectRow("Client Portal", "Delayed", 48, "Priya Menon", LocalDate.now().plusDays(2).format(fmt)),
-                new ProjectRow("Task Engine V2", "On Track", 81, "Ritika Mehra", LocalDate.now().plusDays(12).format(fmt)),
-                new ProjectRow("Payroll Sync", "At Risk", 57, "Arjun Reddy", LocalDate.now().plusDays(6).format(fmt)),
-                new ProjectRow("Audit Pipeline", "On Track", 69, "Nikhil Kumar", LocalDate.now().plusDays(10).format(fmt)),
-                new ProjectRow("Partner API", "Delayed", 41, "Priya Menon", LocalDate.now().plusDays(1).format(fmt)),
-                new ProjectRow("KPI Studio", "On Track", 88, "Ritika Mehra", LocalDate.now().plusDays(18).format(fmt)),
-                new ProjectRow("Resource AI", "At Risk", 53, "Arjun Reddy", LocalDate.now().plusDays(5).format(fmt)),
-                new ProjectRow("Notifications", "On Track", 76, "Nikhil Kumar", LocalDate.now().plusDays(9).format(fmt)),
-                new ProjectRow("Doc Center", "On Track", 64, "Priya Menon", LocalDate.now().plusDays(11).format(fmt))
-        );
+    private void loadProjectsFromServices() {
+        allRows.clear();
+
+        try {
+            List<Projects> projects = projectService.getAllProjects();
+            if (projects == null) {
+                return;
+            }
+
+            for (Projects project : projects) {
+                String managerName = "Unassigned";
+                try {
+                    Employee manager = employeeService.getEmployeeById(project.getManager_id());
+                    if (manager != null && manager.getName() != null) {
+                        managerName = manager.getName();
+                    }
+                } catch (Exception ignored) {
+                }
+
+                int progress = 0;
+                try {
+                    progress = (int) Math.round(projectService.calculateProjectProgress(project.getProject_id()));
+                    progress = Math.max(0, Math.min(100, progress));
+                } catch (Exception ignored) {
+                }
+
+                String deadline = project.getDeadline() == null ? "-" : project.getDeadline().toString();
+                allRows.add(new ProjectRow(project.getName(), normalizeStatus(project.getStatus()), progress, managerName, deadline));
+            }
+        } catch (Exception ignored) {
+        }
+    }
+
+    private String normalizeStatus(String status) {
+        if (status == null) {
+            return "At Risk";
+        }
+
+        String normalized = status.trim().toLowerCase(Locale.ROOT);
+        if (normalized.contains("complete") || normalized.contains("track") || normalized.contains("active")) {
+            return "On Track";
+        }
+        if (normalized.contains("risk")) {
+            return "At Risk";
+        }
+        return "Delayed";
     }
 
     public static class ProjectRow {

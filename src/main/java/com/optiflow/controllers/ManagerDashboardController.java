@@ -4,7 +4,6 @@ import com.optiflow.models.Employee;
 import com.optiflow.models.Tasks;
 import com.optiflow.models.User;
 import com.optiflow.services.EmployeeService;
-import com.optiflow.services.ProjectService;
 import com.optiflow.services.TaskService;
 import com.optiflow.utils.SessionManager;
 import javafx.animation.FadeTransition;
@@ -24,6 +23,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
@@ -31,11 +32,18 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjusters;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 public class ManagerDashboardController {
 
@@ -67,6 +75,12 @@ public class ManagerDashboardController {
     private TableColumn<TaskRow, String> taskNameColumn;
 
     @FXML
+    private TableColumn<TaskRow, String> taskIdColumn;
+
+    @FXML
+    private TableColumn<TaskRow, String> taskDescriptionColumn;
+
+    @FXML
     private TableColumn<TaskRow, String> taskAssignedToColumn;
 
     @FXML
@@ -84,51 +98,39 @@ public class ManagerDashboardController {
     @FXML
     private PieChart completionPieChart;
 
-    @FXML
-    private VBox alertsList;
-
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
 
     private final EmployeeService employeeService = new EmployeeService();
-    private final ProjectService projectService = new ProjectService();
     private final TaskService taskService = new TaskService();
 
     @FXML
     public void initialize() {
-        ObservableList<TeamRow> teamRows = loadTeamRows();
-        ObservableList<TaskRow> taskRows = loadTaskRows();
+        Employee manager = resolveCurrentManager();
+        ObservableList<Employee> teamMembers = resolveTeamMembers(manager);
+        ObservableList<Tasks> teamTasks = resolveTasksForTeam(teamMembers);
+
+        ObservableList<TeamRow> teamRows = loadTeamRows(teamMembers, teamTasks);
+        ObservableList<TaskRow> taskRows = loadTaskRows(teamMembers, teamTasks);
 
         configureTeamOverviewTable(teamRows);
         configureTaskTrackingTable(taskRows);
-        buildWeeklyGantt(taskRows);
+        buildWeeklyGantt(teamMembers, teamTasks);
         configureCharts(teamRows, taskRows);
-        buildAlerts(taskRows, teamRows);
 
         animateCardsOnLoad();
         animateChartsOnLoad();
     }
 
-    private ObservableList<TeamRow> loadTeamRows() {
+    private ObservableList<TeamRow> loadTeamRows(ObservableList<Employee> teamMembers, ObservableList<Tasks> teamTasks) {
         ObservableList<TeamRow> rows = FXCollections.observableArrayList();
 
         try {
-            User user = SessionManager.getUser();
-            if (user == null) {
-                return rows;
-            }
-
-            Employee manager = employeeService.getEmployeeByUserId(user.getUserId());
-            if (manager == null) {
-                return rows;
-            }
-
-            List<Employee> team = employeeService.getEmployeesByManager(manager.getEmp_id());
-            List<Tasks> tasks = loadTasksByManager(manager.getEmp_id());
-
-            for (Employee member : team) {
-                long assigned = tasks.stream().filter(t -> t.getAssigned_to() == member.getEmp_id()).count();
-                long completed = tasks.stream()
-                        .filter(t -> t.getAssigned_to() == member.getEmp_id())
+            for (Employee member : teamMembers) {
+                long assigned = teamTasks.stream()
+                        .filter(t -> t.getAssigned_to() == member.getEmp_id() || t.getAssigned_to() == member.getUser_id())
+                        .count();
+                long completed = teamTasks.stream()
+                        .filter(t -> t.getAssigned_to() == member.getEmp_id() || t.getAssigned_to() == member.getUser_id())
                         .filter(t -> "completed".equalsIgnoreCase(t.getStatus()))
                         .count();
 
@@ -149,32 +151,28 @@ public class ManagerDashboardController {
         return rows;
     }
 
-    private ObservableList<TaskRow> loadTaskRows() {
+    private ObservableList<TaskRow> loadTaskRows(ObservableList<Employee> teamMembers, ObservableList<Tasks> teamTasks) {
         ObservableList<TaskRow> rows = FXCollections.observableArrayList();
 
         try {
-            User user = SessionManager.getUser();
-            if (user == null) {
-                return rows;
+            Map<Integer, String> assigneeNameById = new LinkedHashMap<>();
+            for (Employee member : teamMembers) {
+                assigneeNameById.put(member.getEmp_id(), member.getName());
+                assigneeNameById.put(member.getUser_id(), member.getName());
             }
 
-            Employee manager = employeeService.getEmployeeByUserId(user.getUserId());
-            if (manager == null) {
-                return rows;
-            }
+            for (Tasks task : teamTasks) {
+                String assignedName = assigneeNameById.getOrDefault(task.getAssigned_to(), "Unknown Assignee");
 
-            List<Employee> team = employeeService.getEmployeesByManager(manager.getEmp_id());
-            List<Tasks> tasks = loadTasksByManager(manager.getEmp_id());
-
-            for (Tasks task : tasks) {
-                String assignedName = team.stream()
-                        .filter(e -> e.getEmp_id() == task.getAssigned_to())
-                        .map(Employee::getName)
-                        .findFirst()
-                        .orElse("Unassigned");
-
-                LocalDate deadline = task.getEnd_date() == null ? LocalDate.now().plusDays(7) : task.getEnd_date().toLocalDate();
-                rows.add(new TaskRow(task.getTitle(), assignedName, normalizeStatus(task.getStatus()), deadline));
+                LocalDate deadline = task.getEnd_date() == null ? null : task.getEnd_date().toLocalDate();
+                    rows.add(new TaskRow(
+                        "T-" + task.getTask_id(),
+                        task.getTitle(),
+                        safeText(task.getDescription()),
+                        assignedName,
+                        normalizeStatus(task.getStatus()),
+                        deadline
+                    ));
             }
         } catch (Exception ignored) {
         }
@@ -182,18 +180,92 @@ public class ManagerDashboardController {
         return rows;
     }
 
-    private List<Tasks> loadTasksByManager(int managerEmpId) {
-        List<Tasks> tasks = new ArrayList<>();
+    private Employee resolveCurrentManager() {
         try {
-            int projectId = projectService.getProjectByManager(managerEmpId);
-            if (projectId > 0) {
-                List<Tasks> fetched = taskService.getTaskByProject(projectId);
-                if (fetched != null) {
-                    tasks.addAll(fetched);
+            User user = SessionManager.getUser();
+            if (user == null) {
+                return null;
+            }
+            return employeeService.getEmployeeByUserId(user.getUserId());
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
+
+    private ObservableList<Employee> resolveTeamMembers(Employee manager) {
+        ObservableList<Employee> team = FXCollections.observableArrayList();
+        if (manager == null) {
+            return team;
+        }
+
+        try {
+            Map<Integer, Employee> unique = new LinkedHashMap<>();
+
+            List<Employee> byEmpId = employeeService.getEmployeesByManager(manager.getEmp_id());
+            if (byEmpId != null) {
+                for (Employee employee : byEmpId) {
+                    unique.put(employee.getEmp_id(), employee);
                 }
             }
+
+            List<Employee> byUserId = employeeService.getEmployeesByManager(manager.getUser_id());
+            if (byUserId != null) {
+                for (Employee employee : byUserId) {
+                    unique.put(employee.getEmp_id(), employee);
+                }
+            }
+
+            team.addAll(unique.values());
         } catch (Exception ignored) {
         }
+
+        return team;
+    }
+
+    private ObservableList<Tasks> resolveTasksForTeam(ObservableList<Employee> teamMembers) {
+        ObservableList<Tasks> tasks = FXCollections.observableArrayList();
+        if (teamMembers == null || teamMembers.isEmpty()) {
+            return tasks;
+        }
+
+        try {
+            Set<Integer> candidateAssigneeIds = new HashSet<>();
+            for (Employee member : teamMembers) {
+                candidateAssigneeIds.add(member.getEmp_id());
+                candidateAssigneeIds.add(member.getUser_id());
+            }
+
+            Map<Integer, Tasks> unique = new LinkedHashMap<>();
+
+            List<Tasks> allTasks = taskService.getAllTasks();
+            if (allTasks != null) {
+                for (Tasks task : allTasks) {
+                    if (candidateAssigneeIds.contains(task.getAssigned_to())) {
+                        unique.put(task.getTask_id(), task);
+                    }
+                }
+            }
+
+            for (Employee member : teamMembers) {
+                List<Tasks> employeeTasks = taskService.getTaskByEmp(member.getEmp_id());
+                if (employeeTasks == null) {
+                    employeeTasks = List.of();
+                }
+                for (Tasks task : employeeTasks) {
+                    unique.put(task.getTask_id(), task);
+                }
+
+                List<Tasks> employeeTasksByUserId = taskService.getTaskByEmp(member.getUser_id());
+                if (employeeTasksByUserId != null) {
+                    for (Tasks task : employeeTasksByUserId) {
+                        unique.put(task.getTask_id(), task);
+                    }
+                }
+            }
+            tasks.addAll(unique.values());
+        } catch (Exception ignored) {
+        }
+
         return tasks;
     }
 
@@ -261,10 +333,27 @@ public class ManagerDashboardController {
     }
 
     private void configureTaskTrackingTable(ObservableList<TaskRow> rows) {
+        taskIdColumn.setCellValueFactory(data -> data.getValue().taskIdProperty());
         taskNameColumn.setCellValueFactory(data -> data.getValue().taskProperty());
+        taskDescriptionColumn.setCellValueFactory(data -> data.getValue().descriptionProperty());
         taskAssignedToColumn.setCellValueFactory(data -> data.getValue().assignedToProperty());
         taskStatusColumn.setCellValueFactory(data -> data.getValue().statusProperty());
         taskDeadlineColumn.setCellValueFactory(data -> data.getValue().deadlineTextProperty());
+
+        taskDescriptionColumn.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setTooltip(null);
+                    return;
+                }
+                String trimmed = item.length() > 48 ? item.substring(0, 48) + "..." : item;
+                setText(trimmed);
+                setTooltip(new javafx.scene.control.Tooltip(item));
+            }
+        });
 
         taskStatusColumn.setCellFactory(col -> new TableCell<>() {
             @Override
@@ -321,48 +410,212 @@ public class ManagerDashboardController {
         taskTable.setItems(rows);
     }
 
-    private void buildWeeklyGantt(ObservableList<TaskRow> taskRows) {
+    private void buildWeeklyGantt(ObservableList<Employee> teamMembers, ObservableList<Tasks> teamTasks) {
         ganttContainer.getChildren().clear();
 
-        HBox timeline = new HBox(8);
-        timeline.getStyleClass().add("mgr-gantt-timeline");
+        HBox headerRow = new HBox(10);
+        headerRow.setAlignment(Pos.CENTER_LEFT);
+        headerRow.getStyleClass().add("mgr-gantt-timeline");
+        headerRow.setFillHeight(true);
+        headerRow.setMaxWidth(Double.MAX_VALUE);
+
+        Label employeeHeader = new Label("Employee");
+        employeeHeader.getStyleClass().add("mgr-gantt-task");
+        employeeHeader.setMinWidth(170);
+        employeeHeader.setPrefWidth(170);
+        employeeHeader.setMaxWidth(170);
+
+        GridPane timeline = createGanttGrid();
+        HBox.setHgrow(timeline, Priority.ALWAYS);
+        timeline.setMaxWidth(Double.MAX_VALUE);
+
         List<String> labels = List.of("Mon", "Tue", "Wed", "Thu", "Fri");
-        for (String day : labels) {
+        for (int dayIndex = 0; dayIndex < labels.size(); dayIndex++) {
+            String day = labels.get(dayIndex);
             Label dayLabel = new Label(day);
             dayLabel.getStyleClass().add("mgr-gantt-day");
-            Region spacer = new Region();
-            HBox.setHgrow(spacer, Priority.ALWAYS);
-            HBox dayWrap = new HBox(dayLabel, spacer);
-            HBox.setHgrow(dayWrap, Priority.ALWAYS);
-            timeline.getChildren().add(dayWrap);
+
+            StackPane dayWrap = new StackPane(dayLabel);
+            dayWrap.getStyleClass().add("mgr-gantt-day-wrap");
+            dayWrap.setMaxWidth(Double.MAX_VALUE);
+            timeline.add(dayWrap, dayIndex, 0);
         }
-        ganttContainer.getChildren().add(timeline);
 
-        int barSeed = 0;
-        for (TaskRow task : taskRows) {
-            HBox row = new HBox(10);
-            row.getStyleClass().add("mgr-gantt-row");
+        headerRow.getChildren().addAll(employeeHeader, timeline);
+        ganttContainer.getChildren().add(headerRow);
 
-            Label taskLabel = new Label(task.getTask());
-            taskLabel.getStyleClass().add("mgr-gantt-task");
-            taskLabel.setMinWidth(170);
+        LocalDate weekStart = resolveBestWeekStart(teamMembers, teamTasks);
+        LocalDate weekEnd = weekStart.plusDays(4);
 
-            Region bar = new Region();
-            bar.getStyleClass().add("mgr-gantt-bar");
-            if (barSeed % 3 == 0) {
-                bar.getStyleClass().add("mgr-gantt-bar-a");
-            } else if (barSeed % 3 == 1) {
-                bar.getStyleClass().add("mgr-gantt-bar-b");
-            } else {
-                bar.getStyleClass().add("mgr-gantt-bar-c");
+        for (Employee employee : teamMembers) {
+            HBox employeeRow = new HBox(10);
+            employeeRow.getStyleClass().add("mgr-gantt-row");
+            employeeRow.setAlignment(Pos.CENTER_LEFT);
+            employeeRow.setMaxWidth(Double.MAX_VALUE);
+
+            Label employeeLabel = new Label(employee.getName());
+            employeeLabel.getStyleClass().add("mgr-gantt-task");
+            employeeLabel.setMinWidth(170);
+            employeeLabel.setPrefWidth(170);
+            employeeLabel.setMaxWidth(170);
+
+            GridPane timelineRow = createGanttGrid();
+            HBox.setHgrow(timelineRow, Priority.ALWAYS);
+            timelineRow.setMaxWidth(Double.MAX_VALUE);
+
+            int[] activeCounts = loadEmployeeActiveTaskCounts(employee, teamTasks, weekStart, weekEnd);
+            for (int day = 0; day < 5; day++) {
+                int count = activeCounts[day];
+
+                Region bar = new Region();
+                bar.getStyleClass().add("mgr-gantt-bar");
+                if (count >= 3) {
+                    bar.getStyleClass().add("mgr-gantt-bar-a");
+                } else if (count == 2) {
+                    bar.getStyleClass().add("mgr-gantt-bar-b");
+                } else if (count == 1) {
+                    bar.getStyleClass().add("mgr-gantt-bar-c");
+                } else {
+                    bar.setStyle("-fx-opacity: 0.25;");
+                }
+                bar.setPrefHeight(14);
+                bar.setMaxWidth(Double.MAX_VALUE);
+
+                Label countLabel = new Label(String.valueOf(count));
+                countLabel.getStyleClass().add("proj-page-text");
+
+                VBox dayCell = new VBox(4, bar, countLabel);
+                dayCell.setAlignment(Pos.CENTER);
+                dayCell.getStyleClass().add("mgr-gantt-day-wrap");
+                dayCell.setMaxWidth(Double.MAX_VALUE);
+                timelineRow.add(dayCell, day, 0);
             }
-            bar.setPrefHeight(16);
-            bar.setPrefWidth(120 + (barSeed * 20));
 
-            row.getChildren().addAll(taskLabel, bar);
-            ganttContainer.getChildren().add(row);
-            barSeed++;
+            employeeRow.getChildren().addAll(employeeLabel, timelineRow);
+            ganttContainer.getChildren().add(employeeRow);
         }
+
+        if (teamMembers.isEmpty()) {
+            Label empty = new Label("No team members found for weekly gantt.");
+            empty.getStyleClass().add("proj-page-text");
+            ganttContainer.getChildren().add(empty);
+        }
+
+        ganttContainer.setFillWidth(true);
+    }
+
+    private GridPane createGanttGrid() {
+        GridPane grid = new GridPane();
+        grid.setHgap(8);
+        for (int i = 0; i < 5; i++) {
+            ColumnConstraints col = new ColumnConstraints();
+            col.setPercentWidth(20);
+            col.setHgrow(Priority.ALWAYS);
+            col.setFillWidth(true);
+            grid.getColumnConstraints().add(col);
+        }
+        return grid;
+    }
+
+    private LocalDate resolveBestWeekStart(ObservableList<Employee> teamMembers, ObservableList<Tasks> teamTasks) {
+        LocalDate currentWeekStart = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDate currentWeekEnd = currentWeekStart.plusDays(4);
+
+        Map<LocalDate, Set<Integer>> occupancyByWeek = new LinkedHashMap<>();
+        occupancyByWeek.put(currentWeekStart, new HashSet<>());
+
+        for (Tasks task : teamTasks) {
+            Employee assignee = resolveAssignee(task, teamMembers);
+            if (assignee == null) {
+                continue;
+            }
+
+            LocalDate[] span = resolveTaskSpan(task, currentWeekStart, currentWeekEnd);
+            LocalDate start = span[0];
+            LocalDate end = span[1];
+
+            LocalDate weekCursor = start.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+            LocalDate lastWeek = end.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+            while (!weekCursor.isAfter(lastWeek)) {
+                occupancyByWeek.computeIfAbsent(weekCursor, ignored -> new HashSet<>()).add(assignee.getEmp_id());
+                weekCursor = weekCursor.plusWeeks(1);
+            }
+        }
+
+        LocalDate bestWeek = currentWeekStart;
+        int bestCount = -1;
+        long bestDistance = Long.MAX_VALUE;
+        for (Map.Entry<LocalDate, Set<Integer>> entry : occupancyByWeek.entrySet()) {
+            int count = entry.getValue().size();
+            long distance = Math.abs(ChronoUnit.DAYS.between(currentWeekStart, entry.getKey()));
+            if (count > bestCount || (count == bestCount && distance < bestDistance)) {
+                bestCount = count;
+                bestDistance = distance;
+                bestWeek = entry.getKey();
+            }
+        }
+
+        return bestWeek;
+    }
+
+    private Employee resolveAssignee(Tasks task, ObservableList<Employee> teamMembers) {
+        for (Employee member : teamMembers) {
+            if (task.getAssigned_to() == member.getEmp_id() || task.getAssigned_to() == member.getUser_id()) {
+                return member;
+            }
+        }
+        return null;
+    }
+
+    private LocalDate[] resolveTaskSpan(Tasks task, LocalDate fallbackStart, LocalDate fallbackEnd) {
+        LocalDate taskStart = task.getStart_date() == null ? null : task.getStart_date().toLocalDate();
+        LocalDate taskEnd = task.getEnd_date() == null ? null : task.getEnd_date().toLocalDate();
+
+        if (taskStart == null && taskEnd == null) {
+            return new LocalDate[]{fallbackStart, fallbackEnd};
+        }
+
+        if (taskStart == null) {
+            taskStart = taskEnd;
+        }
+        if (taskEnd == null) {
+            taskEnd = taskStart;
+        }
+
+        if (taskEnd.isBefore(taskStart)) {
+            LocalDate swap = taskStart;
+            taskStart = taskEnd;
+            taskEnd = swap;
+        }
+
+        return new LocalDate[]{taskStart, taskEnd};
+    }
+
+    private int[] loadEmployeeActiveTaskCounts(Employee employee, ObservableList<Tasks> teamTasks, LocalDate weekStart, LocalDate weekEnd) {
+        int[] activeCounts = new int[]{0, 0, 0, 0, 0};
+
+        for (Tasks task : teamTasks) {
+            if (task.getAssigned_to() != employee.getEmp_id() && task.getAssigned_to() != employee.getUser_id()) {
+                continue;
+            }
+
+            LocalDate[] span = resolveTaskSpan(task, weekStart, weekStart);
+            LocalDate taskStart = span[0];
+            LocalDate taskEnd = span[1];
+
+            if (taskEnd.isBefore(weekStart) || taskStart.isAfter(weekEnd)) {
+                continue;
+            }
+
+            for (int day = 0; day < 5; day++) {
+                LocalDate current = weekStart.plusDays(day);
+                if (!current.isBefore(taskStart) && !current.isAfter(taskEnd)) {
+                    activeCounts[day] += 1;
+                }
+            }
+        }
+
+        return activeCounts;
     }
 
     private void configureCharts(ObservableList<TeamRow> teamRows, ObservableList<TaskRow> taskRows) {
@@ -380,28 +633,6 @@ public class ManagerDashboardController {
                 new PieChart.Data("Completed", completed),
                 new PieChart.Data("Pending", pending)
         ));
-    }
-
-    private void buildAlerts(ObservableList<TaskRow> taskRows, ObservableList<TeamRow> teamRows) {
-        alertsList.getChildren().clear();
-
-        taskRows.stream().filter(TaskRow::isOverdue).forEach(task -> {
-            Label alert = new Label("Overdue: " + task.getTask() + " (" + task.getAssignedTo() + ")");
-            alert.getStyleClass().addAll("mgr-alert-item", "mgr-alert-warn");
-            alertsList.getChildren().add(alert);
-        });
-
-        teamRows.stream().filter(row -> row.getWorkload() >= 85).forEach(row -> {
-            Label alert = new Label("High load: " + row.getName() + " at " + row.getWorkload() + "% workload");
-            alert.getStyleClass().addAll("mgr-alert-item", "mgr-alert-soft");
-            alertsList.getChildren().add(alert);
-        });
-
-        if (alertsList.getChildren().isEmpty()) {
-            Label clean = new Label("No urgent alerts. Team workload is balanced.");
-            clean.getStyleClass().add("mgr-alert-item");
-            alertsList.getChildren().add(clean);
-        }
     }
 
     private void animateCardsOnLoad() {
@@ -486,18 +717,26 @@ public class ManagerDashboardController {
     }
 
     public static class TaskRow {
+        private final StringProperty taskId;
         private final StringProperty task;
+        private final StringProperty description;
         private final StringProperty assignedTo;
         private final StringProperty status;
         private final ObjectProperty<LocalDate> deadline;
         private final StringProperty deadlineText;
 
-        public TaskRow(String task, String assignedTo, String status, LocalDate deadline) {
+        public TaskRow(String taskId, String task, String description, String assignedTo, String status, LocalDate deadline) {
+            this.taskId = new SimpleStringProperty(taskId);
             this.task = new SimpleStringProperty(task);
+            this.description = new SimpleStringProperty(description);
             this.assignedTo = new SimpleStringProperty(assignedTo);
             this.status = new SimpleStringProperty(status);
             this.deadline = new SimpleObjectProperty<>(deadline);
-            this.deadlineText = new SimpleStringProperty(deadline.format(DateTimeFormatter.ofPattern("dd MMM yyyy")));
+            this.deadlineText = new SimpleStringProperty(deadline == null ? "-" : deadline.format(DateTimeFormatter.ofPattern("dd MMM yyyy")));
+        }
+
+        public StringProperty taskIdProperty() {
+            return taskId;
         }
 
         public String getTask() {
@@ -508,12 +747,16 @@ public class ManagerDashboardController {
             return assignedTo.get();
         }
 
+        public StringProperty descriptionProperty() {
+            return description;
+        }
+
         public String getStatus() {
             return status.get();
         }
 
         public boolean isOverdue() {
-            return deadline.get().isBefore(LocalDate.now()) && !"Completed".equalsIgnoreCase(getStatus());
+            return deadline.get() != null && deadline.get().isBefore(LocalDate.now()) && !"Completed".equalsIgnoreCase(getStatus());
         }
 
         public StringProperty taskProperty() {
@@ -531,5 +774,9 @@ public class ManagerDashboardController {
         public StringProperty deadlineTextProperty() {
             return deadlineText;
         }
+    }
+
+    private String safeText(String value) {
+        return value == null || value.isBlank() ? "-" : value;
     }
 }

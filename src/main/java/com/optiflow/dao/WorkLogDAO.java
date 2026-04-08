@@ -59,7 +59,7 @@ public class WorkLogDAO
                 workLog.setEmployeeId(rs.getInt("employee_id"));
                 workLog.setTaskId(rs.getInt("task_id"));
                 workLog.setWorkDate(rs.getDate("work_date"));
-                workLog.setHoursWorked(rs.getInt("hours"));
+                workLog.setHoursWorked(rs.getInt("hours_worked"));
                 workLog.setDescription(rs.getString("description"));
 
                 workLogs.add(workLog);
@@ -74,7 +74,7 @@ public class WorkLogDAO
     public List<WorkLog> getLogsByEmployeeByDate(int empId, Date date)
     {
         List<WorkLog> workLogs = new LinkedList<>();
-        String sql = "SELECT * FROM worklog WHERE (employee_id, work_date) VALUES (?, ?)";
+        String sql = "SELECT * FROM worklog WHERE employee_id=? AND work_date=?";
 
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -190,7 +190,7 @@ public class WorkLogDAO
                 workLog.setEmployeeId(rs.getInt("employee_id"));
                 workLog.setTaskId(rs.getInt("task_id"));
                 workLog.setWorkDate(rs.getDate("work_date"));
-                workLog.setHoursWorked(rs.getInt("hours"));
+                workLog.setHoursWorked(rs.getInt("hours_worked"));
                 workLog.setDescription(rs.getString("description"));
 
                 workLogs.add(workLog);
@@ -204,13 +204,13 @@ public class WorkLogDAO
         }
     }
 
-    public static void main(String[] args)
-    {
-        WorkLogDAO workLogDAO = new WorkLogDAO();
-        Date date = java.sql.Date.valueOf(java.time.LocalDate.now());
-        workLogDAO.addWorkLog(1, 1, date, 6, "All Good");
-        workLogDAO.addWorkLog(1, 2, date, 6, "Error Error Error");
-        workLogDAO.addWorkLog(1, 3, date, 7, "Fine by me");
-        workLogDAO.addWorkLog(1, 4, date, 3, "All Good");
-    }
+//    public static void main(String[] args)
+//    {
+//        WorkLogDAO workLogDAO = new WorkLogDAO();
+//        Date date = java.sql.Date.valueOf(java.time.LocalDate.now());
+//        workLogDAO.addWorkLog(1, 1, date, 6, "All Good");
+//        workLogDAO.addWorkLog(1, 2, date, 6, "Error Error Error");
+//        workLogDAO.addWorkLog(1, 3, date, 7, "Fine by me");
+//        workLogDAO.addWorkLog(1, 4, date, 3, "All Good");
+//    }
 }

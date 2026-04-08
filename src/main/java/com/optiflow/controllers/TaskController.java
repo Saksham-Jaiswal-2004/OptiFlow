@@ -162,7 +162,7 @@ public class TaskController {
 
     private void openTask(Tasks task, boolean editable) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/optiflow/views/viewTasks.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/viewTasks.fxml"));
             Parent root = loader.load();
 
             ViewTasksController controller = loader.getController();
@@ -184,7 +184,7 @@ public class TaskController {
     @FXML
     private void handleAnalytics() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/optiflow/views/dashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/DashboardLayout.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) tasksContainer.getScene().getWindow();
@@ -222,6 +222,43 @@ public class TaskController {
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleProjects() {
+        navigateToDashboard();
+    }
+
+    @FXML
+    private void handleTasks() {
+        navigateToDashboard();
+    }
+
+    @FXML
+    private void handleEmployees() {
+        navigateToDashboard();
+    }
+
+    @FXML
+    private void handleLogout() {
+        try {
+            SessionManager.setUser(null);
+            Parent root = FXMLLoader.load(getClass().getResource("/gui/Login.fxml"));
+            Stage stage = (Stage) tasksContainer.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setMaximized(true);
+        } catch (Exception ignored) {
+        }
+    }
+
+    private void navigateToDashboard() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/gui/DashboardLayout.fxml"));
+            Stage stage = (Stage) tasksContainer.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setMaximized(true);
+        } catch (Exception ignored) {
         }
     }
 

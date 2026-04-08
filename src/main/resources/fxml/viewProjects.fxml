@@ -14,7 +14,8 @@
 <BorderPane prefHeight="600.0" prefWidth="900.0"
             style="-fx-background-color: #F5F7FA;"
             xmlns="http://javafx.com/javafx/25"
-            xmlns:fx="http://javafx.com/fxml/1">
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.optiflow.controllers.ViewProjectsController">
 
     <!-- ================= TOP ================= -->
     <top>
@@ -27,7 +28,7 @@
                         <Insets bottom="2" left="10" right="10" top="2" />
                     </padding>
                 </Label>
-                <Button fx:id="closeButton" layoutX="855.0" layoutY="20.0" prefHeight="27.0" prefWidth="23.0" style="-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 8px; -fx-font-weight: bold;" text="✕" />
+                <Button fx:id="closeButton" layoutX="855.0" layoutY="20.0" prefHeight="27.0" prefWidth="23.0" style="-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 8px; -fx-font-weight: bold;" text="✕" onAction="#handleClose" />
             </children>
         </AnchorPane>
     </top>
@@ -48,18 +49,18 @@
 
                         <HBox spacing="15" alignment="CENTER_LEFT">
                             <children>
-                                <Label text="Project Alpha"
+                                    <Label fx:id="projectNameLabel" text="Project Alpha"
                                        style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" />
 
                                 <Separator orientation="VERTICAL" prefHeight="25"/>
 
-                                <Label text="Client XYZ"
+                                    <Label fx:id="managerNameField" text="Client XYZ"
                                        style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" />
                             </children>
                         </HBox>
 
                         <!-- STATUS BADGE -->
-                        <Label text="In Progress"
+                           <Label fx:id="statusField" text="In Progress"
                                style="-fx-background-color: linear-gradient(to right, #8e2de2, #c471ed);
                                       -fx-background-radius: 50;
                                       -fx-text-fill: white;
@@ -78,14 +79,14 @@
                             <children>
                                 <Label text="Manager:"
                                        style="-fx-text-fill: #D1D5DB;" />
-                                <Label text="John Doe"
+                                    <Label fx:id="managerIDField" text="John Doe"
                                        style="-fx-text-fill: white;" />
 
                                 <Separator orientation="VERTICAL" prefHeight="20"/>
 
                                 <Label text="Employee ID:"
                                        style="-fx-text-fill: #D1D5DB;" />
-                                <Label text="EMP12345"
+                                    <Label fx:id="employeeIDField" text="EMP12345"
                                        style="-fx-text-fill: white;" />
                             </children>
                         </HBox>
@@ -101,7 +102,7 @@
                                     <children>
                                         <Label text="Start Date:"
                                                style="-fx-text-fill: #D1D5DB;" />
-                                        <Label text="01 Jan 2026"
+                                             <Label fx:id="startField" text="01 Jan 2026"
                                                style="-fx-text-fill: white;" />
                                     </children>
                                 </HBox>
@@ -110,7 +111,7 @@
                                     <children>
                                         <Label text="End Date:"
                                                style="-fx-text-fill: #D1D5DB;" />
-                                        <Label text="30 Jun 2026"
+                                             <Label fx:id="deadField" text="30 Jun 2026"
                                                style="-fx-text-fill: white;" />
                                     </children>
                                 </HBox>
@@ -124,7 +125,7 @@
                         <children>
                             <Label text="Status:"
                                    style="-fx-text-fill: #D1D5DB;" />
-                            <Label text="Active"
+                            <Label fx:id="projectStatusField" text="Active"
                                    style="-fx-text-fill: white;" />
                         </children>
                     </HBox>

@@ -23,6 +23,11 @@
         <Label text="Log your time and track daily efforts" styleClass="proj-subtitle"/>
     </VBox>
 
+        <HBox spacing="8" alignment="CENTER_LEFT">
+                <Label text="Live Data" styleClass="proj-status-badge proj-status-good"/>
+                <Label text="Tasks are loaded from your current assignments." styleClass="proj-page-text"/>
+        </HBox>
+
     <VBox spacing="12" styleClass="proj-form-card">
         <VBox spacing="6">
             <Label text="Date" styleClass="field-lbl"/>
@@ -37,6 +42,7 @@
         <VBox spacing="6">
             <Label text="Hours Worked" styleClass="field-lbl"/>
             <TextField fx:id="hoursField" promptText="e.g., 2.5" styleClass="glass-field" maxWidth="Infinity"/>
+            <Label text="Use decimal format for partial hours." styleClass="proj-page-text"/>
         </VBox>
 
         <VBox spacing="6" VBox.vgrow="ALWAYS">

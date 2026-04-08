@@ -55,9 +55,9 @@
                   onMouseClicked="#toggleProfileMenu">
                 <StackPane prefWidth="28" prefHeight="28">
                     <Circle radius="14" styleClass="topbar-avatar-bg"/>
-                    <Label text="RM" styleClass="topbar-avatar-txt"/>
+                    <Label fx:id="profileInitialsLabel" text="?" styleClass="topbar-avatar-txt"/>
                 </StackPane>
-                <Label text="Ritika" styleClass="topbar-user-name"/>
+                <Label fx:id="profileNameLabel" text="Guest" styleClass="topbar-user-name"/>
                 <Label text="▾" styleClass="topbar-caret"/>
             </HBox>
 
@@ -68,7 +68,6 @@
                   translateY="44"
                   styleClass="topbar-dropdown">
                 <Button text="Profile" styleClass="topbar-menu-item" onAction="#handleProfileAction" maxWidth="Infinity"/>
-                <Button text="Settings" styleClass="topbar-menu-item" onAction="#handleSettingsAction" maxWidth="Infinity"/>
                 <Button text="Logout" styleClass="topbar-menu-item topbar-menu-item-danger" onAction="#handleLogoutAction" maxWidth="Infinity"/>
             </VBox>
         </StackPane>

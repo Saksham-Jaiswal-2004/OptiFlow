@@ -48,15 +48,18 @@
                     onAction="#handleAnalytics"
                     style="-fx-background-color: #374151; -fx-text-fill: white;" />
 
-            <Button text="Managers" maxWidth="Infinity"
+                <Button text="Managers" maxWidth="Infinity"
+                    onAction="#handleManagers"
                     style="-fx-background-color: transparent; -fx-text-fill: #D1D5DB;" />
 
-            <Button text="Projects" maxWidth="Infinity"
+                <Button text="Projects" maxWidth="Infinity"
+                    onAction="#handleProjects"
                     style="-fx-background-color: transparent; -fx-text-fill: #D1D5DB;" />
 
             <Region VBox.vgrow="ALWAYS" />
 
-            <Button text="Logout" maxWidth="Infinity"
+                <Button text="Logout" maxWidth="Infinity"
+                    onAction="#handleLogout"
                     style="-fx-background-color: transparent; -fx-text-fill: #EF4444;" />
         </VBox>
     </left>

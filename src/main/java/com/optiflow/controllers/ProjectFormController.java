@@ -2,7 +2,11 @@ package com.optiflow.controllers;
 
 import com.optiflow.models.Projects;
 import com.optiflow.models.Tasks;
+import com.optiflow.models.Employee;
 import com.optiflow.services.ProjectService;
+import com.optiflow.services.EmployeeService;
+import com.optiflow.services.ReferenceDataService;
+import com.optiflow.utils.SessionManager;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -18,6 +22,8 @@ import java.util.List;
 public class ProjectFormController {
 
     private final ProjectService projectService = new ProjectService();
+    private final EmployeeService employeeService = new EmployeeService();
+    private final ReferenceDataService referenceDataService = new ReferenceDataService();
 
     @FXML
     private TextField projectNameField;
@@ -54,7 +60,7 @@ public class ProjectFormController {
 
     @FXML
     public void initialize() {
-        priorityCombo.setItems(FXCollections.observableArrayList("Low", "Medium", "High", "Critical"));
+        priorityCombo.setItems(FXCollections.observableArrayList(referenceDataService.getTaskPriorities()));
     }
 
     @FXML
@@ -104,8 +110,8 @@ public class ProjectFormController {
             project.setStart_date(Date.valueOf(startDatePicker.getValue()));
             project.setEnd_date(Date.valueOf(endDatePicker.getValue()));
             project.setDeadline(Date.valueOf(endDatePicker.getValue()));
-            project.setStatus("Active");
-            project.setManager_id(1);
+            project.setStatus(referenceDataService.getDefaultProjectStatus());
+            project.setManager_id(resolveCurrentManagerId());
 
             boolean saved = projectService.createProject(project);
             if (!saved) {
@@ -184,5 +190,18 @@ public class ProjectFormController {
 
     private boolean isBlank(String value) {
         return value == null || value.trim().isEmpty();
+    }
+
+    private int resolveCurrentManagerId() {
+        try {
+            if (SessionManager.getUser() == null) {
+                return 0;
+            }
+
+            Employee manager = employeeService.getEmployeeByUserId(SessionManager.getUser().getUserId());
+            return manager == null ? 0 : manager.getEmp_id();
+        } catch (Exception ignored) {
+            return 0;
+        }
     }
 }

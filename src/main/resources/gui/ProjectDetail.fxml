@@ -11,11 +11,11 @@
 <?import javafx.scene.layout.VBox?>
 
 <VBox xmlns="http://javafx.com/javafx/21"
-      xmlns:fx="http://javafx.com/fxml/1"
+    xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.optiflow.controllers.ProjectDetailController"
-      spacing="14"
-      styleClass="proj-root"
-      stylesheets="@../css/style.css">
+    spacing="14"
+    styleClass="proj-root"
+    stylesheets="@../css/style.css">
 
     <VBox spacing="3">
         <Label text="Project Detail" styleClass="proj-title" />
@@ -26,10 +26,10 @@
         <HBox alignment="CENTER_LEFT" spacing="10">
             <VBox spacing="2">
                 <Label text="Project Info" styleClass="field-lbl" />
-                <Label text="CRM Migration Platform" styleClass="dash-card-value" />
+                <Label fx:id="projectNameLabel" text="CRM Migration Platform" styleClass="dash-card-value" />
             </VBox>
             <Region HBox.hgrow="ALWAYS" />
-            <Button text="Assign Manager" styleClass="glass-btn" />
+            <Button fx:id="assignManagerBtn" text="Assign Manager" styleClass="glass-btn" onAction="#handleAssignManager" />
         </HBox>
 
         <GridPane hgap="18" vgap="12">
@@ -40,63 +40,39 @@
 
             <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="0">
                 <Label text="Status" styleClass="field-lbl" />
-                <Label text="In Progress" styleClass="proj-status-badge proj-status-warn" />
+                <Label fx:id="statusLabel" text="In Progress" styleClass="proj-status-badge proj-status-warn" />
             </VBox>
 
             <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="0">
                 <Label text="Manager" styleClass="field-lbl" />
-                <Label text="Aarav Mehta" styleClass="dash-card-sub" />
+                <Label fx:id="managerLabel" text="Aarav Mehta" styleClass="dash-card-sub" />
             </VBox>
 
             <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="1">
                 <Label text="Start Date" styleClass="field-lbl" />
-                <Label text="2026-04-01" styleClass="dash-card-sub" />
+                <Label fx:id="startDateLabel" text="2026-04-01" styleClass="dash-card-sub" />
             </VBox>
 
             <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="1">
                 <Label text="End Date" styleClass="field-lbl" />
-                <Label text="2026-06-30" styleClass="dash-card-sub" />
+                <Label fx:id="endDateLabel" text="2026-06-30" styleClass="dash-card-sub" />
             </VBox>
         </GridPane>
     </VBox>
 
     <VBox spacing="10" styleClass="proj-card">
         <Label text="Progress" styleClass="field-lbl" />
-        <ProgressBar progress="0.64" maxWidth="Infinity" styleClass="proj-progress" />
-        <Label text="64% completed" styleClass="proj-progress-text" />
+        <ProgressBar fx:id="progressBar" progress="0.64" maxWidth="Infinity" styleClass="proj-progress" />
+        <Label fx:id="progressLabel" text="64% completed" styleClass="proj-progress-text" />
     </VBox>
 
     <VBox spacing="10" styleClass="proj-card" VBox.vgrow="ALWAYS">
         <HBox alignment="CENTER_LEFT" spacing="8">
             <Label text="Task List" styleClass="field-lbl" />
             <Region HBox.hgrow="ALWAYS" />
-            <Label text="8 tasks" styleClass="proj-page-text" />
+            <Label fx:id="taskCountLabel" text="8 tasks" styleClass="proj-page-text" />
         </HBox>
 
-        <VBox spacing="8" styleClass="emp-list" VBox.vgrow="ALWAYS">
-            <HBox alignment="CENTER_LEFT" spacing="8" styleClass="emp-comment-row">
-                <Label text="Define migration strategy" styleClass="dash-card-sub" />
-                <Region HBox.hgrow="ALWAYS" />
-                <Label text="Completed" styleClass="emp-status-badge emp-status-done" />
-            </HBox>
-
-            <HBox alignment="CENTER_LEFT" spacing="8" styleClass="emp-comment-row">
-                <Label text="Design data mapping matrix" styleClass="dash-card-sub" />
-                <Region HBox.hgrow="ALWAYS" />
-                <Label text="In Progress" styleClass="emp-status-badge emp-status-progress" />
-            </HBox>
-
-            <HBox alignment="CENTER_LEFT" spacing="8" styleClass="emp-comment-row">
-                <Label text="Build ETL pipelines" styleClass="dash-card-sub" />
-                <Region HBox.hgrow="ALWAYS" />
-                <Label text="In Progress" styleClass="emp-status-badge emp-status-progress" />
-            </HBox>
-
-            <HBox alignment="CENTER_LEFT" spacing="8" styleClass="emp-comment-row">
-                <Label text="Validate test dataset" styleClass="dash-card-sub" />
-                <Region HBox.hgrow="ALWAYS" />
-                <Label text="Pending" styleClass="emp-status-badge emp-status-pending" />
-            </HBox>
-        </VBox>
+        <VBox fx:id="taskListContainer" spacing="8" styleClass="emp-list" VBox.vgrow="ALWAYS" />
     </VBox>
 </VBox>

@@ -75,6 +75,11 @@ public class TaskService
         return taskDAO.getTasksByProject(project_id);
     }
 
+    public List<Tasks> getAllTasks() throws SQLException
+    {
+        return taskDAO.getAllTasks();
+    }
+
     public boolean updateTask(Tasks task)
     {
         if(task == null)

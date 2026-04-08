@@ -58,23 +58,21 @@ public class CommentsDAO
             stmt.setInt(1, task_id);
             ResultSet rs = stmt.executeQuery();
 
-            if (rs.next()) {
+            while (rs.next()) {
                 Comments comment = new Comments();
                 comment.setTask_id(rs.getInt("task_id"));
                 comment.setUser_id(rs.getInt("user_id"));
                 comment.setContent(rs.getString("content"));
 
                 commentList.add(comment);
-                return commentList;
             }
         }
 
-        return null;
+        return commentList;
     }
 
     public List<Comments> getCommentsByUser(int user_id) throws SQLException
     {
-        LinkedList<Skills> skillList = new LinkedList<>();
         LinkedList<Comments> commentList = new LinkedList<>();
         String sql = "SELECT * FROM comments WHERE user_id=?";
 
@@ -83,7 +81,7 @@ public class CommentsDAO
             stmt.setInt(1, user_id);
             ResultSet rs = stmt.executeQuery();
 
-            if (rs.next())
+            while (rs.next())
             {
                 Comments comment = new Comments();
                 comment.setTask_id(rs.getInt("task_id"));
@@ -91,11 +89,10 @@ public class CommentsDAO
                 comment.setContent(rs.getString("content"));
 
                 commentList.add(comment);
-                return commentList;
             }
         }
 
-        return null;
+        return commentList;
     }
 
     public boolean updateComment(int comment_id, String content) throws SQLException

@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #F5F7FA;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #F5F7FA;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.optiflow.controllers.ProjectsController">
 
 
     <top>
@@ -32,14 +32,14 @@
             <Label style="-fx-text-fill: #6B7280;                       -fx-font-size: 11px;                       -fx-font-weight: bold;" text="MENU" />
 
 
-            <Button maxWidth="Infinity" style="-fx-background-color: #374151;                        -fx-text-fill: white;                        -fx-alignment: CENTER_LEFT;                        -fx-padding: 10 15;                        -fx-background-radius: 8;" text="Dashboard" />
+            <Button maxWidth="Infinity" style="-fx-background-color: #374151;                        -fx-text-fill: white;                        -fx-alignment: CENTER_LEFT;                        -fx-padding: 10 15;                        -fx-background-radius: 8;" text="Dashboard" onAction="#handleDashboard" />
 
 
-            <Button maxWidth="Infinity" style="-fx-background-color: transparent;                        -fx-text-fill: #D1D5DB;                        -fx-alignment: CENTER_LEFT;                        -fx-padding: 10 15;                        -fx-background-radius: 8;" text="Managers" />
+            <Button maxWidth="Infinity" style="-fx-background-color: transparent;                        -fx-text-fill: #D1D5DB;                        -fx-alignment: CENTER_LEFT;                        -fx-padding: 10 15;                        -fx-background-radius: 8;" text="Managers" onAction="#handleManagers" />
 
-            <Button maxWidth="Infinity" style="-fx-background-color: transparent;                        -fx-text-fill: #D1D5DB;                        -fx-alignment: CENTER_LEFT;                        -fx-padding: 10 15;                        -fx-background-radius: 8;" text="Projects" />
+            <Button maxWidth="Infinity" style="-fx-background-color: transparent;                        -fx-text-fill: #D1D5DB;                        -fx-alignment: CENTER_LEFT;                        -fx-padding: 10 15;                        -fx-background-radius: 8;" text="Projects" onAction="#handleProjects" />
 
-            <Button maxWidth="Infinity" style="-fx-background-color: transparent;                        -fx-text-fill: #D1D5DB;                        -fx-alignment: CENTER_LEFT;                        -fx-padding: 10 15;                        -fx-background-radius: 8;" text="Employees" />
+            <Button maxWidth="Infinity" style="-fx-background-color: transparent;                        -fx-text-fill: #D1D5DB;                        -fx-alignment: CENTER_LEFT;                        -fx-padding: 10 15;                        -fx-background-radius: 8;" text="Employees" onAction="#handleEmployees" />
 
             <Button maxWidth="Infinity" style="-fx-background-color: transparent;                        -fx-text-fill: #D1D5DB;                        -fx-alignment: CENTER_LEFT;                        -fx-padding: 10 15;                        -fx-background-radius: 8;" text="Help" />
 
@@ -47,7 +47,7 @@
             <Region VBox.vgrow="ALWAYS" />
 
 
-            <Button maxWidth="Infinity" style="-fx-background-color: transparent;                        -fx-text-fill: #EF4444;                        -fx-alignment: CENTER_LEFT;                        -fx-padding: 10 15;                        -fx-background-radius: 8;" text="Logout">
+            <Button maxWidth="Infinity" style="-fx-background-color: transparent;                        -fx-text-fill: #EF4444;                        -fx-alignment: CENTER_LEFT;                        -fx-padding: 10 15;                        -fx-background-radius: 8;" text="Logout" onAction="#handleLogout">
                 <VBox.margin>
                     <Insets bottom="170.0" />
                 </VBox.margin></Button>
@@ -109,23 +109,23 @@
                         <ComboBox fx:id="projectFilterDropdown" prefWidth="200" promptText="Select Type" style="-fx-background-color: #374151;                      -fx-text-fill: white;                      -fx-background-radius: 6;" />
 
 
-                        <Button prefHeight="32" style="-fx-background-color: linear-gradient(to right, #05a857, #6EE7B7);                    -fx-text-fill: white;                    -fx-font-weight: bold;                    -fx-background-radius: 6;" text="+ Add" />
+                        <Button fx:id="addProjectBtn" prefHeight="32" style="-fx-background-color: linear-gradient(to right, #05a857, #6EE7B7);                    -fx-text-fill: white;                    -fx-font-weight: bold;                    -fx-background-radius: 6;" text="+ Add" onAction="#handleAddProject" />
                   <VBox.margin>
                      <Insets left="5.0" />
                   </VBox.margin>
 
                     </HBox>
 
-                    <VBox spacing="10" style="-fx-background-color: #374151; -fx-padding: 15; -fx-background-radius: 10; -fx-border-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.2, 0, 4);">
+                    <VBox fx:id="projectCardTemplate" spacing="10" style="-fx-background-color: #374151; -fx-padding: 15; -fx-background-radius: 10; -fx-border-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.2, 0, 4);">
 
                         <HBox spacing="510.0">
-                            <Label prefHeight="26.0" prefWidth="135.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Project Alpha" textFill="WHITE" />
-                            <Button prefHeight="26.0" prefWidth="49.0" style="-fx-background-color: linear-gradient(to right, #1E3A8A, #3B82F6); -fx-text-fill: white;" text="Edit" />
+                            <Label fx:id="projectNameLabel" prefHeight="26.0" prefWidth="135.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Project Alpha" textFill="WHITE" />
+                            <Button fx:id="editProjectBtn" prefHeight="26.0" prefWidth="49.0" style="-fx-background-color: linear-gradient(to right, #1E3A8A, #3B82F6); -fx-text-fill: white;" text="Edit" />
                         </HBox>
 
-                        <Label prefHeight="78.0" prefWidth="694.0" style="-fx-text-fill: #6B7280;" text="This is a sample project description." wrapText="true" />
+                        <Label fx:id="projectDescriptionLabel" prefHeight="78.0" prefWidth="694.0" style="-fx-text-fill: #6B7280;" text="This is a sample project description." wrapText="true" />
 
-                        <Button style="-fx-background-color: linear-gradient(to right, #065F46, #10B981); -fx-text-fill: white;" text="Open Project" />
+                        <Button fx:id="openProjectBtn" style="-fx-background-color: linear-gradient(to right, #065F46, #10B981); -fx-text-fill: white;" text="Open Project" />
                     </VBox>
 
                 </VBox>

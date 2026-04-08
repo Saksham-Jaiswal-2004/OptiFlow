@@ -178,7 +178,7 @@ public class ViewTasksController {
     private void handleClose() {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/com/optiflow/views/dashboard.fxml")
+                    getClass().getResource("/gui/DashboardLayout.fxml")
             );
 
             Parent root = loader.load();

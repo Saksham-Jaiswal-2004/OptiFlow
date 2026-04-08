@@ -2,6 +2,9 @@ package com.optiflow.controllers;
 
 import com.optiflow.models.Projects;
 import com.optiflow.services.ProjectService;
+import com.optiflow.services.EmployeeService;
+import com.optiflow.models.Employee;
+import com.optiflow.utils.SessionManager;
 
 import java.sql.Date;
 import java.util.Collections;
@@ -10,9 +13,11 @@ import java.util.List;
 public class ProjectController
 {
     private final ProjectService projectService;
+    private final EmployeeService employeeService;
 
     public ProjectController() {
         this.projectService = new ProjectService();
+        this.employeeService = new EmployeeService();
     }
 
     public boolean createProject(String name, String description, java.sql.Date startDate, java.sql.Date endDate)
@@ -25,7 +30,7 @@ public class ProjectController
             project.setEnd_date(endDate);
             project.setDeadline(endDate);
             project.setStatus("Active");
-            project.setManager_id(1);
+            project.setManager_id(resolveCurrentManagerId());
             return projectService.createProject(project);
         } catch (Exception e) {
             return false;
@@ -89,5 +94,19 @@ public class ProjectController
     {
         // No direct service method exists for this operation in current service layer.
         return false;
+    }
+
+    private int resolveCurrentManagerId()
+    {
+        try {
+            if (SessionManager.getUser() == null) {
+                return 0;
+            }
+
+            Employee manager = employeeService.getEmployeeByUserId(SessionManager.getUser().getUserId());
+            return manager == null ? 0 : manager.getEmp_id();
+        } catch (Exception e) {
+            return 0;
+        }
     }
 }

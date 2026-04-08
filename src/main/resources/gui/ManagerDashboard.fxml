@@ -20,13 +20,8 @@
         <Label text="Overview of team performance and tasks" styleClass="mgr-subtitle"/>
     </VBox>
 
-    <GridPane hgap="16" vgap="16">
-        <columnConstraints>
-            <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
-            <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
-        </columnConstraints>
-
-        <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2" spacing="12" styleClass="mgr-card">
+    <VBox spacing="16" VBox.vgrow="ALWAYS">
+        <VBox spacing="12" styleClass="mgr-card" VBox.vgrow="ALWAYS">
             <Label text="Team Overview" styleClass="mgr-card-title"/>
             <TableView fx:id="teamTable" styleClass="mgr-table" VBox.vgrow="ALWAYS">
                 <columns>
@@ -39,11 +34,13 @@
             </TableView>
         </VBox>
 
-        <VBox GridPane.columnIndex="0" GridPane.rowIndex="1" spacing="12" styleClass="mgr-card">
+        <VBox spacing="12" styleClass="mgr-card" VBox.vgrow="ALWAYS">
             <Label text="Task Tracking" styleClass="mgr-card-title"/>
             <TableView fx:id="taskTable" styleClass="mgr-table" VBox.vgrow="ALWAYS">
                 <columns>
+                    <TableColumn fx:id="taskIdColumn" text="Task ID" prefWidth="110"/>
                     <TableColumn fx:id="taskNameColumn" text="Task" prefWidth="220"/>
+                    <TableColumn fx:id="taskDescriptionColumn" text="Description" prefWidth="260"/>
                     <TableColumn fx:id="taskAssignedToColumn" text="Assigned To" prefWidth="150"/>
                     <TableColumn fx:id="taskStatusColumn" text="Status" prefWidth="120"/>
                     <TableColumn fx:id="taskDeadlineColumn" text="Deadline" prefWidth="140"/>
@@ -51,12 +48,12 @@
             </TableView>
         </VBox>
 
-        <VBox GridPane.columnIndex="1" GridPane.rowIndex="1" spacing="12" styleClass="mgr-card">
+        <VBox spacing="12" styleClass="mgr-card" VBox.vgrow="ALWAYS">
             <Label text="Weekly Gantt" styleClass="mgr-card-title"/>
             <VBox fx:id="ganttContainer" spacing="8" VBox.vgrow="ALWAYS" styleClass="mgr-gantt-wrap"/>
         </VBox>
 
-        <VBox GridPane.columnIndex="0" GridPane.rowIndex="2" spacing="12" styleClass="mgr-card">
+        <VBox spacing="12" styleClass="mgr-card" VBox.vgrow="ALWAYS">
             <Label text="Performance Analytics" styleClass="mgr-card-title"/>
             <BarChart fx:id="performanceBarChart" prefHeight="220" styleClass="mgr-bar-chart">
                 <xAxis>
@@ -68,10 +65,5 @@
             </BarChart>
             <PieChart fx:id="completionPieChart" labelsVisible="false" legendVisible="true" prefHeight="180" styleClass="mgr-pie-chart"/>
         </VBox>
-
-        <VBox GridPane.columnIndex="1" GridPane.rowIndex="2" spacing="12" styleClass="mgr-card">
-            <Label text="Alerts" styleClass="mgr-card-title"/>
-            <VBox fx:id="alertsList" spacing="8" VBox.vgrow="ALWAYS"/>
-        </VBox>
-    </GridPane>
+    </VBox>
 </VBox>

@@ -1,6 +1,5 @@
 package com.optiflow.controllers;
 
-import com.optiflow.dao.UserDAO;
 import com.optiflow.models.User;
 import com.optiflow.services.AuthService;
 import com.optiflow.utils.AppContext;
@@ -47,8 +46,6 @@ public class AuthController
     @FXML
     private Label RegistererrorLabel;
 
-    UserDAO userDAO = new UserDAO();
-
     @FXML
     public boolean handleLogin(ActionEvent event)
     {
@@ -72,7 +69,7 @@ public class AuthController
                 SessionManager.setUser(user);
                 AppContext.initSocket();
 
-                Parent root = FXMLLoader.load(getClass().getResource("/fxml/dashboard.fxml"));
+                Parent root = FXMLLoader.load(getClass().getResource("/gui/DashboardLayout.fxml"));
 
                 Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
                 stage.setScene(new Scene(root));
@@ -137,7 +134,7 @@ public class AuthController
         {
             System.out.println("Registration Done");
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/Login.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
@@ -168,7 +165,7 @@ public class AuthController
     @FXML
     private void goToRegister(@NotNull ActionEvent event) throws IOException
     {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/register.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/gui/Register.fxml"));
 
         Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
@@ -177,8 +174,7 @@ public class AuthController
     @FXML
     private void goToLogin(ActionEvent event) throws IOException
     {
-        System.out.println(getClass().getResource("/fxml/login.fxml"));
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/Login.fxml"));
         Parent root = loader.load();
 
         Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();

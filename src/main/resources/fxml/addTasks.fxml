@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #F5F7FA;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #F5F7FA;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.optiflow.controllers.AddTasksController">
 
     <!-- ================= TOP ================= -->
     <top>
@@ -70,7 +70,7 @@
                                 <Region HBox.hgrow="ALWAYS" />
 
                                 <!-- AUTO ASSIGN -->
-                                <Button onAction="#handleAutoAssign" prefHeight="35" style="-fx-background-color: linear-gradient(to right, #8e2de2, #c471ed);                                                -fx-text-fill: white;                                                -fx-font-weight: bold;                                                -fx-background-radius: 8;" text="Auto Assign" />
+                                <Button fx:id="autoAssignBtn" onAction="#handleAutoAssign" prefHeight="35" style="-fx-background-color: linear-gradient(to right, #8e2de2, #c471ed);                                                -fx-text-fill: white;                                                -fx-font-weight: bold;                                                -fx-background-radius: 8;" text="Auto Assign" />
 
                             </children>
                         </HBox>
@@ -88,7 +88,7 @@
                         </VBox>
 
                         <!-- CREATE BUTTON -->
-                        <Button onAction="#handleCreateTask" prefHeight="35" style="-fx-background-color: linear-gradient(to right, #8e2de2, #c471ed);                                        -fx-text-fill: white;                                        -fx-font-weight: bold;                                        -fx-background-radius: 8;" text="Create Task" />
+                        <Button fx:id="createTaskBtn" onAction="#handleCreateTask" prefHeight="35" style="-fx-background-color: linear-gradient(to right, #8e2de2, #c471ed);                                        -fx-text-fill: white;                                        -fx-font-weight: bold;                                        -fx-background-radius: 8;" text="Create Task" />
 
                     </VBox>
 

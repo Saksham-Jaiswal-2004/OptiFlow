@@ -1,7 +1,9 @@
 package com.optiflow.controllers;
 
 import com.optiflow.models.Employee;
+import com.optiflow.models.User;
 import com.optiflow.services.EmployeeService;
+import com.optiflow.utils.SessionManager;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -17,7 +19,9 @@ import javafx.scene.control.TableView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EmployeeListController {
 
@@ -25,35 +29,45 @@ public class EmployeeListController {
     private TableView<EmployeeRow> employeeTable;
 
     @FXML
+    private TableColumn<EmployeeRow, String> userIdColumn;
+
+    @FXML
+    private TableColumn<EmployeeRow, String> empIdColumn;
+
+    @FXML
     private TableColumn<EmployeeRow, String> nameColumn;
 
     @FXML
-    private TableColumn<EmployeeRow, String> roleColumn;
+    private TableColumn<EmployeeRow, String> designationColumn;
 
     @FXML
-    private TableColumn<EmployeeRow, String> skillsColumn;
+    private TableColumn<EmployeeRow, String> departmentColumn;
 
     @FXML
-    private TableColumn<EmployeeRow, String> workloadColumn;
+    private TableColumn<EmployeeRow, String> statusColumn;
 
     @FXML
-    private TableColumn<EmployeeRow, String> performanceColumn;
+    private TableColumn<EmployeeRow, String> weeklyCapacityColumn;
 
     private final EmployeeService employeeService = new EmployeeService();
 
     @FXML
     public void initialize() {
+        userIdColumn.setCellValueFactory(data -> data.getValue().userIdProperty());
+        empIdColumn.setCellValueFactory(data -> data.getValue().empIdProperty());
         nameColumn.setCellValueFactory(data -> data.getValue().nameProperty());
-        roleColumn.setCellValueFactory(data -> data.getValue().roleProperty());
-        skillsColumn.setCellValueFactory(data -> data.getValue().skillsProperty());
-        workloadColumn.setCellValueFactory(data -> data.getValue().workloadProperty());
-        performanceColumn.setCellValueFactory(data -> data.getValue().performanceProperty());
+        designationColumn.setCellValueFactory(data -> data.getValue().designationProperty());
+        departmentColumn.setCellValueFactory(data -> data.getValue().departmentProperty());
+        statusColumn.setCellValueFactory(data -> data.getValue().statusProperty());
+        weeklyCapacityColumn.setCellValueFactory(data -> data.getValue().weeklyCapacityProperty());
 
+        userIdColumn.setStyle("-fx-alignment: CENTER;");
+        empIdColumn.setStyle("-fx-alignment: CENTER;");
         nameColumn.setStyle("-fx-alignment: CENTER;");
-        roleColumn.setStyle("-fx-alignment: CENTER;");
-        skillsColumn.setStyle("-fx-alignment: CENTER;");
-        workloadColumn.setStyle("-fx-alignment: CENTER;");
-        performanceColumn.setStyle("-fx-alignment: CENTER;");
+        designationColumn.setStyle("-fx-alignment: CENTER;");
+        departmentColumn.setStyle("-fx-alignment: CENTER;");
+        statusColumn.setStyle("-fx-alignment: CENTER;");
+        weeklyCapacityColumn.setStyle("-fx-alignment: CENTER;");
 
         employeeTable.setRowFactory(tv -> {
             TableRow<EmployeeRow> row = new TableRow<>();
@@ -89,19 +103,30 @@ public class EmployeeListController {
         ObservableList<EmployeeRow> rows = FXCollections.observableArrayList();
 
         try {
-            List<Employee> employees = employeeService.getAllEmployees();
+            List<Employee> employees;
+            User currentUser = SessionManager.getUser();
+
+            if (currentUser != null && currentUser.isManager()) {
+                Employee managerProfile = employeeService.getEmployeeByUserId(currentUser.getUserId());
+                if (managerProfile != null) {
+                    employees = resolveManagerTeam(managerProfile);
+                } else {
+                    employees = FXCollections.observableArrayList();
+                }
+            } else {
+                employees = employeeService.getAllEmployees();
+            }
+
             if (employees != null) {
                 for (Employee employee : employees) {
-                    int capacity = Math.max(employee.getWeeklyCapacity(), 1);
-                    int allocated = Math.max(employee.getAllocated_hours(), 0);
-                    int workloadPct = Math.min(100, (int) Math.round((allocated * 100.0) / capacity));
-
                     rows.add(new EmployeeRow(
+                            String.valueOf(employee.getUser_id()),
+                            String.valueOf(employee.getEmp_id()),
                             employee.getName(),
                             employee.getDesignation(),
-                            "Skills data linked in Employee Skills",
-                            workloadPct + "%",
-                            employee.getStatus()
+                            employee.getDepartment(),
+                            employee.getStatus(),
+                            String.valueOf(employee.getWeeklyCapacity())
                     ));
                 }
             }
@@ -111,19 +136,55 @@ public class EmployeeListController {
         employeeTable.setItems(rows);
     }
 
-    public static class EmployeeRow {
-        private final StringProperty name;
-        private final StringProperty role;
-        private final StringProperty skills;
-        private final StringProperty workload;
-        private final StringProperty performance;
+    private List<Employee> resolveManagerTeam(Employee managerProfile) {
+        try {
+            Map<Integer, Employee> unique = new LinkedHashMap<>();
 
-        public EmployeeRow(String name, String role, String skills, String workload, String performance) {
+            List<Employee> byEmpId = employeeService.getEmployeesByManager(managerProfile.getEmp_id());
+            if (byEmpId != null) {
+                for (Employee employee : byEmpId) {
+                    unique.put(employee.getEmp_id(), employee);
+                }
+            }
+
+            List<Employee> byUserId = employeeService.getEmployeesByManager(managerProfile.getUser_id());
+            if (byUserId != null) {
+                for (Employee employee : byUserId) {
+                    unique.put(employee.getEmp_id(), employee);
+                }
+            }
+
+            return FXCollections.observableArrayList(unique.values());
+        } catch (Exception ignored) {
+            return FXCollections.observableArrayList();
+        }
+    }
+
+    public static class EmployeeRow {
+        private final StringProperty userId;
+        private final StringProperty empId;
+        private final StringProperty name;
+        private final StringProperty designation;
+        private final StringProperty department;
+        private final StringProperty status;
+        private final StringProperty weeklyCapacity;
+
+        public EmployeeRow(String userId, String empId, String name, String designation, String department, String status, String weeklyCapacity) {
+            this.userId = new SimpleStringProperty(userId == null ? "-" : userId);
+            this.empId = new SimpleStringProperty(empId == null ? "-" : empId);
             this.name = new SimpleStringProperty(name);
-            this.role = new SimpleStringProperty(role);
-            this.skills = new SimpleStringProperty(skills);
-            this.workload = new SimpleStringProperty(workload);
-            this.performance = new SimpleStringProperty(performance);
+            this.designation = new SimpleStringProperty(designation == null ? "-" : designation);
+            this.department = new SimpleStringProperty(department == null ? "-" : department);
+            this.status = new SimpleStringProperty(status == null ? "-" : status);
+            this.weeklyCapacity = new SimpleStringProperty(weeklyCapacity == null ? "-" : weeklyCapacity);
+        }
+
+        public StringProperty userIdProperty() {
+            return userId;
+        }
+
+        public StringProperty empIdProperty() {
+            return empId;
         }
 
         public StringProperty nameProperty() {
@@ -134,20 +195,20 @@ public class EmployeeListController {
             return name.get();
         }
 
-        public StringProperty roleProperty() {
-            return role;
+        public StringProperty designationProperty() {
+            return designation;
         }
 
-        public StringProperty skillsProperty() {
-            return skills;
+        public StringProperty departmentProperty() {
+            return department;
         }
 
-        public StringProperty workloadProperty() {
-            return workload;
+        public StringProperty statusProperty() {
+            return status;
         }
 
-        public StringProperty performanceProperty() {
-            return performance;
+        public StringProperty weeklyCapacityProperty() {
+            return weeklyCapacity;
         }
     }
 }

@@ -141,7 +141,7 @@ public class ManagerController {
     private void handleAnalytics() {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/com/optiflow/views/dashboard.fxml")
+                    getClass().getResource("/gui/DashboardLayout.fxml")
             );
 
             Parent root = loader.load();
@@ -151,6 +151,38 @@ public class ManagerController {
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleManagers() {
+        navigateToDashboard();
+    }
+
+    @FXML
+    private void handleProjects() {
+        navigateToDashboard();
+    }
+
+    @FXML
+    private void handleLogout() {
+        try {
+            SessionManager.setUser(null);
+            Parent root = FXMLLoader.load(getClass().getResource("/gui/Login.fxml"));
+            Stage stage = (Stage) managersContainer.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setMaximized(true);
+        } catch (Exception ignored) {
+        }
+    }
+
+    private void navigateToDashboard() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/gui/DashboardLayout.fxml"));
+            Stage stage = (Stage) managersContainer.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setMaximized(true);
+        } catch (Exception ignored) {
         }
     }
 }

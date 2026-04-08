@@ -53,18 +53,22 @@
                     maxWidth="Infinity"
                     style="-fx-background-color: #374151; -fx-text-fill: white; -fx-alignment: CENTER_LEFT; -fx-padding: 10 15; -fx-background-radius: 8;" />
 
-            <Button text="Project" maxWidth="Infinity"
+                <Button text="Project" maxWidth="Infinity"
+                    onAction="#handleProjects"
                     style="-fx-background-color: transparent; -fx-text-fill: #D1D5DB; -fx-alignment: CENTER_LEFT; -fx-padding: 10 15;" />
 
-            <Button text="Tasks" maxWidth="Infinity"
+                <Button text="Tasks" maxWidth="Infinity"
+                    onAction="#handleTasks"
                     style="-fx-background-color: transparent; -fx-text-fill: #D1D5DB; -fx-alignment: CENTER_LEFT; -fx-padding: 10 15;" />
 
-            <Button text="Employees" maxWidth="Infinity"
+                <Button text="Employees" maxWidth="Infinity"
+                    onAction="#handleEmployees"
                     style="-fx-background-color: transparent; -fx-text-fill: #D1D5DB; -fx-alignment: CENTER_LEFT; -fx-padding: 10 15;" />
 
             <Region VBox.vgrow="ALWAYS" />
 
-            <Button text="Logout" maxWidth="Infinity"
+                <Button text="Logout" maxWidth="Infinity"
+                    onAction="#handleLogout"
                     style="-fx-background-color: transparent; -fx-text-fill: #EF4444; -fx-alignment: CENTER_LEFT; -fx-padding: 10 15;" />
         </VBox>
     </left>

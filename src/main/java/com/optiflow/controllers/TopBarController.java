@@ -39,12 +39,19 @@ public class TopBarController {
     @FXML
     private Label notificationBadgeLabel;
 
+    @FXML
+    private Label profileInitialsLabel;
+
+    @FXML
+    private Label profileNameLabel;
+
     private boolean dropdownOpen;
 
     @FXML
     public void initialize() {
         profileDropdown.setVisible(false);
         profileDropdown.setManaged(false);
+        syncProfileIdentity();
 
         searchField.focusedProperty().addListener((obs, oldVal, focused) -> {
             if (focused) {
@@ -97,11 +104,6 @@ public class TopBarController {
     }
 
     @FXML
-    private void handleSettingsAction() {
-        closeDropdown();
-    }
-
-    @FXML
     private void handleLogoutAction() {
         SessionManager.setUser(null);
         try {
@@ -113,6 +115,41 @@ public class TopBarController {
         } catch (Exception ignored) {
         }
         closeDropdown();
+    }
+
+    private void syncProfileIdentity() {
+        var user = SessionManager.getUser();
+        String displayName = user != null && user.getName() != null && !user.getName().isBlank()
+                ? user.getName().trim()
+                : "Guest";
+        String initials = buildInitials(displayName);
+
+        if (profileNameLabel != null) {
+            profileNameLabel.setText(displayName);
+        }
+
+        if (profileInitialsLabel != null) {
+            profileInitialsLabel.setText(initials);
+        }
+    }
+
+    private String buildInitials(String displayName) {
+        String[] parts = displayName.split("\\s+");
+        if (parts.length == 0) {
+            return "?";
+        }
+
+        StringBuilder builder = new StringBuilder();
+        for (String part : parts) {
+            if (!part.isBlank()) {
+                builder.append(Character.toUpperCase(part.charAt(0)));
+            }
+            if (builder.length() == 2) {
+                break;
+            }
+        }
+
+        return builder.length() == 0 ? "?" : builder.toString();
     }
 
     private void openDropdown() {

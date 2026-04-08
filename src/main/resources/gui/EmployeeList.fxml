@@ -20,11 +20,13 @@
     <VBox spacing="10" styleClass="proj-card" VBox.vgrow="ALWAYS">
         <TableView fx:id="employeeTable" styleClass="proj-table" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="nameColumn" text="Name" prefWidth="180"/>
-                <TableColumn fx:id="roleColumn" text="Role" prefWidth="150"/>
-                <TableColumn fx:id="skillsColumn" text="Skills" prefWidth="280"/>
-                <TableColumn fx:id="workloadColumn" text="Workload" prefWidth="150"/>
-                <TableColumn fx:id="performanceColumn" text="Performance" prefWidth="170"/>
+                <TableColumn fx:id="userIdColumn" text="User-Id" prefWidth="110"/>
+                <TableColumn fx:id="empIdColumn" text="Emp-Id" prefWidth="110"/>
+                <TableColumn fx:id="nameColumn" text="Name" prefWidth="170"/>
+                <TableColumn fx:id="designationColumn" text="Designation" prefWidth="150"/>
+                <TableColumn fx:id="departmentColumn" text="Department" prefWidth="150"/>
+                <TableColumn fx:id="statusColumn" text="Status" prefWidth="130"/>
+                <TableColumn fx:id="weeklyCapacityColumn" text="Weekly Capacity" prefWidth="140"/>
             </columns>
 
             <placeholder>
