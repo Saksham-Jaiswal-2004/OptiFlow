@@ -18,6 +18,8 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Locale;
 
@@ -122,7 +124,7 @@ public class ProjectsController {
     }
 
     private VBox createProjectCard(Projects project) {
-        String status = normalize(project.getStatus());
+        String status = normalize(project);
         String managerName = resolveManagerName(project.getManager_id());
         String deadline = project.getDeadline() == null ? "-" : project.getDeadline().toString();
         double progress = calculateProgress(project);
@@ -193,19 +195,25 @@ public class ProjectsController {
         return 0;
     }
 
-    private String normalize(String status) {
-        if (status == null) {
-            return "Active";
+    private String normalize(Projects project) {
+        if (project == null) {
+            return "At Risk";
         }
 
-        String normalized = status.trim().toLowerCase(Locale.ROOT);
-        if (normalized.contains("complete")) {
+        if (project.isCompleted()) {
             return "Completed";
         }
-        if (normalized.contains("delay")) {
+
+        if (project.getDeadline() == null) {
+            return "At Risk";
+        }
+
+        LocalDate deadline = project.getDeadline().toLocalDate();
+        long daysRemaining = ChronoUnit.DAYS.between(LocalDate.now(), deadline);
+        if (daysRemaining < 0) {
             return "Delayed";
         }
-        if (normalized.contains("risk")) {
+        if (daysRemaining <= 7) {
             return "At Risk";
         }
         return "Active";

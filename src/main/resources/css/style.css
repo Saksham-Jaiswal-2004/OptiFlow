@@ -1452,6 +1452,39 @@
     -fx-padding: 6;
 }
 
+.proj-form-dark {
+    -fx-background-color: linear-gradient(to bottom right, rgba(13, 8, 28, 0.98), rgba(8, 5, 18, 0.98));
+    -fx-padding: 18;
+}
+
+.proj-form-dark .proj-form-card {
+    -fx-background-color: rgba(11, 7, 24, 0.92);
+    -fx-background-radius: 14;
+    -fx-border-color: rgba(255,255,255,0.08);
+    -fx-border-radius: 14;
+    -fx-padding: 18;
+}
+
+.proj-form-dark .glass-field {
+    -fx-background-color: rgba(18, 13, 43, 0.92);
+    -fx-border-color: rgba(255,255,255,0.16);
+    -fx-text-fill: #ffffff;
+}
+
+.proj-form-dark .text-area,
+.proj-form-dark .text-area .content,
+.proj-form-dark .text-area .viewport {
+    -fx-background-color: rgba(18, 13, 43, 0.92);
+    -fx-text-fill: #ffffff;
+    -fx-prompt-text-fill: rgba(255,255,255,0.5);
+}
+
+.proj-form-dark .date-picker .text-field,
+.proj-form-dark .combo-box-base .text-field {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ffffff;
+}
+
 .worklog-dialog-root {
     -fx-background-color: radial-gradient(center 50% 50%, radius 80%, #1a0f2c, #0b0617);
     -fx-padding: 30;

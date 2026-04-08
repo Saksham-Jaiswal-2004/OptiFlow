@@ -1,0 +1,355 @@
+@startuml
+title OptiFlow - Full Project Class Diagram
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide empty methods
+hide empty fields
+
+left to right direction
+
+package "Entry Point" {
+	class Main <<Main>>
+}
+
+package "GUI Resources (gui/)" {
+	class "Login.fxml" <<FXML>>
+	class "Register.fxml" <<FXML>>
+	class "DashboardLayout.fxml" <<FXML>>
+	class "DashboardBase.fxml" <<FXML>>
+	class "Sidebar.fxml" <<FXML>>
+	class "TopBar.fxml" <<FXML>>
+	class "AdminDashboard.fxml" <<FXML>>
+	class "ManagerDashboard.fxml" <<FXML>>
+	class "EmployeeDashboard.fxml" <<FXML>>
+	class "Analytics.fxml" <<FXML>>
+	class "ProjectList.fxml" <<FXML>>
+	class "ProjectForm.fxml" <<FXML>>
+	class "ProjectDetail.fxml" <<FXML>>
+	class "TaskList.fxml" <<FXML>>
+	class "TaskDetail.fxml" <<FXML>>
+	class "WorklogsPanel.fxml" <<FXML>>
+	class "AddWorklog.fxml" <<FXML>>
+	class "Managers.fxml" <<FXML>>
+	class "ViewManagers.fxml" <<FXML>>
+	class "EmployeeList.fxml" <<FXML>>
+	class "EmployeeProfile.fxml" <<FXML>>
+	class "CommentsPanel.fxml" <<FXML>>
+	class "NotificationPanel.fxml" <<FXML>>
+}
+
+package "GUI Resources (fxml/)" {
+	class "login.fxml" <<FXML>>
+	class "register.fxml" <<FXML>>
+	class "dashboard.fxml" <<FXML>>
+	class "projects.fxml" <<FXML>>
+	class "viewProjects.fxml" <<FXML>>
+	class "addProjects.fxml" <<FXML>>
+	class "tasks.fxml" <<FXML>>
+	class "viewTasks.fxml" <<FXML>>
+	class "addTasks.fxml" <<FXML>>
+	class "managers.fxml" <<FXML>>
+	class "viewManagers.fxml" <<FXML>>
+	class "employee.fxml" <<FXML>>
+	class "addWorklogs.fxml" <<FXML>>
+}
+
+package "Controllers" {
+	class AuthController
+	class LoginController
+	class RegisterController
+	class DashboardController
+	class SidebarController
+	class TopBarController
+	class AdminDashboardController
+	class ManagerDashboardController
+	class AnalyticsController
+	class ProjectsController
+	class ProjectListController
+	class ProjectFormController
+	class ProjectController
+	class ProjectDetailController
+	class TaskController
+	class TaskListController
+	class TaskDetailPanelController
+	class ViewTasksController
+	class AddTasksController
+	class WorkLogController
+	class AddWorklogController
+	class ManagersPanelController
+	class ManagerDetailController
+	class ViewManagersController
+	class EmployeeController
+	class EmployeeListController
+	class EmployeeProfileController
+	class CommentsPanelController
+	class CommentController
+	class NotificationPanelController
+	class AuditLogController
+	class SkillController
+	class UserController
+}
+
+package "Services" {
+	class AuthService
+	class AuditLogService
+	class AIService
+	class EmployeeService
+	class EmployeeSkillService
+	class ProjectService
+	class ProjectSkillService
+	class ReferenceDataService
+	class SkillService
+	class TaskService
+	class TaskSkillService
+	class UserService
+	class WorkLogService
+	class WorkloadService
+	class CommentService
+}
+
+package "DAO" {
+	class EmployeeDAO
+	class EmployeeSkillDAO
+	class ProjectDAO
+	class ProjectSkillDAO
+	class SkillsDAO
+	class TaskDAO
+	class TaskSkillDAO
+	class UserDAO
+	class WorkLogDAO
+	class WorkloadDAO
+	class CommentsDAO
+	class AuditLogDAO
+}
+
+package "Models" {
+	class User <<Model>>
+	class Employee <<Model>>
+	class Projects <<Model>>
+	class Tasks <<Model>>
+	class WorkLog <<Model>>
+	class Workload <<Model>>
+	class Comments <<Model>>
+	class AuditLog <<Model>>
+	class Skills <<Model>>
+	class ProjectSkill <<Model>>
+	class TaskSkill <<Model>>
+	class EmployeeSkill <<Model>>
+}
+
+package "Utilities / DTO / DB" {
+	class SessionManager <<Utility>>
+	class DBUtility <<Utility>>
+	class AutoAssignEngine <<Utility>>
+	class AuthorizationUtil <<Utility>>
+	class AppContext <<Utility>>
+	class TaskDTO <<DTO>>
+	class DBConnection <<DB>>
+}
+
+' Entry flow
+Main --> "Login.fxml"
+Main --> "DashboardLayout.fxml"
+
+' GUI to controllers
+"Login.fxml" --> LoginController
+"Register.fxml" --> RegisterController
+"DashboardLayout.fxml" --> DashboardController
+"DashboardBase.fxml" --> DashboardController
+"Sidebar.fxml" --> SidebarController
+"TopBar.fxml" --> TopBarController
+"AdminDashboard.fxml" --> AdminDashboardController
+"ManagerDashboard.fxml" --> ManagerDashboardController
+"EmployeeDashboard.fxml" --> ManagerDashboardController : shared dashboard logic
+"Analytics.fxml" --> AnalyticsController
+"ProjectList.fxml" --> ProjectListController
+"ProjectForm.fxml" --> ProjectFormController
+"ProjectDetail.fxml" --> ProjectDetailController
+"TaskList.fxml" --> TaskListController
+"TaskDetail.fxml" --> TaskDetailPanelController
+"WorklogsPanel.fxml" --> WorkLogController
+"AddWorklog.fxml" --> AddWorklogController
+"Managers.fxml" --> ManagersPanelController
+"ViewManagers.fxml" --> ViewManagersController
+"EmployeeList.fxml" --> EmployeeListController
+"EmployeeProfile.fxml" --> EmployeeProfileController
+"CommentsPanel.fxml" --> CommentsPanelController
+"NotificationPanel.fxml" --> NotificationPanelController
+
+"login.fxml" --> LoginController
+"register.fxml" --> RegisterController
+"dashboard.fxml" --> DashboardController
+"projects.fxml" --> ProjectsController
+"viewProjects.fxml" --> ViewProjectsController
+"addProjects.fxml" --> AddProjectsController
+"tasks.fxml" --> TaskController
+"viewTasks.fxml" --> ViewTasksController
+"addTasks.fxml" --> AddTasksController
+"managers.fxml" --> ManagersPanelController
+"viewManagers.fxml" --> ViewManagersController
+"employee.fxml" --> EmployeeController
+"addWorklogs.fxml" --> AddWorklogController
+
+' Controller to services
+AuthController --> AuthService
+LoginController --> AuthService
+RegisterController --> UserService
+DashboardController --> TaskService
+DashboardController --> WorkLogService
+DashboardController --> ProjectService
+DashboardController --> EmployeeService
+DashboardController --> UserService
+SidebarController --> SessionManager
+TopBarController --> SessionManager
+AdminDashboardController --> ProjectService
+AdminDashboardController --> TaskService
+AdminDashboardController --> EmployeeService
+AdminDashboardController --> WorkLogService
+AnalyticsController --> ProjectService
+AnalyticsController --> TaskService
+AnalyticsController --> EmployeeService
+ProjectsController --> ProjectService
+ProjectListController --> ProjectService
+ProjectListController --> EmployeeService
+ProjectFormController --> ProjectService
+ProjectController --> ProjectService
+ProjectDetailController --> ProjectService
+ProjectDetailController --> TaskService
+ProjectDetailController --> EmployeeService
+TaskController --> TaskService
+TaskController --> ProjectService
+TaskController --> EmployeeService
+TaskListController --> TaskService
+TaskListController --> EmployeeService
+TaskDetailPanelController --> TaskService
+TaskDetailPanelController --> EmployeeService
+TaskDetailPanelController --> UserService
+TaskDetailPanelController --> CommentService
+ViewTasksController --> TaskService
+ViewTasksController --> WorkLogService
+AddTasksController --> TaskService
+AddTasksController --> ProjectService
+AddTasksController --> EmployeeService
+WorkLogController --> WorkLogService
+WorkLogController --> EmployeeService
+WorkLogController --> TaskService
+AddWorklogController --> WorkLogService
+AddWorklogController --> TaskService
+AddWorklogController --> EmployeeService
+ManagersPanelController --> EmployeeService
+ManagersPanelController --> UserService
+ManagerDetailController --> EmployeeService
+ManagerDetailController --> ProjectService
+ViewManagersController --> EmployeeService
+EmployeeController --> EmployeeService
+EmployeeListController --> EmployeeService
+EmployeeProfileController --> EmployeeService
+EmployeeProfileController --> TaskService
+CommentsPanelController --> CommentService
+CommentController --> CommentService
+NotificationPanelController --> SessionManager
+AuditLogController --> AuditLogService
+SkillController --> SkillService
+UserController --> UserService
+
+' Service to DAO / utility / models
+AuthService --> UserDAO
+AuthService --> AuthorizationUtil
+AuditLogService --> AuditLogDAO
+AIService ..> TaskDTO
+EmployeeService --> EmployeeDAO
+EmployeeService --> EmployeeSkillDAO
+EmployeeSkillService --> EmployeeSkillDAO
+EmployeeSkillService --> EmployeeDAO
+ProjectService --> ProjectDAO
+ProjectService --> TaskDAO
+ProjectService --> ProjectSkillDAO
+ProjectService --> AIService
+ProjectService --> EmployeeService
+ProjectSkillService --> ProjectSkillDAO
+ProjectSkillService --> ProjectDAO
+ReferenceDataService --> SkillsDAO
+ReferenceDataService --> EmployeeDAO
+ReferenceDataService --> ProjectDAO
+ReferenceDataService --> TaskDAO
+SkillService --> SkillsDAO
+TaskService --> TaskDAO
+TaskService --> EmployeeDAO
+TaskService --> TaskSkillDAO
+TaskService --> ProjectService
+TaskSkillService --> TaskSkillDAO
+UserService --> UserDAO
+WorkLogService --> WorkLogDAO
+WorkLogService --> TaskDAO
+WorkloadService --> WorkloadDAO
+WorkloadService --> TaskDAO
+WorkloadService --> EmployeeDAO
+CommentService --> CommentsDAO
+
+' DAO to DB / models
+EmployeeDAO --> DBConnection
+EmployeeDAO --> Employee
+EmployeeDAO --> User
+EmployeeDAO --> Projects
+EmployeeSkillDAO --> DBConnection
+EmployeeSkillDAO --> EmployeeSkill
+ProjectDAO --> DBConnection
+ProjectDAO --> Projects
+ProjectDAO --> Tasks
+ProjectSkillDAO --> DBConnection
+ProjectSkillDAO --> ProjectSkill
+SkillsDAO --> DBConnection
+SkillsDAO --> Skills
+TaskDAO --> DBConnection
+TaskDAO --> Tasks
+TaskDAO --> ProjectSkill
+TaskSkillDAO --> DBConnection
+TaskSkillDAO --> TaskSkill
+UserDAO --> DBConnection
+UserDAO --> User
+WorkLogDAO --> DBConnection
+WorkLogDAO --> WorkLog
+WorkLogDAO --> Tasks
+WorkloadDAO --> DBConnection
+WorkloadDAO --> Workload
+CommentsDAO --> DBConnection
+CommentsDAO --> Comments
+AuditLogDAO --> DBConnection
+AuditLogDAO --> AuditLog
+
+' Utilities and support
+SessionManager --> User
+DBUtility --> DBConnection
+AutoAssignEngine --> EmployeeDAO
+AutoAssignEngine --> TaskDAO
+AutoAssignEngine --> ProjectSkillDAO
+AuthorizationUtil --> User
+AppContext --> SessionManager
+
+' Data model relationships
+Projects --> Tasks : contains
+Employee --> Projects : manages
+Employee --> Tasks : assigned via employee_id
+Tasks --> WorkLog : tracked by
+Tasks --> Comments : discussed in
+Employee --> WorkLog : authored by
+User --> Employee : 1..1 profile
+User --> Comments : authored by
+ProjectSkill --> Skills
+TaskSkill --> Skills
+EmployeeSkill --> Skills
+
+note right of Main
+	Main launches the JavaFX application and loads the initial GUI.
+	The GUI layer is split into gui/ and fxml/ resource sets.
+end note
+
+note bottom
+	The diagram includes all project files in these layers:
+	Main -> GUI resources -> Controllers -> Services -> DAO -> DBConnection,
+	plus models, utilities, DTO, and support classes.
+end note
+
+@enduml

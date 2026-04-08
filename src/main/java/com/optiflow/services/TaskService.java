@@ -45,10 +45,25 @@ public class TaskService
 
     public boolean createTask(Tasks task) throws SQLException
     {
-        if(task == null)
-            return false;
+        return createTaskAndReturnId(task) > 0;
+    }
 
-        return taskDAO.createTask(task.getProject_id(), task.getAssigned_to(), task.getTitle(), task.getDescription(), task.getStatus(), task.getPriority(), task.getEstimated_hours(), task.getStart_date(), task.getEnd_date());
+    public int createTaskAndReturnId(Tasks task) throws SQLException
+    {
+        if(task == null)
+            return -1;
+
+        return taskDAO.createTaskAndReturnId(
+                task.getProject_id(),
+                task.getAssigned_to(),
+                task.getTitle(),
+                task.getDescription(),
+                task.getStatus(),
+                task.getPriority(),
+                task.getEstimated_hours(),
+                task.getStart_date(),
+                task.getEnd_date()
+        );
     }
 
     public Tasks getTaskById(int task_id) throws SQLException

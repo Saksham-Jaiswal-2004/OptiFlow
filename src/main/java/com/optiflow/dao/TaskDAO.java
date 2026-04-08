@@ -25,6 +25,11 @@ public class TaskDAO
 
     public boolean createTask(int project_id, int assigned_to, String title, String description, String status, String priority, int estimated_hours, Date start_date, Date end_date) throws SQLException
     {
+        return createTaskAndReturnId(project_id, assigned_to, title, description, status, priority, estimated_hours, start_date, end_date) > 0;
+    }
+
+    public int createTaskAndReturnId(int project_id, int assigned_to, String title, String description, String status, String priority, int estimated_hours, Date start_date, Date end_date) throws SQLException
+    {
         String sql = "INSERT INTO tasks (project_id, assigned_to, title, description, status, priority, estimated_hours, actual_hours, start_date, end_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -52,13 +57,14 @@ public class TaskDAO
                 {
                     int generatedId = rs.getInt(1);
                     auditLogService.logAction(SessionManager.getUser().getUserId(), "ADD_TASK", "TASK", generatedId, SessionManager.getUser().getName()+" created a new task");
+                    return generatedId;
                 }
             }
 
-            return true;
+            return -1;
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return -1;
         }
     }
 

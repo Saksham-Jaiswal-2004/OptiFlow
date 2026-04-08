@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import java.time.temporal.ChronoUnit;
 import java.util.stream.Collectors;
 
 public class ProjectListController {
@@ -301,25 +302,34 @@ public class ProjectListController {
                 }
 
                 String deadline = project.getDeadline() == null ? "-" : project.getDeadline().toString();
-                allRows.add(new ProjectRow(project.getName(), normalizeStatus(project.getStatus()), progress, managerName, deadline));
+                allRows.add(new ProjectRow(project.getName(), normalizeStatus(project), progress, managerName, deadline));
             }
         } catch (Exception ignored) {
         }
     }
 
-    private String normalizeStatus(String status) {
-        if (status == null) {
+    private String normalizeStatus(Projects project) {
+        if (project == null) {
             return "At Risk";
         }
 
-        String normalized = status.trim().toLowerCase(Locale.ROOT);
-        if (normalized.contains("complete") || normalized.contains("track") || normalized.contains("active")) {
+        if (project.isCompleted()) {
             return "On Track";
         }
-        if (normalized.contains("risk")) {
+
+        LocalDate deadline = project.getDeadline() == null ? null : project.getDeadline().toLocalDate();
+        if (deadline == null) {
             return "At Risk";
         }
-        return "Delayed";
+
+        long daysRemaining = ChronoUnit.DAYS.between(LocalDate.now(), deadline);
+        if (daysRemaining < 0) {
+            return "Delayed";
+        }
+        if (daysRemaining <= 7) {
+            return "At Risk";
+        }
+        return "On Track";
     }
 
     public static class ProjectRow {

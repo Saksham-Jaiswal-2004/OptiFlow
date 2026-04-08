@@ -16,6 +16,11 @@ public class AIService
 
     public String generateTasks(String projectTitle, String projectDetails)
     {
+        return generateTasks(projectTitle, projectDetails, Collections.emptyList());
+    }
+
+    public String generateTasks(String projectTitle, String projectDetails, List<String> availableSkills)
+    {
         try
         {
             URL url = new URL(API_URL);
@@ -29,7 +34,7 @@ public class AIService
 
             conn.setDoOutput(true);
 
-            String prompt = buildPrompt(projectTitle, projectDetails);
+            String prompt = buildPrompt(projectTitle, projectDetails, availableSkills);
 
             ObjectMapper mapper = new ObjectMapper();
 
@@ -82,8 +87,12 @@ public class AIService
         return null;
     }
 
-    private String buildPrompt(String title, String details)
+    private String buildPrompt(String title, String details, List<String> availableSkills)
     {
+        String allowedSkills = (availableSkills == null || availableSkills.isEmpty())
+                ? "No predefined skills provided."
+                : String.join(", ", availableSkills);
+
         return "You are an expert project manager of your company.\n\n" +
                 "Your task is to analyze the given project and break it down into clear, actionable tasks for your employees.\n\n" +
 
@@ -102,6 +111,8 @@ public class AIService
                 "  \"estimated_hours\": number,\n" +
                 "  \"priority\": \"HIGH | MEDIUM | LOW\"\n" +
                 "}\n\n" +
+
+                "Use only skills from this company skill catalog when possible:\n" + allowedSkills + "\n\n" +
 
                 "Return an array of such task objects.\n\n" +
 

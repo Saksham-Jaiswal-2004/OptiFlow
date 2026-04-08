@@ -41,17 +41,32 @@ public class ProjectService
 
     public boolean createProject(Projects project) throws SQLException
     {
+        return createProjectAndReturnId(project) > 0;
+    }
+
+    public int createProjectAndReturnId(Projects project) throws SQLException
+    {
         if(project == null)
-            return false;
+            return -1;
 
-       project.setManager_id(getBestManagerForProject(project.getProject_id()).getEmp_id());
-
-        return projectDAO.createProject(project.getName(), project.getDescription(), project.getStart_date(), project.getDeadline(), project.getManager_id(), project.getStatus());
+        return projectDAO.createProjectAndReturnId(
+                project.getName(),
+                project.getDescription(),
+                project.getStart_date(),
+                project.getDeadline(),
+                project.getManager_id(),
+                project.getStatus()
+        );
     }
 
     public List<Tasks> generateTasksForProjects(String project_title, String project_details)
     {
-        String response = aiService.generateTasks(project_title, project_details);
+        return generateTasksForProjects(project_title, project_details, List.of());
+    }
+
+    public List<Tasks> generateTasksForProjects(String project_title, String project_details, List<String> availableSkills)
+    {
+        String response = aiService.generateTasks(project_title, project_details, availableSkills);
         System.out.println("Response: "+response);
 
         List<Tasks> tasksList = new LinkedList<>();

@@ -24,6 +24,11 @@ public class ProjectDAO
 
     public boolean createProject(String name, String description, Date start_date, Date deadline, int manager_id, String status) throws SQLException
     {
+        return createProjectAndReturnId(name, description, start_date, deadline, manager_id, status) > 0;
+    }
+
+    public int createProjectAndReturnId(String name, String description, Date start_date, Date deadline, int manager_id, String status) throws SQLException
+    {
         String sql = "INSERT INTO projects (name, description, start_date, end_date, deadline, manager_id, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -48,13 +53,14 @@ public class ProjectDAO
                 {
                     int generatedId = rs.getInt(1);
                     auditLogService.logAction(SessionManager.getUser().getUserId(), "ADD_PROJECT", "PROJECT", generatedId, SessionManager.getUser().getName()+" added a new project");
+                    return generatedId;
                 }
             }
 
-            return true;
+            return -1;
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return -1;
         }
     }
 
@@ -76,7 +82,7 @@ public class ProjectDAO
                 pro.setDescription(rs.getString("description"));
                 pro.setStart_date(rs.getDate("start_date"));
                 pro.setEnd_date(rs.getDate("end_date"));
-                pro.setEnd_date(rs.getDate("deadline"));
+                pro.setDeadline(rs.getDate("deadline"));
                 pro.setManager_id(rs.getInt("manager_id"));
                 pro.setStatus(rs.getString("status"));
                 return pro;
@@ -104,7 +110,7 @@ public class ProjectDAO
                 pro.setDescription(rs.getString("description"));
                 pro.setStart_date(rs.getDate("start_date"));
                 pro.setEnd_date(rs.getDate("end_date"));
-                pro.setEnd_date(rs.getDate("deadline"));
+                pro.setDeadline(rs.getDate("deadline"));
                 pro.setManager_id(rs.getInt("manager_id"));
                 pro.setStatus(rs.getString("status"));
 
@@ -133,7 +139,7 @@ public class ProjectDAO
                 pro.setDescription(rs.getString("description"));
                 pro.setStart_date(rs.getDate("start_date"));
                 pro.setEnd_date(rs.getDate("end_date"));
-                pro.setEnd_date(rs.getDate("deadline"));
+                pro.setDeadline(rs.getDate("deadline"));
                 pro.setManager_id(rs.getInt("manager_id"));
                 pro.setStatus(rs.getString("status"));
 
@@ -200,7 +206,7 @@ public class ProjectDAO
                 pro.setDescription(rs.getString("description"));
                 pro.setStart_date(rs.getDate("start_date"));
                 pro.setEnd_date(rs.getDate("end_date"));
-                pro.setEnd_date(rs.getDate("deadline"));
+                pro.setDeadline(rs.getDate("deadline"));
                 pro.setManager_id(rs.getInt("manager_id"));
                 pro.setStatus(rs.getString("status"));
 

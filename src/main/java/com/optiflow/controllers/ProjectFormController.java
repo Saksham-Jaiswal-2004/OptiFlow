@@ -1,14 +1,20 @@
 package com.optiflow.controllers;
 
 import com.optiflow.models.Projects;
+import com.optiflow.models.Skills;
 import com.optiflow.models.Tasks;
 import com.optiflow.models.Employee;
 import com.optiflow.services.ProjectService;
 import com.optiflow.services.EmployeeService;
 import com.optiflow.services.ReferenceDataService;
+import com.optiflow.services.SkillService;
+import com.optiflow.services.TaskService;
+import com.optiflow.services.TaskSkillService;
 import com.optiflow.utils.SessionManager;
+import javafx.event.ActionEvent;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -17,13 +23,20 @@ import javafx.scene.control.TextField;
 
 import java.time.LocalDate;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class ProjectFormController {
 
     private final ProjectService projectService = new ProjectService();
     private final EmployeeService employeeService = new EmployeeService();
     private final ReferenceDataService referenceDataService = new ReferenceDataService();
+    private final TaskService taskService = new TaskService();
+    private final TaskSkillService taskSkillService = new TaskSkillService();
+    private final SkillService skillService = new SkillService();
 
     @FXML
     private TextField projectNameField;
@@ -64,34 +77,48 @@ public class ProjectFormController {
     }
 
     @FXML
-    private void handleGenerateTasks() {
+    private void handleGenerateTasks(ActionEvent event) {
         hideMessages();
-        if (isBlank(projectNameField.getText()) || isBlank(descriptionField.getText())) {
-            showError(projectNameError, "Project name is required before task generation");
-            showError(descriptionError, "Description is required before task generation");
+        if (!validateForm()) {
             return;
         }
 
-        List<Tasks> generated = projectService.generateTasksForProjects(
-                projectNameField.getText().trim(),
-                descriptionField.getText().trim()
-        );
+        try {
+            Projects project = buildProjectFromForm();
+            int projectId = projectService.createProjectAndReturnId(project);
 
-        if (generated == null || generated.isEmpty()) {
-            showError(formSuccessMessage, "Could not generate tasks at the moment.");
-            return;
+            if (projectId <= 0) {
+                showError(formSuccessMessage, "Unable to save project. Check required data.");
+                return;
+            }
+
+            closeCurrentComponent(event);
+            generateAndPersistTasksInBackground(projectId, project.getName(), project.getDescription(), project.getStart_date(), project.getDeadline());
+        } catch (Exception e) {
+            showError(formSuccessMessage, "Failed to save project before AI generation.");
         }
-
-        formSuccessMessage.setText("Generated " + generated.size() + " tasks from AI.");
-        formSuccessMessage.setVisible(true);
-        formSuccessMessage.setManaged(true);
     }
 
     @FXML
-    private void handleAddTaskManually() {
-        formSuccessMessage.setText("Manual task mode is available in the Tasks section.");
-        formSuccessMessage.setVisible(true);
-        formSuccessMessage.setManaged(true);
+    private void handleAddTaskManually(ActionEvent event) {
+        hideMessages();
+        if (!validateForm()) {
+            return;
+        }
+
+        try {
+            Projects project = buildProjectFromForm();
+            int projectId = projectService.createProjectAndReturnId(project);
+
+            if (projectId <= 0) {
+                showError(formSuccessMessage, "Unable to save project. Check required data.");
+                return;
+            }
+
+            closeCurrentComponent(event);
+        } catch (Exception e) {
+            showError(formSuccessMessage, "Failed to save project.");
+        }
     }
 
     @FXML
@@ -104,14 +131,7 @@ public class ProjectFormController {
         }
 
         try {
-            Projects project = new Projects();
-            project.setName(projectNameField.getText().trim());
-            project.setDescription(descriptionField.getText().trim());
-            project.setStart_date(Date.valueOf(startDatePicker.getValue()));
-            project.setEnd_date(Date.valueOf(endDatePicker.getValue()));
-            project.setDeadline(Date.valueOf(endDatePicker.getValue()));
-            project.setStatus(referenceDataService.getDefaultProjectStatus());
-            project.setManager_id(resolveCurrentManagerId());
+            Projects project = buildProjectFromForm();
 
             boolean saved = projectService.createProject(project);
             if (!saved) {
@@ -154,7 +174,7 @@ public class ProjectFormController {
         }
 
         if (start != null && end != null && end.isBefore(start)) {
-            showError(endDateError, "End date must be after start date");
+            showError(endDateError, "Deadline must be after start date");
             valid = false;
         }
 
@@ -203,5 +223,132 @@ public class ProjectFormController {
         } catch (Exception ignored) {
             return 0;
         }
+    }
+
+    private Projects buildProjectFromForm() {
+        Projects project = new Projects();
+        project.setName(projectNameField.getText().trim());
+        project.setDescription(descriptionField.getText().trim());
+        project.setStart_date(Date.valueOf(startDatePicker.getValue()));
+        project.setEnd_date(Date.valueOf(endDatePicker.getValue()));
+        project.setDeadline(Date.valueOf(endDatePicker.getValue()));
+        project.setStatus(referenceDataService.getDefaultProjectStatus());
+        project.setManager_id(resolveCurrentManagerId());
+        return project;
+    }
+
+    private void closeCurrentComponent(ActionEvent event) {
+        if (event == null || event.getSource() == null) {
+            return;
+        }
+
+        Node source = (Node) event.getSource();
+        if (source.getScene() != null && source.getScene().getWindow() != null) {
+            source.getScene().getWindow().hide();
+        }
+    }
+
+    private void generateAndPersistTasksInBackground(int projectId, String projectTitle, String projectDescription, Date startDate, Date deadline) {
+        Thread worker = new Thread(() -> {
+            try {
+                List<String> totalSkillList = fetchAllSkillNames();
+                List<Tasks> generated = projectService.generateTasksForProjects(projectTitle, projectDescription, totalSkillList);
+                if (generated == null || generated.isEmpty()) {
+                    return;
+                }
+
+                Map<String, Integer> skillIdsByName = buildSkillIdMap();
+                for (Tasks generatedTask : generated) {
+                    Tasks taskToSave = new Tasks();
+                    taskToSave.setProject_id(projectId);
+                    taskToSave.setAssigned_to(0);
+                    taskToSave.setTitle(generatedTask.getTitle());
+                    taskToSave.setDescription(generatedTask.getDescription());
+                    taskToSave.setStatus(referenceDataService.getDefaultTaskStatus());
+                    taskToSave.setPriority(normalizePriority(generatedTask.getPriority()));
+                    taskToSave.setEstimated_hours(Math.max(generatedTask.getEstimated_hours(), 1));
+                    taskToSave.setStart_date(startDate);
+                    taskToSave.setEnd_date(deadline);
+
+                    int taskId = taskService.createTaskAndReturnId(taskToSave);
+                    if (taskId <= 0 || generatedTask.getSkillsList() == null) {
+                        continue;
+                    }
+
+                    for (String skillName : generatedTask.getSkillsList()) {
+                        if (skillName == null) {
+                            continue;
+                        }
+
+                        Integer skillId = skillIdsByName.get(skillName.trim().toLowerCase(Locale.ROOT));
+                        if (skillId != null) {
+                            taskSkillService.addSkillToTask(SessionManager.getUser(), taskId, skillId);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        worker.setDaemon(true);
+        worker.start();
+    }
+
+    private List<String> fetchAllSkillNames() {
+        List<String> names = new ArrayList<>();
+        try {
+            List<Skills> allSkills = skillService.getAllSkills();
+            if (allSkills == null) {
+                return names;
+            }
+
+            for (Skills skill : allSkills) {
+                if (skill != null && !isBlank(skill.getName())) {
+                    names.add(skill.getName().trim());
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        return names;
+    }
+
+    private Map<String, Integer> buildSkillIdMap() {
+        Map<String, Integer> map = new HashMap<>();
+        try {
+            List<Skills> allSkills = skillService.getAllSkills();
+            if (allSkills == null) {
+                return map;
+            }
+
+            for (Skills skill : allSkills) {
+                if (skill != null && !isBlank(skill.getName())) {
+                    map.put(skill.getName().trim().toLowerCase(Locale.ROOT), skill.getSkill_id());
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        return map;
+    }
+
+    private String normalizePriority(String aiPriority) {
+        if (isBlank(aiPriority)) {
+            return referenceDataService.getDefaultTaskPriority();
+        }
+
+        String normalized = aiPriority.trim().toUpperCase(Locale.ROOT);
+        if ("HIGH".equals(normalized)) {
+            return "High";
+        }
+        if ("LOW".equals(normalized)) {
+            return "Low";
+        }
+        if ("MEDIUM".equals(normalized)) {
+            return "Medium";
+        }
+        if ("CRITICAL".equals(normalized)) {
+            return "Critical";
+        }
+        return referenceDataService.getDefaultTaskPriority();
     }
 }
