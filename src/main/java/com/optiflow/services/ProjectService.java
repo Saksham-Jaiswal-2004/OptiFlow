@@ -49,13 +49,20 @@ public class ProjectService
         if(project == null)
             return -1;
 
+        if (project.getManager_id() > 0 && hasOpenProjectForManager(project.getManager_id(), null)) {
+            return -1;
+        }
+
+        String normalizedStatus = normalizeProjectStatus(project.getStatus());
+        project.setStatus(normalizedStatus);
+
         return projectDAO.createProjectAndReturnId(
                 project.getName(),
                 project.getDescription(),
                 project.getStart_date(),
                 project.getDeadline(),
                 project.getManager_id(),
-                project.getStatus()
+                normalizedStatus
         );
     }
 
@@ -146,6 +153,14 @@ public class ProjectService
         if(project == null)
             return false;
 
+        try {
+            if (project.getManager_id() > 0 && hasOpenProjectForManager(project.getManager_id(), project.getProject_id())) {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+
         try
         {
             projectDAO.updateName(project.getProject_id(), project.getName());
@@ -153,7 +168,7 @@ public class ProjectService
             projectDAO.updateStartDate(project.getProject_id(), project.getStart_date());
             projectDAO.updateEndDate(project.getProject_id(), project.getEnd_date());
             projectDAO.updateDeadline(project.getProject_id(), project.getDeadline());
-            projectDAO.updateStatus(project.getProject_id(), project.getStatus());
+            projectDAO.updateStatus(project.getProject_id(), normalizeProjectStatus(project.getStatus()));
 
             auditLogService.logAction(SessionManager.getUser().getUserId(), "UPDATE_PROJECT", "PROJECT", project.getProject_id(), SessionManager.getUser().getName()+" updated the project "+project.getName());
 
@@ -161,6 +176,34 @@ public class ProjectService
         } catch (Exception e) {
             return false;
         }
+    }
+
+    private String normalizeProjectStatus(String status)
+    {
+        if(status == null || status.isBlank())
+            return "PLANNED";
+
+        String normalized = status.trim().toUpperCase();
+        if("IN PROGRESS".equals(normalized))
+            normalized = "IN_PROGRESS";
+        if("ON HOLD".equals(normalized))
+            normalized = "ON_HOLD";
+
+        return switch (normalized)
+        {
+            case "PLANNED", "IN_PROGRESS", "COMPLETED", "ON_HOLD" -> normalized;
+            default -> "PLANNED";
+        };
+    }
+
+    public boolean hasOpenProjectForManager(int managerId, Integer excludeProjectId) throws SQLException
+    {
+        return projectDAO.hasOpenProjectForManager(managerId, excludeProjectId);
+    }
+
+    public boolean isManagerAvailableForNewProject(int managerId) throws SQLException
+    {
+        return !hasOpenProjectForManager(managerId, null);
     }
 
     public Employee getBestManagerForProject(int projectId) throws SQLException

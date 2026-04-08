@@ -183,6 +183,11 @@ public class ProjectFormController {
             valid = false;
         }
 
+        if (resolveCurrentManagerId() <= 0) {
+            showError(formSuccessMessage, "No manager profile found. Please add/select a manager before creating a project.");
+            valid = false;
+        }
+
         return valid;
     }
 
@@ -215,14 +220,33 @@ public class ProjectFormController {
     private int resolveCurrentManagerId() {
         try {
             if (SessionManager.getUser() == null) {
-                return 0;
+                return resolveFallbackManagerId();
             }
 
             Employee manager = employeeService.getEmployeeByUserId(SessionManager.getUser().getUserId());
-            return manager == null ? 0 : manager.getEmp_id();
+            if (manager != null) {
+                return manager.getEmp_id();
+            }
+
+            return resolveFallbackManagerId();
         } catch (Exception ignored) {
-            return 0;
+            return resolveFallbackManagerId();
         }
+    }
+
+    private int resolveFallbackManagerId() {
+        try {
+            List<Employee> managers = employeeService.getAllManagers();
+            if (managers != null) {
+                for (Employee manager : managers) {
+                    if (projectService.isManagerAvailableForNewProject(manager.getEmp_id())) {
+                        return manager.getEmp_id();
+                    }
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        return 0;
     }
 
     private Projects buildProjectFromForm() {
@@ -271,20 +295,28 @@ public class ProjectFormController {
                     taskToSave.setEnd_date(deadline);
 
                     int taskId = taskService.createTaskAndReturnId(taskToSave);
-                    if (taskId <= 0 || generatedTask.getSkillsList() == null) {
+                    if (taskId <= 0) {
                         continue;
                     }
 
-                    for (String skillName : generatedTask.getSkillsList()) {
-                        if (skillName == null) {
-                            continue;
-                        }
+                    if (generatedTask.getSkillsList() != null) {
+                        for (String skillName : generatedTask.getSkillsList()) {
+                            if (skillName == null) {
+                                continue;
+                            }
 
-                        Integer skillId = skillIdsByName.get(skillName.trim().toLowerCase(Locale.ROOT));
-                        if (skillId != null) {
-                            taskSkillService.addSkillToTask(SessionManager.getUser(), taskId, skillId);
+                            Integer skillId = skillIdsByName.get(skillName.trim().toLowerCase(Locale.ROOT));
+                            if (skillId != null) {
+                                taskSkillService.addSkillToTask(SessionManager.getUser(), taskId, skillId);
+                            }
                         }
                     }
+
+                    // Use prebuilt assignment engine to pick the best employee from manager's team.
+                    Tasks persistedTask = new Tasks();
+                    persistedTask.setTask_id(taskId);
+                    persistedTask.setProject_id(projectId);
+                    taskService.autoAssignTask(persistedTask);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

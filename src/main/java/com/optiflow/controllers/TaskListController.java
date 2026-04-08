@@ -6,6 +6,8 @@ import com.optiflow.models.User;
 import com.optiflow.services.EmployeeService;
 import com.optiflow.services.TaskService;
 import com.optiflow.utils.SessionManager;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -25,6 +27,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javafx.util.Duration;
 
 public class TaskListController {
 
@@ -49,12 +52,14 @@ public class TaskListController {
     private final ObservableList<TaskRow> rows = FXCollections.observableArrayList();
     private final TaskService taskService = new TaskService();
     private final EmployeeService employeeService = new EmployeeService();
+    private Timeline autoRefreshTimeline;
 
     @FXML
     public void initialize() {
         configureColumns();
         loadRowsFromServices();
         taskTable.setItems(rows);
+        startAutoRefresh();
 
         taskTable.setRowFactory(tv -> {
             TableRow<TaskRow> row = new TableRow<>();
@@ -310,9 +315,30 @@ public class TaskListController {
             Stage owner = (Stage) taskTable.getScene().getWindow();
             detailStage.initOwner(owner);
             detailStage.showAndWait();
+            refreshRows();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void startAutoRefresh() {
+        if (autoRefreshTimeline != null) {
+            autoRefreshTimeline.stop();
+        }
+
+        autoRefreshTimeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> refreshRows()));
+        autoRefreshTimeline.setCycleCount(Timeline.INDEFINITE);
+        autoRefreshTimeline.play();
+
+        taskTable.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null && newScene.getWindow() != null) {
+                newScene.getWindow().setOnHidden(event -> autoRefreshTimeline.stop());
+            }
+        });
+    }
+
+    private void refreshRows() {
+        loadRowsFromServices();
     }
 
     public static class TaskRow {

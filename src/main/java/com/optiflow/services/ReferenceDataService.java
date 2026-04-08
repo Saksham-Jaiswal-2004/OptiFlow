@@ -17,6 +17,6 @@ public class ReferenceDataService {
     }
 
     public String getDefaultProjectStatus() {
-        return "Active";
+        return "PLANNED";
     }
 }

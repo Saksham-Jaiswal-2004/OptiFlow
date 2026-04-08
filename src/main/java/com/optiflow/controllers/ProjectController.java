@@ -29,7 +29,7 @@ public class ProjectController
             project.setStart_date(startDate);
             project.setEnd_date(endDate);
             project.setDeadline(endDate);
-            project.setStatus("Active");
+            project.setStatus("PLANNED");
             project.setManager_id(resolveCurrentManagerId());
             return projectService.createProject(project);
         } catch (Exception e) {

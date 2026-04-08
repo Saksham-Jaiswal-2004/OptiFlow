@@ -55,14 +55,26 @@ public class AddProjectsController {
         }
 
         try {
+            int selectedManagerId = resolveSelectedManagerId();
+            if (selectedManagerId <= 0) {
+                showAlert("Validation Error", "Please select an available manager.");
+                return;
+            }
+
+            if (!projectService.isManagerAvailableForNewProject(selectedManagerId)) {
+                showAlert("Manager Busy", "This manager already has an active project assigned.");
+                loadManagers();
+                return;
+            }
+
             Projects project = new Projects();
             project.setName(name);
             project.setDescription(buildDescription(description));
             project.setStart_date(Date.valueOf(LocalDate.now()));
             project.setEnd_date(Date.valueOf(deadlinePicker.getValue()));
             project.setDeadline(Date.valueOf(deadlinePicker.getValue()));
-            project.setManager_id(resolveSelectedManagerId());
-            project.setStatus("Active");
+            project.setManager_id(selectedManagerId);
+            project.setStatus("PLANNED");
 
             if (!projectService.createProject(project)) {
                 showAlert("Save Failed", "The project could not be saved.");
@@ -88,6 +100,9 @@ public class AddProjectsController {
             List<Employee> managers = employeeService.getAllManagers();
             if (managers != null) {
                 for (Employee manager : managers) {
+                    if (!projectService.isManagerAvailableForNewProject(manager.getEmp_id())) {
+                        continue;
+                    }
                     String label = manager.getName() + " (#" + manager.getEmp_id() + ")";
                     managerIds.put(label, manager.getEmp_id());
                     managerDropdown.getItems().add(label);
@@ -98,6 +113,8 @@ public class AddProjectsController {
 
         if (!managerDropdown.getItems().isEmpty()) {
             managerDropdown.getSelectionModel().selectFirst();
+        } else {
+            managerDropdown.setPromptText("No available managers");
         }
     }
 

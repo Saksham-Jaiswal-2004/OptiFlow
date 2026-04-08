@@ -3,6 +3,7 @@ package com.optiflow.dao;
 import com.optiflow.database.DBConnection;
 import com.optiflow.models.ProjectSkill;
 import com.optiflow.models.Tasks;
+import com.optiflow.models.User;
 import com.optiflow.services.AuditLogService;
 import com.optiflow.utils.SessionManager;
 import org.apache.poi.ss.formula.functions.T;
@@ -56,7 +57,10 @@ public class TaskDAO
                 if (rs.next())
                 {
                     int generatedId = rs.getInt(1);
-                    auditLogService.logAction(SessionManager.getUser().getUserId(), "ADD_TASK", "TASK", generatedId, SessionManager.getUser().getName()+" created a new task");
+                    User user = SessionManager.getUser();
+                    if (user != null) {
+                        auditLogService.logAction(user.getUserId(), "ADD_TASK", "TASK", generatedId, user.getName()+" created a new task");
+                    }
                     return generatedId;
                 }
             }

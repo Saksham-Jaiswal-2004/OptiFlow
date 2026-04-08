@@ -5,6 +5,8 @@ import com.optiflow.models.Projects;
 import com.optiflow.services.EmployeeService;
 import com.optiflow.services.ProjectService;
 import com.optiflow.utils.SessionManager;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,8 +22,10 @@ import javafx.stage.Stage;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import javafx.util.Duration;
 
 public class ProjectsController {
 
@@ -36,12 +40,15 @@ public class ProjectsController {
 
     private final ProjectService projectService = new ProjectService();
     private final EmployeeService employeeService = new EmployeeService();
+    private final List<VBox> renderedCards = new ArrayList<>();
+    private Timeline autoRefreshTimeline;
 
     @FXML
     public void initialize() {
         configureHeader();
         configureFilters();
         loadProjects();
+        startAutoRefresh();
     }
 
     @FXML
@@ -105,6 +112,8 @@ public class ProjectsController {
     }
 
     private void loadProjects() {
+        clearRenderedCards();
+
         try {
             List<Projects> projects = projectService.getAllProjects();
             if (projects == null || projects.isEmpty()) {
@@ -116,11 +125,32 @@ public class ProjectsController {
             setTemplateText(first.getName(), safeDescription(first.getDescription()));
 
             for (int index = 1; index < projects.size(); index++) {
-                mainContainer.getChildren().add(createProjectCard(projects.get(index)));
+                VBox card = createProjectCard(projects.get(index));
+                renderedCards.add(card);
+                mainContainer.getChildren().add(card);
             }
         } catch (Exception e) {
             setTemplateText("Unable to load projects", e.getMessage() == null ? "Service unavailable" : e.getMessage());
         }
+    }
+
+    private void clearRenderedCards() {
+        if (mainContainer == null || renderedCards.isEmpty()) {
+            return;
+        }
+
+        mainContainer.getChildren().removeAll(renderedCards);
+        renderedCards.clear();
+    }
+
+    private void startAutoRefresh() {
+        if (autoRefreshTimeline != null) {
+            autoRefreshTimeline.stop();
+        }
+
+        autoRefreshTimeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> loadProjects()));
+        autoRefreshTimeline.setCycleCount(Timeline.INDEFINITE);
+        autoRefreshTimeline.play();
     }
 
     private VBox createProjectCard(Projects project) {

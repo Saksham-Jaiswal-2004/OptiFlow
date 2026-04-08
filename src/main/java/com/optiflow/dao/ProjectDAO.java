@@ -3,6 +3,7 @@ package com.optiflow.dao;
 import com.optiflow.database.DBConnection;
 import com.optiflow.models.Projects;
 import com.optiflow.models.Tasks;
+import com.optiflow.models.User;
 import com.optiflow.services.AuditLogService;
 import com.optiflow.utils.DBUtility;
 import com.optiflow.utils.SessionManager;
@@ -35,7 +36,7 @@ public class ProjectDAO
             stmt.setString(1, name);
             stmt.setString(2, description);
             stmt.setDate(3, Date.valueOf(start_date.toLocalDate()));
-            stmt.setDate(4, null);
+            stmt.setNull(4, Types.DATE);
             stmt.setDate(5, Date.valueOf(deadline.toLocalDate()));
             if(manager_id == 0)
                 stmt.setNull(6, java.sql.Types.INTEGER);
@@ -52,7 +53,10 @@ public class ProjectDAO
                 if (rs.next())
                 {
                     int generatedId = rs.getInt(1);
-                    auditLogService.logAction(SessionManager.getUser().getUserId(), "ADD_PROJECT", "PROJECT", generatedId, SessionManager.getUser().getName()+" added a new project");
+                    User user = SessionManager.getUser();
+                    if (user != null) {
+                        auditLogService.logAction(user.getUserId(), "ADD_PROJECT", "PROJECT", generatedId, user.getName()+" added a new project");
+                    }
                     return generatedId;
                 }
             }
@@ -214,6 +218,32 @@ public class ProjectDAO
             }
         }
         return proList;
+    }
+
+    public boolean hasOpenProjectForManager(int manager_id, Integer excludeProjectId) throws SQLException
+    {
+        if (manager_id <= 0) {
+            return false;
+        }
+
+        String sql = "SELECT COUNT(*) FROM projects WHERE manager_id = ? AND status IN ('PLANNED', 'IN_PROGRESS', 'ON_HOLD')"
+                + (excludeProjectId != null && excludeProjectId > 0 ? " AND project_id <> ?" : "");
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql))
+        {
+            stmt.setInt(1, manager_id);
+            if (excludeProjectId != null && excludeProjectId > 0) {
+                stmt.setInt(2, excludeProjectId);
+            }
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        }
+
+        return false;
     }
 
     public String getProjectStatus(int project_id) throws SQLException

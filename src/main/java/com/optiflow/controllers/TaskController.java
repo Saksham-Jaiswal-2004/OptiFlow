@@ -4,6 +4,8 @@ import com.optiflow.models.*;
 import com.optiflow.services.*;
 import com.optiflow.utils.SessionManager;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.util.List;
@@ -34,6 +37,7 @@ public class TaskController {
 
     private int managerId;
     private int projectId;
+    private Timeline autoRefreshTimeline;
 
 
     @FXML
@@ -49,9 +53,31 @@ public class TaskController {
 
             loadStats();
             loadTasks();
+            startAutoRefresh();
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void startAutoRefresh() {
+        if (autoRefreshTimeline != null) {
+            autoRefreshTimeline.stop();
+        }
+
+        autoRefreshTimeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
+            loadStats();
+            loadTasks();
+        }));
+        autoRefreshTimeline.setCycleCount(Timeline.INDEFINITE);
+        autoRefreshTimeline.play();
+
+        if (tasksContainer != null) {
+            tasksContainer.sceneProperty().addListener((obs, oldScene, newScene) -> {
+                if (newScene != null && newScene.getWindow() != null) {
+                    newScene.getWindow().setOnHidden(event -> autoRefreshTimeline.stop());
+                }
+            });
         }
     }
 

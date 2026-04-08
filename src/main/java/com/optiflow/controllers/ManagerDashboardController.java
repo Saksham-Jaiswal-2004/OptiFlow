@@ -6,15 +6,20 @@ import com.optiflow.models.User;
 import com.optiflow.services.EmployeeService;
 import com.optiflow.services.TaskService;
 import com.optiflow.utils.SessionManager;
+import javafx.animation.KeyFrame;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
+import javafx.animation.Timeline;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
@@ -22,6 +27,8 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -102,9 +109,20 @@ public class ManagerDashboardController {
 
     private final EmployeeService employeeService = new EmployeeService();
     private final TaskService taskService = new TaskService();
+    private Timeline autoRefreshTimeline;
 
     @FXML
     public void initialize() {
+        configureTeamOverviewTable(FXCollections.observableArrayList());
+        configureTaskTrackingTable(FXCollections.observableArrayList());
+        reloadDashboardData();
+        startAutoRefresh();
+
+        animateCardsOnLoad();
+        animateChartsOnLoad();
+    }
+
+    private void reloadDashboardData() {
         Employee manager = resolveCurrentManager();
         ObservableList<Employee> teamMembers = resolveTeamMembers(manager);
         ObservableList<Tasks> teamTasks = resolveTasksForTeam(teamMembers);
@@ -112,13 +130,28 @@ public class ManagerDashboardController {
         ObservableList<TeamRow> teamRows = loadTeamRows(teamMembers, teamTasks);
         ObservableList<TaskRow> taskRows = loadTaskRows(teamMembers, teamTasks);
 
-        configureTeamOverviewTable(teamRows);
-        configureTaskTrackingTable(taskRows);
+        teamTable.setItems(teamRows);
+        taskTable.setItems(taskRows);
         buildWeeklyGantt(teamMembers, teamTasks);
         configureCharts(teamRows, taskRows);
+    }
 
-        animateCardsOnLoad();
-        animateChartsOnLoad();
+    private void startAutoRefresh() {
+        if (autoRefreshTimeline != null) {
+            autoRefreshTimeline.stop();
+        }
+
+        autoRefreshTimeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> reloadDashboardData()));
+        autoRefreshTimeline.setCycleCount(Timeline.INDEFINITE);
+        autoRefreshTimeline.play();
+
+        if (root != null) {
+            root.sceneProperty().addListener((obs, oldScene, newScene) -> {
+                if (newScene != null && newScene.getWindow() != null) {
+                    newScene.getWindow().setOnHidden(event -> autoRefreshTimeline.stop());
+                }
+            });
+        }
     }
 
     private ObservableList<TeamRow> loadTeamRows(ObservableList<Employee> teamMembers, ObservableList<Tasks> teamTasks) {
@@ -166,6 +199,7 @@ public class ManagerDashboardController {
 
                 LocalDate deadline = task.getEnd_date() == null ? null : task.getEnd_date().toLocalDate();
                     rows.add(new TaskRow(
+                        task,
                         "T-" + task.getTask_id(),
                         task.getTitle(),
                         safeText(task.getDescription()),
@@ -404,10 +438,43 @@ public class ManagerDashboardController {
                     row.getStyleClass().add("mgr-task-overdue-row");
                 }
             });
+            row.setOnMouseClicked(event -> {
+                if (!row.isEmpty() && event.getClickCount() == 1) {
+                    openTaskDetail(row.getItem());
+                }
+            });
             return row;
         });
 
         taskTable.setItems(rows);
+    }
+
+    private void openTaskDetail(TaskRow row) {
+        if (row == null || row.getTaskData() == null) {
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/TaskDetail.fxml"));
+            Parent rootNode = loader.load();
+            TaskDetailPanelController controller = loader.getController();
+            controller.setTask(row.getTaskData());
+
+            Stage detailStage = new Stage();
+            detailStage.setTitle("Task Detail - " + row.getTask());
+            detailStage.setScene(new Scene(rootNode, 1120, 780));
+            detailStage.initModality(Modality.APPLICATION_MODAL);
+            detailStage.setMinWidth(1040);
+            detailStage.setMinHeight(720);
+            detailStage.setResizable(true);
+
+            Stage owner = (Stage) taskTable.getScene().getWindow();
+            detailStage.initOwner(owner);
+            detailStage.showAndWait();
+            reloadDashboardData();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void buildWeeklyGantt(ObservableList<Employee> teamMembers, ObservableList<Tasks> teamTasks) {
@@ -717,6 +784,7 @@ public class ManagerDashboardController {
     }
 
     public static class TaskRow {
+        private final Tasks taskData;
         private final StringProperty taskId;
         private final StringProperty task;
         private final StringProperty description;
@@ -725,7 +793,8 @@ public class ManagerDashboardController {
         private final ObjectProperty<LocalDate> deadline;
         private final StringProperty deadlineText;
 
-        public TaskRow(String taskId, String task, String description, String assignedTo, String status, LocalDate deadline) {
+        public TaskRow(Tasks taskData, String taskId, String task, String description, String assignedTo, String status, LocalDate deadline) {
+            this.taskData = taskData;
             this.taskId = new SimpleStringProperty(taskId);
             this.task = new SimpleStringProperty(task);
             this.description = new SimpleStringProperty(description);
@@ -733,6 +802,10 @@ public class ManagerDashboardController {
             this.status = new SimpleStringProperty(status);
             this.deadline = new SimpleObjectProperty<>(deadline);
             this.deadlineText = new SimpleStringProperty(deadline == null ? "-" : deadline.format(DateTimeFormatter.ofPattern("dd MMM yyyy")));
+        }
+
+        public Tasks getTaskData() {
+            return taskData;
         }
 
         public StringProperty taskIdProperty() {

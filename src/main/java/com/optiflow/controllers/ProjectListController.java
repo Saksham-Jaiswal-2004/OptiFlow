@@ -6,6 +6,8 @@ import com.optiflow.models.User;
 import com.optiflow.services.EmployeeService;
 import com.optiflow.services.ProjectService;
 import com.optiflow.utils.SessionManager;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.Locale;
 import java.time.temporal.ChronoUnit;
 import java.util.stream.Collectors;
+import javafx.util.Duration;
 
 public class ProjectListController {
 
@@ -69,6 +72,7 @@ public class ProjectListController {
     private final ObservableList<ProjectRow> allRows = FXCollections.observableArrayList();
     private final ObservableList<ProjectRow> filteredRows = FXCollections.observableArrayList();
     private User currentUser;
+    private Timeline autoRefreshTimeline;
 
     @FXML
     public void initialize() {
@@ -90,6 +94,7 @@ public class ProjectListController {
         });
 
         applyFilters();
+        startAutoRefresh();
     }
 
     @FXML
@@ -109,6 +114,7 @@ public class ProjectListController {
             Stage owner = (Stage) addProjectBtn.getScene().getWindow();
             dialogStage.initOwner(owner);
             dialogStage.showAndWait();
+            refreshFromDatabase();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -270,9 +276,67 @@ public class ProjectListController {
             Stage owner = (Stage) projectTable.getScene().getWindow();
             detailStage.initOwner(owner);
             detailStage.showAndWait();
+            refreshFromDatabase();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void startAutoRefresh() {
+        if (autoRefreshTimeline != null) {
+            autoRefreshTimeline.stop();
+        }
+
+        autoRefreshTimeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> refreshFromDatabase()));
+        autoRefreshTimeline.setCycleCount(Timeline.INDEFINITE);
+        autoRefreshTimeline.play();
+
+        if (projectTable != null && projectTable.getScene() != null && projectTable.getScene().getWindow() != null) {
+            projectTable.getScene().getWindow().setOnHidden(event -> autoRefreshTimeline.stop());
+        }
+    }
+
+    private void refreshFromDatabase() {
+        String previousKeyword = searchField.getText();
+        String previousStatus = statusFilter.getValue();
+        String previousManager = managerFilter.getValue();
+
+        loadProjectsFromServices();
+        rebuildManagerFilter();
+
+        searchField.setText(previousKeyword == null ? "" : previousKeyword);
+
+        if (previousStatus != null && statusFilter.getItems().contains(previousStatus)) {
+            statusFilter.getSelectionModel().select(previousStatus);
+        } else {
+            statusFilter.getSelectionModel().select("All");
+        }
+
+        if (previousManager != null && managerFilter.getItems().contains(previousManager)) {
+            managerFilter.getSelectionModel().select(previousManager);
+        } else {
+            managerFilter.getSelectionModel().select("All");
+        }
+
+        applyFilters();
+    }
+
+    private void rebuildManagerFilter() {
+        ObservableList<String> managers = FXCollections.observableArrayList("All");
+        for (ProjectRow row : allRows) {
+            if (row.getManager() != null && !row.getManager().isBlank() && !managers.contains(row.getManager())) {
+                managers.add(row.getManager());
+            }
+        }
+
+        if (currentUser != null && currentUser.isManager() && currentUser.getName() != null && !currentUser.getName().isBlank()) {
+            managerFilter.setItems(FXCollections.observableArrayList(currentUser.getName().trim()));
+            managerFilter.getSelectionModel().select(currentUser.getName().trim());
+            managerFilter.setDisable(true);
+            return;
+        }
+
+        managerFilter.setItems(managers);
     }
 
     private void loadProjectsFromServices() {
