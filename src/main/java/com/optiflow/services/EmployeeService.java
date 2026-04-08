@@ -206,13 +206,11 @@ public class EmployeeService
         return employeeDAO.updateManager(emp_id, manager_id) == 1;
     }
 
-    public String exportEmployeesToCSV() throws Exception
+    public String exportEmployeesToCSV(String filePath) throws Exception
     {
         List<Employee> employees = employeeDAO.getAllEmployees();
 
-        String fileName = "employees_" + LocalDate.now() + ".csv";
-
-        FileWriter writer = new FileWriter(fileName);
+        FileWriter writer = new FileWriter(filePath);
 
         writer.append("User-ID,Emp-ID,Name,Department,Designation,Status,Manager-ID,Weekly Capacity,Allocated Hours\n");
 
@@ -234,33 +232,47 @@ public class EmployeeService
 
         auditLogService.logAction(SessionManager.getUser().getUserId(), "EXPORT_EMPLOYEE", "EMPLOYEE", -1, SessionManager.getUser().getName()+" exported employee details via CSV");
 
-        return fileName;
+        return filePath;
     }
 
-    public String exportEmployeesToExcel() throws Exception
+    public String exportEmployeesToExcel(String filePath) throws Exception
     {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Employees");
 
         Row header = sheet.createRow(0);
-        header.createCell(0).setCellValue("ID");
-        header.createCell(1).setCellValue("Name");
+        header.createCell(0).setCellValue("User-ID");
+        header.createCell(1).setCellValue("Emp-ID");
+        header.createCell(2).setCellValue("Name");
+        header.createCell(3).setCellValue("Department");
+        header.createCell(4).setCellValue("Designation");
+        header.createCell(5).setCellValue("Status");
+        header.createCell(6).setCellValue("Manager-ID");
+        header.createCell(7).setCellValue("Weekly Capacity");
+        header.createCell(8).setCellValue("Allocated Hours");
 
         int rowNum = 1;
 
         for(Employee e : employeeDAO.getAllEmployees()) {
             Row row = sheet.createRow(rowNum++);
-            row.createCell(0).setCellValue(e.getEmp_id());
-            row.createCell(1).setCellValue(e.getName());
+            row.createCell(0).setCellValue(e.getUser_id());
+            row.createCell(1).setCellValue(e.getEmp_id());
+            row.createCell(2).setCellValue(e.getName());
+            row.createCell(3).setCellValue(e.getDepartment());
+            row.createCell(4).setCellValue(e.getDesignation());
+            row.createCell(5).setCellValue(e.getStatus());
+            row.createCell(6).setCellValue(e.getManager_id());
+            row.createCell(7).setCellValue(e.getWeeklyCapacity());
+            row.createCell(8).setCellValue(e.getAllocated_hours());
         }
 
-        FileOutputStream fileOut = new FileOutputStream("employees.xlsx");
+        FileOutputStream fileOut = new FileOutputStream(filePath);
         workbook.write(fileOut);
         fileOut.close();
         workbook.close();
 
         auditLogService.logAction(SessionManager.getUser().getUserId(), "EXPORT_EMPLOYEE", "EMPLOYEE", -1, SessionManager.getUser().getName()+" exported employee details via Excel");
 
-        return "";
+        return filePath;
     }
 }

@@ -14,9 +14,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -25,6 +24,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.io.File;
 
 public class TaskListController {
 
@@ -49,6 +49,9 @@ public class TaskListController {
     private final ObservableList<TaskRow> rows = FXCollections.observableArrayList();
     private final TaskService taskService = new TaskService();
     private final EmployeeService employeeService = new EmployeeService();
+
+    @FXML
+    private Button exportBtn;
 
     @FXML
     public void initialize() {
@@ -313,6 +316,48 @@ public class TaskListController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void handleExport() {
+        ChoiceDialog<String> dialog = new ChoiceDialog<>("CSV", "CSV", "Excel");
+        dialog.setTitle("Export Tasks");
+        dialog.setHeaderText("Choose export format");
+        dialog.setContentText("Format:");
+
+        dialog.showAndWait().ifPresent(format -> {
+            try {
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Save Tasks " + format);
+                fileChooser.setInitialFileName("tasks_" + java.time.LocalDate.now() + "." + (format.equals("CSV") ? "csv" : "xlsx"));
+                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(format.toUpperCase() + " Files", "*." + (format.equals("CSV") ? "csv" : "xlsx")));
+
+                Stage stage = (Stage) exportBtn.getScene().getWindow();
+                File file = fileChooser.showSaveDialog(stage);
+
+                if (file != null) {
+                    String filePath = file.getAbsolutePath();
+                    String savedFile;
+                    if (format.equals("CSV")) {
+                        // For all tasks, use project_id = -1 or modify service to export all
+                        savedFile = taskService.exportTasksToCSV(-1, filePath); // Assuming -1 means all projects
+                    } else {
+                        savedFile = taskService.exportTasksToExcel(filePath);
+                    }
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Export Successful");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Tasks exported successfully to " + savedFile);
+                    alert.showAndWait();
+                }
+            } catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Export Failed");
+                alert.setHeaderText(null);
+                alert.setContentText("Failed to export tasks: " + e.getMessage());
+                alert.showAndWait();
+            }
+        });
     }
 
     public static class TaskRow {

@@ -15,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Locale;
 import java.time.temporal.ChronoUnit;
 import java.util.stream.Collectors;
+import java.io.File;
 
 public class ProjectListController {
 
@@ -65,6 +67,9 @@ public class ProjectListController {
 
     @FXML
     private Button addProjectBtn;
+
+    @FXML
+    private Button exportBtn;
 
     private final ObservableList<ProjectRow> allRows = FXCollections.observableArrayList();
     private final ObservableList<ProjectRow> filteredRows = FXCollections.observableArrayList();
@@ -330,6 +335,47 @@ public class ProjectListController {
             return "At Risk";
         }
         return "On Track";
+    }
+
+    @FXML
+    private void handleExport() {
+        ChoiceDialog<String> dialog = new ChoiceDialog<>("CSV", "CSV", "Excel");
+        dialog.setTitle("Export Projects");
+        dialog.setHeaderText("Choose export format");
+        dialog.setContentText("Format:");
+
+        dialog.showAndWait().ifPresent(format -> {
+            try {
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Save Projects " + format);
+                fileChooser.setInitialFileName("projects_" + java.time.LocalDate.now() + "." + (format.equals("CSV") ? "csv" : "xlsx"));
+                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(format.toUpperCase() + " Files", "*." + (format.equals("CSV") ? "csv" : "xlsx")));
+
+                Stage stage = (Stage) exportBtn.getScene().getWindow();
+                File file = fileChooser.showSaveDialog(stage);
+
+                if (file != null) {
+                    String filePath = file.getAbsolutePath();
+                    String savedFile;
+                    if (format.equals("CSV")) {
+                        savedFile = projectService.exportProjectsToCSV(filePath);
+                    } else {
+                        savedFile = projectService.exportProjectsToExcel(filePath);
+                    }
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Export Successful");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Projects exported successfully to " + savedFile);
+                    alert.showAndWait();
+                }
+            } catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Export Failed");
+                alert.setHeaderText(null);
+                alert.setContentText("Failed to export projects: " + e.getMessage());
+                alert.showAndWait();
+            }
+        });
     }
 
     public static class ProjectRow {

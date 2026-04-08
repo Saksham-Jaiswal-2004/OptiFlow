@@ -16,6 +16,7 @@
             <Label text="Projects" styleClass="proj-title"/>
             <Label text="Track all project delivery health in one place" styleClass="proj-subtitle"/>
         </VBox>
+        <Button fx:id="exportBtn" text="Export" styleClass="glass-btn" onAction="#handleExport"/>
         <Button fx:id="addProjectBtn" text="Add Project" styleClass="glass-btn" onAction="#handleAddProject"/>
     </HBox>
 

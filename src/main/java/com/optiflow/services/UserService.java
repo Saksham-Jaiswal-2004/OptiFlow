@@ -156,13 +156,11 @@ public class UserService
         return userDAO.getUsersByRole(role);
     }
 
-    public String exportUsersToCSV() throws Exception
+    public String exportUsersToCSV(String filePath) throws Exception
     {
         List<User> users = userDAO.getAllUsers();
 
-        String fileName = "users_" + LocalDate.now() + ".csv";
-
-        FileWriter writer = new FileWriter(fileName);
+        FileWriter writer = new FileWriter(filePath);
 
         writer.append("User-ID,Name,Email,Password Hash,Role\n");
 
@@ -180,10 +178,10 @@ public class UserService
 
         auditLogService.logAction(SessionManager.getUser().getUserId(), "EXPORT_USER", "USER", SessionManager.getUser().getUserId(), SessionManager.getUser().getName()+" exported user details via CSV");
 
-        return fileName;
+        return filePath;
     }
 
-    public String exportUsersToExcel() throws Exception
+    public String exportUsersToExcel(String filePath) throws Exception
     {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Users");
@@ -206,13 +204,13 @@ public class UserService
             row.createCell(4).setCellValue(u.getRole());
         }
 
-        FileOutputStream fileOut = new FileOutputStream("users.xlsx");
+        FileOutputStream fileOut = new FileOutputStream(filePath);
         workbook.write(fileOut);
         fileOut.close();
         workbook.close();
 
         auditLogService.logAction(SessionManager.getUser().getUserId(), "EXPORT_USER", "USER", SessionManager.getUser().getUserId(), SessionManager.getUser().getName()+" exported user details via Excel");
 
-        return "";
+        return filePath;
     }
 }
