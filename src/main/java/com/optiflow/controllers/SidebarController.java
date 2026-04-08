@@ -166,7 +166,6 @@ public class SidebarController {
             configs.add(new MenuItemConfig("dashboard", "Dashboard", "⌂"));
             configs.add(new MenuItemConfig("team", "Team", "◑"));
             configs.add(new MenuItemConfig("tasks", "Tasks", "☑"));
-            configs.add(new MenuItemConfig("assignment", "Task Assignment", "⇄"));
             configs.add(new MenuItemConfig("projects", "Projects", "◻"));
             configs.add(new MenuItemConfig("analytics", "Analytics", "◈"));
             configs.add(new MenuItemConfig("worklogs", "Worklogs", "🗒"));

@@ -6,6 +6,7 @@ import com.optiflow.models.WorkLog;
 
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.Types;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.LinkedList;
@@ -27,7 +28,11 @@ public class WorkLogDAO
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, empId);
-            stmt.setInt(2, taskId);
+            if (taskId <= 0) {
+                stmt.setNull(2, Types.INTEGER);
+            } else {
+                stmt.setInt(2, taskId);
+            }
             stmt.setDate(3, workDate);
             stmt.setInt(4, hours);
             stmt.setString(5, desc);
@@ -154,7 +159,7 @@ public class WorkLogDAO
                 workLog.setHoursWorked(rs.getInt("hours_worked"));
                 workLog.setDescription(rs.getString("description"));
 
-                if(taskDAO.getTaskById(workLog.getTaskId()).getProject_id() == projectId)
+                if(workLog.getTaskId() > 0 && taskDAO.getTaskById(workLog.getTaskId()) != null && taskDAO.getTaskById(workLog.getTaskId()).getProject_id() == projectId)
                     workLogs.add(workLog);
             }
 

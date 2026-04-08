@@ -8,9 +8,11 @@ import com.optiflow.services.ProjectService;
 import com.optiflow.services.TaskService;
 import com.optiflow.utils.SessionManager;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 import java.util.List;
@@ -19,6 +21,8 @@ public class ProjectDetailController {
 
     @FXML private VBox detailCard;
     @FXML private Label projectNameLabel;
+    @FXML private Label projectIdLabel;
+    @FXML private Label projectDescriptionLabel;
     @FXML private Label statusLabel;
     @FXML private Label managerLabel;
     @FXML private Label startDateLabel;
@@ -27,7 +31,6 @@ public class ProjectDetailController {
     @FXML private Label progressLabel;
     @FXML private Label taskCountLabel;
     @FXML private VBox taskListContainer;
-    @FXML private Button assignManagerBtn;
 
     private final ProjectService projectService = new ProjectService();
     private final EmployeeService employeeService = new EmployeeService();
@@ -36,13 +39,6 @@ public class ProjectDetailController {
     @FXML
     public void initialize() {
         loadProjectDetails();
-    }
-
-    @FXML
-    private void handleAssignManager() {
-        if (assignManagerBtn != null) {
-            assignManagerBtn.setText("Assign Manager is not wired yet");
-        }
     }
 
     private void loadProjectDetails() {
@@ -55,8 +51,26 @@ public class ProjectDetailController {
             if (projectNameLabel != null) {
                 projectNameLabel.setText(project.getName());
             }
+            if (projectIdLabel != null) {
+                projectIdLabel.setText("Project ID: " + project.getProject_id());
+            }
+            if (projectDescriptionLabel != null) {
+                String description = project.getDescription() == null || project.getDescription().isBlank()
+                        ? "No project description available."
+                        : project.getDescription();
+                projectDescriptionLabel.setText(description);
+            }
             if (statusLabel != null) {
-                statusLabel.setText(project.getStatus());
+                String normalizedStatus = normalizeProjectStatus(project.getStatus());
+                statusLabel.setText(normalizedStatus);
+                statusLabel.getStyleClass().removeAll("mgr-status-done", "mgr-status-progress", "mgr-status-pending");
+                if ("Completed".equalsIgnoreCase(normalizedStatus)) {
+                    statusLabel.getStyleClass().add("mgr-status-done");
+                } else if ("In Progress".equalsIgnoreCase(normalizedStatus) || "On Track".equalsIgnoreCase(normalizedStatus)) {
+                    statusLabel.getStyleClass().add("mgr-status-progress");
+                } else {
+                    statusLabel.getStyleClass().add("mgr-status-pending");
+                }
             }
             if (startDateLabel != null) {
                 startDateLabel.setText(project.getStart_date() == null ? "-" : project.getStart_date().toString());
@@ -100,12 +114,54 @@ public class ProjectDetailController {
         VBox row = new VBox(4);
         row.getStyleClass().add("emp-comment-row");
 
-        Label title = new Label(task.getTitle());
+        HBox top = new HBox(8);
+        Label title = new Label(task.getTitle() == null || task.getTitle().isBlank() ? "Untitled Task" : task.getTitle());
         title.getStyleClass().add("dash-card-sub");
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
         Label status = new Label(task.getStatus() == null ? "Pending" : task.getStatus());
-        status.getStyleClass().add("emp-status-badge");
-        row.getChildren().addAll(title, status);
+        status.getStyleClass().addAll("mgr-status-badge", "mgr-status-progress");
+
+        top.getChildren().addAll(title, spacer, status);
+
+        String due = task.getEnd_date() == null ? "-" : task.getEnd_date().toString();
+        String assignee = resolveAssignee(task.getAssigned_to());
+        Label meta = new Label("Assignee: " + assignee + "   |   Due: " + due);
+        meta.getStyleClass().add("proj-page-text");
+
+        row.getChildren().addAll(top, meta);
         return row;
+    }
+
+    private String resolveAssignee(int assigneeId) {
+        try {
+            Employee employee = employeeService.getEmployeeById(assigneeId);
+            if (employee != null && employee.getName() != null && !employee.getName().isBlank()) {
+                return employee.getName();
+            }
+            Employee byUser = employeeService.getEmployeeByUserId(assigneeId);
+            if (byUser != null && byUser.getName() != null && !byUser.getName().isBlank()) {
+                return byUser.getName();
+            }
+        } catch (Exception ignored) {
+        }
+        return "Unassigned";
+    }
+
+    private String normalizeProjectStatus(String status) {
+        if (status == null || status.isBlank()) {
+            return "Pending";
+        }
+        String normalized = status.trim().toLowerCase();
+        if (normalized.contains("complete")) {
+            return "Completed";
+        }
+        if (normalized.contains("progress") || normalized.contains("active") || normalized.contains("track")) {
+            return "In Progress";
+        }
+        return "Delayed";
     }
 
     private Projects resolveProject() throws Exception {

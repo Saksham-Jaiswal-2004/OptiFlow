@@ -12,8 +12,6 @@
 <?import javafx.scene.layout.Priority?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
 
 <VBox xmlns="http://javafx.com/javafx/21"
       xmlns:fx="http://javafx.com/fxml/1"
@@ -30,40 +28,14 @@
     <HBox alignment="CENTER_LEFT" spacing="10" styleClass="proj-filter-wrap">
         <Label text="Filters" styleClass="field-lbl"/>
 
-        <ComboBox promptText="Time Range" styleClass="glass-field proj-filter" prefWidth="170">
-            <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="Last 7 Days"/>
-                    <String fx:value="Last 30 Days"/>
-                    <String fx:value="Last Quarter"/>
-                </FXCollections>
-            </items>
-        </ComboBox>
+        <ComboBox fx:id="timeRangeCombo" promptText="Time Range" styleClass="glass-field proj-filter" prefWidth="170" onAction="#handleFiltersChanged"/>
 
-        <ComboBox promptText="Project" styleClass="glass-field proj-filter" prefWidth="180">
-            <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="All Projects"/>
-                    <String fx:value="CRM Migration"/>
-                    <String fx:value="HR Portal Revamp"/>
-                    <String fx:value="Ops Automation"/>
-                </FXCollections>
-            </items>
-        </ComboBox>
+        <ComboBox fx:id="projectCombo" promptText="Project" styleClass="glass-field proj-filter" prefWidth="220" onAction="#handleFiltersChanged"/>
 
-        <ComboBox promptText="Team" styleClass="glass-field proj-filter" prefWidth="160">
-            <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="All Teams"/>
-                    <String fx:value="Engineering"/>
-                    <String fx:value="Design"/>
-                    <String fx:value="QA"/>
-                </FXCollections>
-            </items>
-        </ComboBox>
+        <ComboBox fx:id="teamCombo" promptText="Team" styleClass="glass-field proj-filter" prefWidth="180" onAction="#handleFiltersChanged"/>
 
         <Region HBox.hgrow="ALWAYS"/>
-        <Label text="Updated just now" styleClass="proj-page-text"/>
+        <Label fx:id="updatedLabel" text="Updated just now" styleClass="proj-page-text"/>
     </HBox>
 
     <GridPane hgap="12" vgap="12" VBox.vgrow="ALWAYS">
@@ -79,7 +51,7 @@
                 <Label text="LineChart" styleClass="proj-page-text"/>
             </HBox>
 
-            <LineChart styleClass="adm-line" animated="true" legendVisible="false" prefHeight="300" VBox.vgrow="ALWAYS">
+            <LineChart fx:id="progressLineChart" styleClass="adm-line" animated="true" legendVisible="false" prefHeight="300" VBox.vgrow="ALWAYS">
                 <xAxis>
                     <CategoryAxis label="Week"/>
                 </xAxis>
@@ -96,7 +68,7 @@
                 <Label text="PieChart" styleClass="proj-page-text"/>
             </HBox>
 
-            <PieChart styleClass="adm-pie" animated="true" labelsVisible="true" prefHeight="300" VBox.vgrow="ALWAYS"/>
+            <PieChart fx:id="taskDistributionChart" styleClass="adm-pie" animated="true" labelsVisible="true" prefHeight="300" VBox.vgrow="ALWAYS"/>
         </VBox>
 
         <VBox spacing="10" styleClass="proj-card" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.columnSpan="2" VBox.vgrow="ALWAYS">
@@ -106,7 +78,7 @@
                 <Label text="BarChart" styleClass="proj-page-text"/>
             </HBox>
 
-            <BarChart styleClass="adm-bar" animated="true" legendVisible="false" prefHeight="290" VBox.vgrow="ALWAYS">
+            <BarChart fx:id="performanceBarChart" styleClass="adm-bar" animated="true" legendVisible="false" prefHeight="290" VBox.vgrow="ALWAYS">
                 <xAxis>
                     <CategoryAxis label="Teams"/>
                 </xAxis>

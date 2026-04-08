@@ -44,7 +44,7 @@ public class ProjectService
         if(project == null)
             return false;
 
-//        project.setManager_id(getBestManagerForProject(project.getProject_id()).getEmp_id());
+       project.setManager_id(getBestManagerForProject(project.getProject_id()).getEmp_id());
 
         return projectDAO.createProject(project.getName(), project.getDescription(), project.getStart_date(), project.getDeadline(), project.getManager_id(), project.getStatus());
     }

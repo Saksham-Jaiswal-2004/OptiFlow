@@ -25,7 +25,7 @@
 
         <HBox spacing="8" alignment="CENTER_LEFT">
                 <Label text="Live Data" styleClass="proj-status-badge proj-status-good"/>
-                <Label text="Tasks are loaded from your current assignments." styleClass="proj-page-text"/>
+            <Label fx:id="liveDataInfoLabel" text="Tasks are loaded from your current assignments." styleClass="proj-page-text"/>
         </HBox>
 
     <VBox spacing="12" styleClass="proj-form-card">
@@ -34,7 +34,7 @@
             <DatePicker fx:id="datePicker" styleClass="glass-field" maxWidth="Infinity"/>
         </VBox>
 
-        <VBox spacing="6">
+        <VBox fx:id="taskSection" spacing="6">
             <Label text="Task" styleClass="field-lbl"/>
             <ComboBox fx:id="taskComboBox" promptText="Select task..." styleClass="glass-field" maxWidth="Infinity"/>
         </VBox>

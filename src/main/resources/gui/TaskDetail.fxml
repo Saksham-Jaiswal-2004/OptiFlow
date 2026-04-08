@@ -6,6 +6,8 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Priority?>
 <?import javafx.scene.layout.Region?>
@@ -16,7 +18,7 @@
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.optiflow.controllers.TaskDetailPanelController"
       spacing="14"
-      styleClass="mgr-root"
+    styleClass="mgr-root mgr-screen-bg"
       prefWidth="1120"
       prefHeight="780"
       stylesheets="@../css/style.css">
@@ -34,40 +36,74 @@
         </HBox>
 
         <Label fx:id="taskDescriptionLabel" text="No task selected." styleClass="dash-card-sub" wrapText="true"/>
+
+        <GridPane hgap="18" vgap="10">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="25" hgrow="ALWAYS"/>
+                <ColumnConstraints percentWidth="25" hgrow="ALWAYS"/>
+                <ColumnConstraints percentWidth="25" hgrow="ALWAYS"/>
+                <ColumnConstraints percentWidth="25" hgrow="ALWAYS"/>
+            </columnConstraints>
+
+            <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                <Label text="Task ID" styleClass="field-lbl"/>
+                <Label fx:id="taskIdValueLabel" text="-" styleClass="dash-card-sub"/>
+            </VBox>
+
+            <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                <Label text="Project ID" styleClass="field-lbl"/>
+                <Label fx:id="projectIdValueLabel" text="-" styleClass="dash-card-sub"/>
+            </VBox>
+
+            <VBox spacing="4" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                <Label text="Priority" styleClass="field-lbl"/>
+                <Label fx:id="priorityValueLabel" text="-" styleClass="dash-card-sub"/>
+            </VBox>
+
+            <VBox spacing="4" GridPane.columnIndex="3" GridPane.rowIndex="0">
+                <Label text="Current Status" styleClass="field-lbl"/>
+                <Label fx:id="currentStatusValueLabel" text="Pending" styleClass="mgr-status-badge mgr-status-pending"/>
+            </VBox>
+
+            <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                <Label text="Start Date" styleClass="field-lbl"/>
+                <Label fx:id="startDateValueLabel" text="-" styleClass="dash-card-sub"/>
+            </VBox>
+
+            <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <Label text="End Date" styleClass="field-lbl"/>
+                <Label fx:id="endDateValueLabel" text="-" styleClass="dash-card-sub"/>
+            </VBox>
+
+            <VBox spacing="4" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                <Label text="Estimated Hours" styleClass="field-lbl"/>
+                <Label fx:id="estimatedHoursValueLabel" text="0" styleClass="dash-card-sub"/>
+            </VBox>
+
+            <VBox spacing="4" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                <Label text="Actual Hours" styleClass="field-lbl"/>
+                <Label fx:id="actualHoursValueLabel" text="0" styleClass="dash-card-sub"/>
+            </VBox>
+        </GridPane>
     </VBox>
 
-    <HBox spacing="12" VBox.vgrow="ALWAYS">
-        <VBox spacing="12" styleClass="mgr-card" HBox.hgrow="ALWAYS" opacity="0.98">
-            <HBox alignment="CENTER_LEFT" spacing="8">
-                <Label text="Assigned Employees" styleClass="mgr-card-title"/>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Label fx:id="memberCountLabel" text="0 members" styleClass="proj-page-text"/>
-            </HBox>
+    <VBox spacing="12" styleClass="mgr-card" opacity="0.98">
+        <HBox alignment="CENTER_LEFT" spacing="8">
+            <Label text="Assignment" styleClass="mgr-card-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="memberCountLabel" text="0 members" styleClass="proj-page-text"/>
+        </HBox>
 
-            <ListView fx:id="assignedEmployeesList" styleClass="emp-list" VBox.vgrow="ALWAYS" prefHeight="280"/>
+        <ListView fx:id="assignedEmployeesList" styleClass="emp-list" prefHeight="160"/>
 
-            <VBox spacing="6">
-                <Label text="Status" styleClass="field-lbl"/>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                <Label text="Update Status" styleClass="field-lbl"/>
                 <ComboBox fx:id="statusComboBox" promptText="Update status" styleClass="glass-field proj-filter" maxWidth="Infinity"/>
             </VBox>
-        </VBox>
-
-        <VBox spacing="12" styleClass="mgr-card" prefWidth="360" opacity="0.98">
-            <Label text="Task Actions" styleClass="mgr-card-title"/>
-
-            <VBox spacing="8" styleClass="emp-comment-row">
-                <Label text="Execution Note" styleClass="proj-page-text"/>
-                <Label text="Break this work into deliverables and close each milestone with a short status update." styleClass="dash-card-sub" wrapText="true"/>
-            </VBox>
-
-            <VBox spacing="8" styleClass="emp-comment-row">
-                <Label text="Coordination" styleClass="proj-page-text"/>
-                <Label text="Use comments below to track blockers and share dependency updates between members." styleClass="dash-card-sub" wrapText="true"/>
-            </VBox>
-
-            <Button text="Save Changes" styleClass="glass-btn" maxWidth="Infinity" onAction="#handleSaveChanges"/>
-        </VBox>
-    </HBox>
+            <Button text="Save Changes" styleClass="glass-btn" onAction="#handleSaveChanges"/>
+        </HBox>
+    </VBox>
 
     <VBox spacing="10" styleClass="mgr-card" opacity="0.98" VBox.vgrow="ALWAYS">
         <HBox alignment="CENTER_LEFT" spacing="8">

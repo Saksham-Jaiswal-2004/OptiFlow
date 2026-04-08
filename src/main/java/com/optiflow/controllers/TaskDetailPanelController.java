@@ -39,6 +39,30 @@ public class TaskDetailPanelController {
     private Label taskDescriptionLabel;
 
     @FXML
+    private Label taskIdValueLabel;
+
+    @FXML
+    private Label projectIdValueLabel;
+
+    @FXML
+    private Label priorityValueLabel;
+
+    @FXML
+    private Label currentStatusValueLabel;
+
+    @FXML
+    private Label startDateValueLabel;
+
+    @FXML
+    private Label endDateValueLabel;
+
+    @FXML
+    private Label estimatedHoursValueLabel;
+
+    @FXML
+    private Label actualHoursValueLabel;
+
+    @FXML
     private Label memberCountLabel;
 
     @FXML
@@ -135,6 +159,8 @@ public class TaskDetailPanelController {
         try {
             if (taskService.updateTaskStatus(currentTask.getTask_id(), selectedStatus)) {
                 currentTask.setStatus(selectedStatus);
+                currentStatusValueLabel.setText(normalizeStatus(selectedStatus));
+                applyStatusBadgeStyle(selectedStatus);
             }
         } catch (Exception ignored) {
         }
@@ -163,6 +189,15 @@ public class TaskDetailPanelController {
             pageTitleLabel.setText("Task Detail");
             dueDateLabel.setText("Due: --");
             taskDescriptionLabel.setText("No task selected.");
+            taskIdValueLabel.setText("-");
+            projectIdValueLabel.setText("-");
+            priorityValueLabel.setText("-");
+            startDateValueLabel.setText("-");
+            endDateValueLabel.setText("-");
+            estimatedHoursValueLabel.setText("0");
+            actualHoursValueLabel.setText("0");
+            currentStatusValueLabel.setText("Pending");
+            applyStatusBadgeStyle("Pending");
             memberCountLabel.setText("0 members");
             commentCountLabel.setText("0 messages");
             assignedEmployees.clear();
@@ -183,7 +218,18 @@ public class TaskDetailPanelController {
                 : currentTask.getDescription();
         taskDescriptionLabel.setText(description);
 
-        statusComboBox.setValue(normalizeStatus(currentTask.getStatus()));
+        String normalizedStatus = normalizeStatus(currentTask.getStatus());
+        statusComboBox.setValue(normalizedStatus);
+        currentStatusValueLabel.setText(normalizedStatus);
+        applyStatusBadgeStyle(normalizedStatus);
+
+        taskIdValueLabel.setText(String.valueOf(currentTask.getTask_id()));
+        projectIdValueLabel.setText(String.valueOf(currentTask.getProject_id()));
+        priorityValueLabel.setText(currentTask.getPriority() == null || currentTask.getPriority().isBlank() ? "Unspecified" : currentTask.getPriority());
+        startDateValueLabel.setText(currentTask.getStart_date() == null ? "-" : currentTask.getStart_date().toString());
+        endDateValueLabel.setText(currentTask.getEnd_date() == null ? "-" : currentTask.getEnd_date().toString());
+        estimatedHoursValueLabel.setText(String.valueOf(Math.max(0, currentTask.getEstimated_hours())));
+        actualHoursValueLabel.setText(String.valueOf(Math.max(0, currentTask.getActual_hours())));
 
         loadAssignedEmployees();
         loadComments();
@@ -197,14 +243,26 @@ public class TaskDetailPanelController {
         }
 
         try {
-            List<Employee> allEmployees = employeeService.getAllEmployees();
-            if (allEmployees != null) {
-                for (Employee employee : allEmployees) {
-                    if (currentTask.getAssigned_to() == employee.getEmp_id() || currentTask.getAssigned_to() == employee.getUser_id()) {
-                        String designation = employee.getDesignation() == null ? "Unspecified" : employee.getDesignation();
-                        assignedEmployees.add(employee.getName() + " - " + designation);
-                    }
-                }
+            int assignedId = currentTask.getAssigned_to();
+
+            Employee assignedEmployee = null;
+            Employee currentEmployee = resolveCurrentEmployeeProfile();
+            if (currentEmployee != null && (assignedId == currentEmployee.getEmp_id() || assignedId == currentEmployee.getUser_id())) {
+                assignedEmployee = currentEmployee;
+            }
+
+            // Prefer employee-id mapping (primary assignment key in tasks table).
+            if (assignedEmployee == null) {
+                assignedEmployee = employeeService.getEmployeeById(assignedId);
+            }
+            if (assignedEmployee == null) {
+                // Fallback for legacy rows that may store user_id in assigned_to.
+                assignedEmployee = employeeService.getEmployeeByUserId(assignedId);
+            }
+
+            if (assignedEmployee != null) {
+                String designation = assignedEmployee.getDesignation() == null ? "Unspecified" : assignedEmployee.getDesignation();
+                assignedEmployees.add(assignedEmployee.getName() + " - " + designation);
             }
         } catch (Exception ignored) {
         }
@@ -220,6 +278,29 @@ public class TaskDetailPanelController {
         }
 
         memberCountLabel.setText(assignedEmployees.size() + (assignedEmployees.size() == 1 ? " member" : " members"));
+    }
+
+    private Employee resolveCurrentEmployeeProfile() {
+        try {
+            User user = SessionManager.getUser();
+            if (user == null) {
+                return null;
+            }
+            return employeeService.getEmployeeByUserId(user.getUserId());
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
+
+    private void applyStatusBadgeStyle(String status) {
+        currentStatusValueLabel.getStyleClass().removeAll("mgr-status-done", "mgr-status-progress", "mgr-status-pending");
+        if ("Completed".equalsIgnoreCase(status)) {
+            currentStatusValueLabel.getStyleClass().add("mgr-status-done");
+        } else if ("In Progress".equalsIgnoreCase(status)) {
+            currentStatusValueLabel.getStyleClass().add("mgr-status-progress");
+        } else {
+            currentStatusValueLabel.getStyleClass().add("mgr-status-pending");
+        }
     }
 
     private void loadComments() {

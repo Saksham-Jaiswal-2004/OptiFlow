@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -10,27 +10,34 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/21"
+<ScrollPane xmlns="http://javafx.com/javafx/21"
     xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.optiflow.controllers.ProjectDetailController"
-    spacing="14"
-    styleClass="proj-root"
+    fitToWidth="true"
+    fitToHeight="true"
+    hbarPolicy="NEVER"
+    styleClass="content-scroll-wrap mgr-screen-bg"
     stylesheets="@../css/style.css">
 
+    <content>
+    <VBox spacing="14" styleClass="mgr-root mgr-screen-bg">
+
     <VBox spacing="3">
-        <Label text="Project Detail" styleClass="proj-title" />
-        <Label text="Complete visibility into scope, timeline, and task execution" styleClass="proj-subtitle" />
+        <Label text="Project Detail" styleClass="mgr-title" />
+        <Label text="Complete visibility into scope, timeline, and task execution" styleClass="mgr-subtitle" />
     </VBox>
 
-    <VBox spacing="14" styleClass="proj-card" fx:id="detailCard">
+    <VBox spacing="14" styleClass="mgr-card" fx:id="detailCard">
         <HBox alignment="CENTER_LEFT" spacing="10">
             <VBox spacing="2">
-                <Label text="Project Info" styleClass="field-lbl" />
+                <Label text="Project Info" styleClass="mgr-card-title" />
                 <Label fx:id="projectNameLabel" text="CRM Migration Platform" styleClass="dash-card-value" />
             </VBox>
             <Region HBox.hgrow="ALWAYS" />
-            <Button fx:id="assignManagerBtn" text="Assign Manager" styleClass="glass-btn" onAction="#handleAssignManager" />
+            <Label fx:id="projectIdLabel" text="Project ID: -" styleClass="proj-page-text"/>
         </HBox>
+
+        <Label fx:id="projectDescriptionLabel" text="No project description available." styleClass="dash-card-sub" wrapText="true" />
 
         <GridPane hgap="18" vgap="12">
             <columnConstraints>
@@ -40,7 +47,7 @@
 
             <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="0">
                 <Label text="Status" styleClass="field-lbl" />
-                <Label fx:id="statusLabel" text="In Progress" styleClass="proj-status-badge proj-status-warn" />
+                <Label fx:id="statusLabel" text="In Progress" styleClass="mgr-status-badge mgr-status-progress" />
             </VBox>
 
             <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="0">
@@ -60,19 +67,21 @@
         </GridPane>
     </VBox>
 
-    <VBox spacing="10" styleClass="proj-card">
-        <Label text="Progress" styleClass="field-lbl" />
+    <VBox spacing="10" styleClass="mgr-card">
+        <Label text="Progress" styleClass="mgr-card-title" />
         <ProgressBar fx:id="progressBar" progress="0.64" maxWidth="Infinity" styleClass="proj-progress" />
         <Label fx:id="progressLabel" text="64% completed" styleClass="proj-progress-text" />
     </VBox>
 
-    <VBox spacing="10" styleClass="proj-card" VBox.vgrow="ALWAYS">
+    <VBox spacing="10" styleClass="mgr-card" VBox.vgrow="ALWAYS">
         <HBox alignment="CENTER_LEFT" spacing="8">
-            <Label text="Task List" styleClass="field-lbl" />
+            <Label text="Task List" styleClass="mgr-card-title" />
             <Region HBox.hgrow="ALWAYS" />
             <Label fx:id="taskCountLabel" text="8 tasks" styleClass="proj-page-text" />
         </HBox>
 
         <VBox fx:id="taskListContainer" spacing="8" styleClass="emp-list" VBox.vgrow="ALWAYS" />
     </VBox>
-</VBox>
+    </VBox>
+    </content>
+</ScrollPane>

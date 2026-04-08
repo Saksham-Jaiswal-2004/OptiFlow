@@ -24,7 +24,7 @@ public class WorkLogService
 
     public boolean logWork(int empId, int taskId, Date workDate, int hours, String description) throws SQLException
     {
-        if(empId <= 0 || taskId <= 0 || hours <= 0)
+        if(empId <= 0 || taskId < 0 || hours <= 0)
             return false;
 
         auditLogService.logAction(SessionManager.getUser().getUserId(), "LOG_WORK", "WORKLOG", empId, SessionManager.getUser().getName()+" added their daily work log");

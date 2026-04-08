@@ -814,6 +814,40 @@
     -fx-padding: 4;
 }
 
+.mgr-screen-bg {
+    -fx-background-color: linear-gradient(to bottom right, rgba(36, 18, 73, 0.82), rgba(25, 11, 56, 0.88));
+    -fx-background-radius: 14;
+    -fx-padding: 10;
+}
+
+.mgr-screen-bg > .viewport {
+    -fx-background-color: transparent;
+}
+
+.mgr-screen-bg .scroll-bar:vertical {
+    -fx-pref-width: 8;
+    -fx-background-color: transparent;
+}
+
+.mgr-screen-bg .scroll-bar:vertical .track {
+    -fx-background-color: rgba(255,255,255,0.10);
+    -fx-background-radius: 999;
+}
+
+.mgr-screen-bg .scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(139,92,246,0.64);
+    -fx-background-radius: 999;
+}
+
+.mgr-screen-bg .scroll-bar:vertical .increment-button,
+.mgr-screen-bg .scroll-bar:vertical .decrement-button,
+.mgr-screen-bg .scroll-bar:vertical .increment-arrow,
+.mgr-screen-bg .scroll-bar:vertical .decrement-arrow {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+    -fx-shape: "";
+}
+
 .mgr-title {
     -fx-text-fill: #ffffff;
     -fx-font-size: 28px;

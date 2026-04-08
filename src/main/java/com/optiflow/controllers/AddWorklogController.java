@@ -11,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.sql.Date;
@@ -24,6 +25,12 @@ public class AddWorklogController {
 
     @FXML
     private ComboBox<String> taskComboBox;
+
+    @FXML
+    private VBox taskSection;
+
+    @FXML
+    private Label liveDataInfoLabel;
 
     @FXML
     private TextField hoursField;
@@ -42,6 +49,7 @@ public class AddWorklogController {
     private EmployeeService employeeService;
     private Employee currentEmployee;
     private List<Tasks> tasks;
+    private boolean managerMode;
 
     @FXML
     public void initialize() {
@@ -52,8 +60,20 @@ public class AddWorklogController {
         // Set today's date as default
         datePicker.setValue(LocalDate.now());
 
-        // Load tasks for the ComboBox
-        loadTasks();
+        User user = SessionManager.getUser();
+        managerMode = user != null && user.isManager();
+
+        if (managerMode) {
+            if (taskSection != null) {
+                taskSection.setVisible(false);
+                taskSection.setManaged(false);
+            }
+            if (liveDataInfoLabel != null) {
+                liveDataInfoLabel.setText("Manager mode: add a generalized worklog entry without task mapping.");
+            }
+        } else {
+            loadTasks();
+        }
     }
 
     private void loadTasks() {
@@ -89,7 +109,7 @@ public class AddWorklogController {
             return;
         }
 
-        if (taskComboBox.getValue() == null || taskComboBox.getValue().isEmpty()) {
+        if (!managerMode && (taskComboBox.getValue() == null || taskComboBox.getValue().isEmpty())) {
             showAlert("Validation Error", "Please select a task.");
             return;
         }
@@ -112,9 +132,11 @@ public class AddWorklogController {
             return;
         }
 
-        // Get selected task ID
-        String selectedTask = taskComboBox.getValue();
-        int taskId = Integer.parseInt(selectedTask.split(" ")[0].substring(2));
+        int taskId = 0;
+        if (!managerMode) {
+            String selectedTask = taskComboBox.getValue();
+            taskId = Integer.parseInt(selectedTask.split(" ")[0].substring(2));
+        }
 
         // Get description
         String description = descriptionArea.getText().trim();

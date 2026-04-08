@@ -214,9 +214,6 @@ public class DashboardController {
             case "add_tasks":
             case "task_detail":
                 return loadView("TaskDetail.fxml");
-            case "assignment":
-            case "allocation":
-                return loadView("TaskAssignment.fxml");
             case "employees":
                 return loadView("EmployeeList.fxml");
             case "employee_profile":

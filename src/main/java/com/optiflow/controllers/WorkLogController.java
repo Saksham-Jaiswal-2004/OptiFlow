@@ -203,6 +203,9 @@ public class WorkLogController {
     }
 
     private String resolveTaskLabel(int taskId) {
+        if (taskId <= 0) {
+            return "General Worklog";
+        }
         try {
             Tasks task = taskService.getTaskById(taskId);
             if (task == null || task.getTitle() == null || task.getTitle().isBlank()) {

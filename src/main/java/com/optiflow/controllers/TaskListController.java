@@ -2,8 +2,10 @@ package com.optiflow.controllers;
 
 import com.optiflow.models.Employee;
 import com.optiflow.models.Tasks;
+import com.optiflow.models.User;
 import com.optiflow.services.EmployeeService;
 import com.optiflow.services.TaskService;
+import com.optiflow.utils.SessionManager;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -18,7 +20,11 @@ import javafx.scene.control.TableView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class TaskListController {
 
@@ -73,13 +79,14 @@ public class TaskListController {
         rows.clear();
 
         try {
-            List<Tasks> tasks = taskService.getAllTasks();
+            Map<Integer, String> assigneeNameById = resolveAssigneeNameMapForCurrentUser();
+            List<Tasks> tasks = resolveTasksForCurrentUser();
             if (tasks == null) {
                 return;
             }
 
             for (Tasks task : tasks) {
-                String assignedTo = resolveEmployeeName(task.getAssigned_to());
+                String assignedTo = assigneeNameById.getOrDefault(task.getAssigned_to(), resolveEmployeeName(task.getAssigned_to()));
                 String deadline = task.getEnd_date() == null ? "-" : task.getEnd_date().toLocalDate().toString();
                 String comments = task.getDescription() == null ? "" : task.getDescription();
 
@@ -96,13 +103,178 @@ public class TaskListController {
         }
     }
 
+    private Map<Integer, String> resolveAssigneeNameMapForCurrentUser() {
+        Map<Integer, String> assigneeNameById = new LinkedHashMap<>();
+
+        try {
+            User user = SessionManager.getUser();
+            if (user != null && user.isEmployee()) {
+                Employee self = employeeService.getEmployeeByUserId(user.getUserId());
+                if (self != null && self.getName() != null && !self.getName().isBlank()) {
+                    assigneeNameById.put(self.getEmp_id(), self.getName());
+                    assigneeNameById.put(self.getUser_id(), self.getName());
+                }
+            }
+
+            if (user != null && user.isManager()) {
+                Employee manager = employeeService.getEmployeeByUserId(user.getUserId());
+                if (manager != null) {
+                    List<Employee> teamMembers = resolveTeamMembersForManager(manager);
+                    for (Employee member : teamMembers) {
+                        if (member.getName() != null && !member.getName().isBlank()) {
+                            assigneeNameById.put(member.getEmp_id(), member.getName());
+                            assigneeNameById.put(member.getUser_id(), member.getName());
+                        }
+                    }
+                }
+            }
+        } catch (Exception ignored) {
+        }
+
+        return assigneeNameById;
+    }
+
+    private List<Tasks> resolveTasksForCurrentUser() throws Exception {
+        User user = SessionManager.getUser();
+        if (user == null || user.isAdmin()) {
+            return taskService.getAllTasks();
+        }
+
+        if (user.isEmployee()) {
+            Employee self = employeeService.getEmployeeByUserId(user.getUserId());
+            if (self == null) {
+                return FXCollections.observableArrayList();
+            }
+
+            return resolveTasksForEmployee(self);
+        }
+
+        if (user.isManager()) {
+            Employee manager = employeeService.getEmployeeByUserId(user.getUserId());
+            if (manager == null) {
+                return List.of();
+            }
+
+            List<Employee> teamMembers = resolveTeamMembersForManager(manager);
+            if (teamMembers.isEmpty()) {
+                return List.of();
+            }
+
+            return resolveTasksForTeam(teamMembers);
+        }
+
+        return taskService.getAllTasks();
+    }
+
     private String resolveEmployeeName(int empId) {
         try {
             Employee employee = employeeService.getEmployeeById(empId);
+            if (employee == null) {
+                employee = employeeService.getEmployeeByUserId(empId);
+            }
             return employee == null || employee.getName() == null ? "Unassigned" : employee.getName();
         } catch (Exception ignored) {
             return "Unassigned";
         }
+    }
+
+    private List<Employee> resolveTeamMembersForManager(Employee manager) {
+        Map<Integer, Employee> unique = new LinkedHashMap<>();
+
+        try {
+            List<Employee> byEmpId = employeeService.getEmployeesByManager(manager.getEmp_id());
+            if (byEmpId != null) {
+                for (Employee employee : byEmpId) {
+                    unique.put(employee.getEmp_id(), employee);
+                }
+            }
+
+            List<Employee> byUserId = employeeService.getEmployeesByManager(manager.getUser_id());
+            if (byUserId != null) {
+                for (Employee employee : byUserId) {
+                    unique.put(employee.getEmp_id(), employee);
+                }
+            }
+        } catch (Exception ignored) {
+        }
+
+        return List.copyOf(unique.values());
+    }
+
+    private List<Tasks> resolveTasksForTeam(List<Employee> teamMembers) {
+        Map<Integer, Tasks> unique = new LinkedHashMap<>();
+
+        try {
+            Set<Integer> candidateAssigneeIds = new HashSet<>();
+            for (Employee member : teamMembers) {
+                candidateAssigneeIds.add(member.getEmp_id());
+                candidateAssigneeIds.add(member.getUser_id());
+            }
+
+            List<Tasks> allTasks = taskService.getAllTasks();
+            if (allTasks != null) {
+                for (Tasks task : allTasks) {
+                    if (candidateAssigneeIds.contains(task.getAssigned_to())) {
+                        unique.put(task.getTask_id(), task);
+                    }
+                }
+            }
+
+            for (Employee member : teamMembers) {
+                List<Tasks> byEmpId = taskService.getTaskByEmp(member.getEmp_id());
+                if (byEmpId != null) {
+                    for (Tasks task : byEmpId) {
+                        unique.put(task.getTask_id(), task);
+                    }
+                }
+
+                List<Tasks> byUserId = taskService.getTaskByEmp(member.getUser_id());
+                if (byUserId != null) {
+                    for (Tasks task : byUserId) {
+                        unique.put(task.getTask_id(), task);
+                    }
+                }
+            }
+        } catch (Exception ignored) {
+        }
+
+        return List.copyOf(unique.values());
+    }
+
+    private List<Tasks> resolveTasksForEmployee(Employee employee) {
+        Map<Integer, Tasks> unique = new LinkedHashMap<>();
+
+        try {
+            Set<Integer> candidateAssigneeIds = new HashSet<>();
+            candidateAssigneeIds.add(employee.getEmp_id());
+            candidateAssigneeIds.add(employee.getUser_id());
+
+            List<Tasks> allTasks = taskService.getAllTasks();
+            if (allTasks != null) {
+                for (Tasks task : allTasks) {
+                    if (candidateAssigneeIds.contains(task.getAssigned_to())) {
+                        unique.put(task.getTask_id(), task);
+                    }
+                }
+            }
+
+            List<Tasks> byEmpId = taskService.getTaskByEmp(employee.getEmp_id());
+            if (byEmpId != null) {
+                for (Tasks task : byEmpId) {
+                    unique.put(task.getTask_id(), task);
+                }
+            }
+
+            List<Tasks> byUserId = taskService.getTaskByEmp(employee.getUser_id());
+            if (byUserId != null) {
+                for (Tasks task : byUserId) {
+                    unique.put(task.getTask_id(), task);
+                }
+            }
+        } catch (Exception ignored) {
+        }
+
+        return List.copyOf(unique.values());
     }
 
     private String normalizeStatus(String status) {
